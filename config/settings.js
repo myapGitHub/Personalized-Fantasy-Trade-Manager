@@ -1,4 +1,4 @@
-// You will need to change the DB name to match the required DB name in the assignment specs!
+// Changed DB name to workoutApp
 export const mongoConfig = {
     serverUrl: 'mongodb://localhost:27017/',
     database: 'workoutApp'
