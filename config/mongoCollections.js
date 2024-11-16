@@ -13,7 +13,7 @@ const getCollectionFn = (collection) => {
   };
 };
 
-// Note: You will need to change the code below to have the collection required by the assignment!
+// Create users, workouts, comments collections
 export const users = getCollectionFn('users');
 export const workouts = getCollectionFn('workouts');
 export const comments = getCollectionFn('comments');
