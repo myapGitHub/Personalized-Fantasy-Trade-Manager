@@ -8,7 +8,29 @@
 </head>
 
 <body>
+    <header>
+        <nav>
+            <a href="/">Home</a>
+            {{#if loggedIn}}
+                <a href="/profile">Profile</a>
+                <a href="/logout">Logout</a>
+            {{else}}
+                <a href="/login" id="login-button">Login</a>
+                <a href="/sign-up" id="sign-up-button">Sign Up</a>
+            {{/if}}
+        </nav>
+
+
+    </header>
+
+
+    <main>
+        {{{ body }}}
+    </main>
     
+
+
+    <script src="/public//js/main.js"></script>
 
 </body>
 
