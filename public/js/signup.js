@@ -47,7 +47,6 @@ const isValidExperience = (experience) => {
 // Show error message
 const showError = (message) => {
     errorDiv.innerHTML = message;
-    errorDiv.style.color = 'red';
 };
 
 // Clear error message

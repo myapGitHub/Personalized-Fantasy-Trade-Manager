@@ -6,7 +6,8 @@ import { userData } from '../data/index.js';
 
 
 router.get('/', (req, res)=> {
-    res.sendFile(path.resolve('static/sign-up/page1.html'));
+    //res.sendFile(path.resolve('static/sign-up/page1.html'));
+    res.render('pages/sign_up');
 });
 
 router.post('/', async (req,res) => {
@@ -47,10 +48,24 @@ router.post('/', async (req,res) => {
             level
         );
     } catch(e) {
-        //TODO NEED TO SEND BACK DATA SO FORM DOESNT RESET 
-        return res.status(404).json({error: "Error Sign-up"});
+        //return res.status(404).json({error: "Error Sign-up"});
+        return res.render('pages/sign_up', {
+            userName: userName,
+            email: email,
+            firstName: firstName,
+            lastName: lastName,
+            height: height,
+            weight: weight,
+            age: age,
+            gender: gender,
+            benchMax: benchMax,
+            squatMax: squatMax,
+            deadLiftMax: deadLiftMax,
+            level: level,
+            error: e
+        })
     }
-    return res.json({Success: "Signed-up"});
+    return res.render('pages/signed_up');
 });
 
 export default router;
