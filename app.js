@@ -2,8 +2,7 @@ import express from 'express';
 const app = express();
 import { constructorMethod } from './routes/index.js';
 import exphbs from 'express-handlebars';
-import * as authMiddlware from './middlewares/auth.js';
-
+import session from 'express-session';
 
 
 // static files and allows parsing of req
@@ -18,8 +17,39 @@ app.set('view engine', 'handlebars');
 
 
 // middleware
-// 1) hides the login and sign-up button if the user is already logged in 
-app.use(authMiddlware.isLogin);
+app.use(
+    session({
+        name: "WorkoutApp",
+        secret: "Billy is a freak",
+        saveUninitialized: false,
+        resave: false,
+        cookie: {maxAge: 60000}
+    })
+)
+
+app.use('/private', (req, res, next) => {
+    if (!req.session.user) {
+        return res.redirect('/');
+    } else {
+        next();
+    }
+});
+
+app.use('/login', (req, res, next) => {
+    if (req.session.user) {
+        return res.redirect('/private');
+    } else {
+        next();
+    }
+})
+
+app.use('/sign-up', (req, res, next) => {
+    if (req.session.user) {
+        return res.redirect('/private');
+    } else {
+        next();
+    }
+})
 
 
 // sets up routes

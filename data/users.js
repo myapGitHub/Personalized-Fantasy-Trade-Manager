@@ -10,7 +10,7 @@ const checkUserNameSignUp = async (userName) => {
     if (userName.length === 0) throw "Not valid username";
 
     const userCollection = await users();
-    const user = await userCollection.findOne({ userName: userName }); // Fixed missing `await`
+    const user = await userCollection.findOne({ userName: userName }); 
 
     if (user) throw "A user with that username already exists";
 
@@ -186,4 +186,41 @@ export const createUser = async (userName, email, password, firstName, lastName,
     const newInsertUser = await userCollection.insertOne(newUser); // Fixed missing `await`
     if (!newInsertUser.insertedId) throw "Insert Failed";
 
+};
+
+
+export const userLogin = async (user, password) => {
+    if (!user || !password) throw "Invalid username or password";
+    if (typeof user !=='string' || typeof password !== 'string'
+        || user.trim().length === 0 || password.trim().length === 0
+        || password.trim().length < 8) {
+        throw "Invalid username or password";
+    }
+
+    user = user.trim().toLowerCase();
+    password = password.trim();
+
+    const userCollection = await users();
+    const validEmailFinder = await userCollection.findOne({email: user});
+    const validUserNameFinder = await userCollection.findOne({userName: user});
+    if (!validEmailFinder && !validUserNameFinder) throw "Invalid username or password";
+
+    let correctPassword = false;
+    let hashedPassword;
+    let id;
+    if (validEmailFinder) {
+        hashedPassword = validEmailFinder.password;
+        id = validEmailFinder._id.toString();
+    } else {
+        hashedPassword = validUserNameFinder.password;
+        id = validUserNameFinder._id.toString();
+    }
+    try {
+        correctPassword = await bcrypt.compare(password, hashedPassword);
+    } catch(e) {
+        throw e;
+    }
+    if (!correctPassword) throw "Invalid username or password";
+
+    return id; 
 };
