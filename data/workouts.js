@@ -38,17 +38,31 @@ const createWorkout = async (workoutType, userId, exercises) => {
   return workout;
 };
 
-const getAllWorkout = async () => {};
+const getAllWorkouts = async () => {
+  const workoutCollection = await workouts();
+  const workoutList = await workoutCollection.find({}).toArray();
+
+  if (!workoutList) throw "Error: Could not get all workouts";
+
+  const resultList = [];
+
+  for (const workout of workoutList) {
+    const nameID = await findByWorkoutIdExercisesOnly(workout._id);
+    resultList.push(nameID);
+  }
+
+  return resultList;
+};
 
 const getWorkoutById = async (id) => {
   checkExists(id);
   checkString(id);
   id = id.trim();
-  helpers.checkStringLength(id);
+  checkStringLength(id);
   if (!ObjectId.isValid(id)) throw "Error: invalid object ID";
   const workoutCollection = await workouts();
   const workout = await workoutCollection.findOne({ _id: new ObjectId(id) });
-  if (workout === null) throw "Error: No team with that id";
+  if (workout === null) throw "Error: No workout with that id";
   workout._id = workout._id.toString();
   // console.log(`This is : ${workout}`);
   return workout;
@@ -329,20 +343,20 @@ function checkPlayers(players) {
   }
 }
 
-//Given a workoutId, returns the id and the exercises
+//Given a workoutId, returns the id and the workoutType
 async function findByWorkoutIdExercisesOnly(workoutId) {
   if (!workoutId) throw "You must provide a workout ID";
   const workoutCollection = await workouts();
   const foundWorkout = await workoutCollection.findOne(
     { _id: workoutId },
-    { projection: { _id: 1, exercises: 1 } }
+    { projection: { _id: 1, workoutType: 1 } }
   );
 
   if (!foundWorkout) throw "Workout not found";
 
   return {
     _id: foundWorkout._id.toString(),
-    exercises: foundWorkout.exercises,
+    workoutType: foundWorkout.workoutType,
   };
 }
 
