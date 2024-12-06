@@ -139,7 +139,23 @@ const updateWorkout = async (workoutId, workoutType, exercises) => {
 };
 
 //Gets all workouts of a specific user based on passed in userId
-const getAllWorkoutsOfUser = async (userId) => {};
+const getAllWorkoutsOfUser = async (userId) => {
+  const workoutCollection = await workouts();
+  const workoutList = await workoutCollection.find({}).toArray();
+
+  if (!workoutList) throw "Error: Could not get all workouts";
+
+  const resultList = [];
+
+  for (const workout of workoutList) {
+    if (workout.userId === userId) {
+      const nameID = await findByWorkoutIdExercisesOnly(workout._id);
+      resultList.push(nameID);
+    }
+  }
+
+  return resultList;
+};
 
 function checkId(id) {
   if (!id) throw "Error: You must provide an id to search for";
@@ -602,4 +618,5 @@ export default {
   getWorkoutById,
   removeWorkout,
   updateWorkout,
+  getAllWorkoutsOfUser,
 };
