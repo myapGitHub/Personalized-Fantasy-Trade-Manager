@@ -4,7 +4,7 @@ import { workouts } from "../config/mongoCollections.js";
 import { ObjectId } from "mongodb";
 import validateDate from "validate-date";
 
-// TODO: Export and implement the following functions in ES6 format
+//Creates a workout with workoutType, userId (who created the workout), and exercises
 const createWorkout = async (workoutType, userId, exercises) => {
   //Check args exist
   checkExists(workoutType);
@@ -17,6 +17,12 @@ const createWorkout = async (workoutType, userId, exercises) => {
   checkId(userId);
   checkArray(exercises);
   checkEmptyArray(exercises);
+
+  for (let exercise of exercises) {
+    checkString(exercise);
+    exercise = exercise.trim();
+    checkStringLength(exercise);
+  }
 
   let newWorkout = {
     workoutType: workoutType,
@@ -38,6 +44,7 @@ const createWorkout = async (workoutType, userId, exercises) => {
   return workout;
 };
 
+//Gets all workouts in the database
 const getAllWorkouts = async () => {
   const workoutCollection = await workouts();
   const workoutList = await workoutCollection.find({}).toArray();
@@ -54,6 +61,7 @@ const getAllWorkouts = async () => {
   return resultList;
 };
 
+//Gets a specific workout based on workout id that is passed in
 const getWorkoutById = async (id) => {
   checkExists(id);
   checkString(id);
@@ -68,9 +76,70 @@ const getWorkoutById = async (id) => {
   return workout;
 };
 
-const removeWorkout = async () => {};
+//Removes workout based on workout id that is passed in
+const removeWorkout = async (id) => {
+  checkExists(id);
+  if (!id) throw "Error: You must provide an id to search for";
+  checkString(id);
+  id = id.trim();
+  checkStringLength(id);
+  if (!ObjectId.isValid(id)) throw "Error: Invalid object ID";
+  const workoutCollection = await workouts();
+  const deletionInfo = await workoutCollection.findOneAndDelete({
+    _id: new ObjectId(id),
+  });
 
-const updateWorkout = async () => {};
+  if (!deletionInfo) {
+    throw `Error: Could not delete team with id of ${id}`;
+  }
+  return `${deletionInfo.workoutType} with exercises
+  ${deletionInfo.exercises} have been successfully deleted!`;
+};
+
+//Updates workout based on id that is passed in
+const updateWorkout = async (workoutId, workoutType, exercises) => {
+  checkExists(workoutId);
+  checkExists(workoutType);
+  checkExists(exercises);
+
+  checkString(workoutId);
+  workoutId = workoutId.trim();
+  checkStringLength(workoutId);
+  checkId(workoutId);
+
+  checkString(workoutType);
+  workoutType = workoutType.trim();
+  checkStringLength(workoutType);
+  checkArray(exercises);
+  checkEmptyArray(exercises);
+
+  for (let exercise of exercises) {
+    checkString(exercise);
+    exercise = exercise.trim();
+    checkStringLength(exercise);
+  }
+
+  const updatedWorkout = {
+    workoutType: workoutType,
+    exercises: exercises,
+  };
+
+  const workoutCollection = await workouts();
+  const updatedInfo = await workoutCollection.findOneAndUpdate(
+    { _id: new ObjectId(id) },
+    { $set: updatedWorkout },
+    { returnDocument: "after" }
+  );
+
+  if (!updatedInfo) {
+    throw "Error: Could not update workout successfully";
+  }
+  updatedInfo._id = updatedInfo._id.toString();
+  return updatedInfo;
+};
+
+//Gets all workouts of a specific user based on passed in userId
+const getAllWorkoutsOfUser = async (userId) => {};
 
 function checkId(id) {
   if (!id) throw "Error: You must provide an id to search for";
