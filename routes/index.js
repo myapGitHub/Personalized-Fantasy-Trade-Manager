@@ -2,11 +2,13 @@ import path from "path";
 import signupRoutes from "./sign-up.js";
 import signinRoutes from "./login.js";
 import privateRoutes from "./private.js";
+import workouts from "./workouts.js";
 
 export const constructorMethod = (app) => {
   app.use("/sign-up", signupRoutes);
   app.use("/login", signinRoutes);
   app.use("/private", privateRoutes);
+  app.use("/workouts", workouts);
   app.use("/logout", async (req, res) => {
     req.session.destroy();
     res.redirect("/");

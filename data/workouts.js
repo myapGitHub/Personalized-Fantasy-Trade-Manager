@@ -4,16 +4,19 @@ import { workouts } from "../config/mongoCollections.js";
 import { ObjectId } from "mongodb";
 import validateDate from "validate-date";
 
-//Creates a workout with workoutType, userId (who created the workout), and exercises
-const createWorkout = async (workoutType, userId, exercises) => {
+//Creates a workout with workoutType, userId (who created the workout), and exercises, and a description of the workout
+const createWorkout = async (workoutType, userId, exercises, description) => {
   //Check args exist
   checkExists(workoutType);
   checkExists(userId);
   checkExists(exercises);
+  checkExists(description);
   //Check valid strings
   checkString(workoutType);
   workoutType = workoutType.trim();
   checkStringLength(workoutType);
+  checkString(description);
+  description = description.trim();
   checkId(userId);
   checkArray(exercises);
   checkEmptyArray(exercises);
@@ -27,9 +30,13 @@ const createWorkout = async (workoutType, userId, exercises) => {
   let newWorkout = {
     workoutType: workoutType,
     userId: userId,
-    ratings: 0,
+    ratings: {
+      totalRating: 0,
+      count: 0,
+    },
     exercises: exercises,
     comments: [],
+    description: description,
   };
 
   const workoutCollection = await workouts();
@@ -97,6 +104,8 @@ const removeWorkout = async (id) => {
 };
 
 //Updates workout based on id that is passed in
+//Here if needed, from what I see our core features dont require it,
+//but if there is use then feel free
 const updateWorkout = async (workoutId, workoutType, exercises) => {
   checkExists(workoutId);
   checkExists(workoutType);
@@ -155,6 +164,45 @@ const getAllWorkoutsOfUser = async (userId) => {
   }
 
   return resultList;
+};
+
+const rateWorkout = async (workoutId, userRating) => {
+  checkExists(workoutId);
+  checkExists(userRating);
+  checkId(workoutId);
+  if (typeof userRating !== "number" || userRating < 1 || userRating > 5) {
+    throw "Error: Rating must be a number between 1 and 5.";
+  }
+
+  const workoutCollection = await workouts();
+
+  const workout = await workoutCollection.findOne({
+    _id: new ObjectId(workoutId),
+  });
+  if (!workout) throw "Error: Workout not found.";
+
+  let newTotal = (workout.ratings.totalRating || 0) + userRating;
+  let newCount = (workout.ratings.count || 0) + 1;
+  let averageRating = newTotal / newCount;
+
+  const updateInfo = await workoutCollection.updateOne(
+    { _id: new ObjectId(workoutId) },
+    {
+      $set: {
+        "ratings.totalRating": newTotal,
+        "ratings.count": newCount,
+      },
+    }
+  );
+
+  if (updateInfo.matchedCount === 0) {
+    throw "Error: Could not update workout rating.";
+  }
+
+  return {
+    workoutId: workoutId,
+    averageRating: averageRating.toFixed(2),
+  };
 };
 
 function checkId(id) {
@@ -619,4 +667,5 @@ export default {
   removeWorkout,
   updateWorkout,
   getAllWorkoutsOfUser,
+  rateWorkout,
 };
