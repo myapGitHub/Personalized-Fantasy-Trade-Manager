@@ -1,0 +1,50 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Workout</title>
+  </head>
+  <body>
+    <h1>Create a New Workout</h1>
+
+    {{#if error}}
+      <p style="color: red;">{{error}}</p>
+    {{/if}}
+
+    <form action="/workouts" method="POST">
+      <div>
+        <label for="workoutType">Workout Type:</label>
+        <input
+          type="text"
+          id="workoutType"
+          name="workoutType"
+          placeholder="e.g., Cardio, Upper Body, etc."
+          required
+        />
+      </div>
+
+      <div>
+        <label for="description">Description:</label>
+        <textarea
+          id="description"
+          name="description"
+          placeholder="Brief description of the workout"
+          required
+        ></textarea>
+      </div>
+
+      <div>
+        <label for="exercises">Exercises (comma-separated):</label>
+        <input
+          type="text"
+          id="exercises"
+          name="exercises"
+          placeholder="e.g., Push-ups, Pull-ups, Squats"
+          required
+        />
+      </div>
+
+      <button type="submit">Create Workout</button>
+    </form>
+  </body>
+</html>
