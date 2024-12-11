@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+</head>
+<body>
+    <ul>
+    {{#each comments}}
+        <li>{{this}}</li>
+    {{/each}}
+    </ul>
+    <form action="/comments/{{id}}" method="POST">
+        <label for="comment">Add a comment</label>
+        <input type="text" name="comment" id="comment">
+        <button type="submit">Submit comment</button>
+    </form>
+</body>
+</html>
