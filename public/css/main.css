@@ -1,5 +1,4 @@
 
-
 /* General CSS styling */
 
 .error {
@@ -15,6 +14,7 @@ h1 {
 body {
     text-align: center;
     background-color: rgb(121, 201, 228);
+    font-family: Georgia, Times, 'Times New Roman', serif;
 }
 nav {
     text-align: left;
@@ -73,7 +73,7 @@ button:hover {
 #userId, #password {
     margin: 10px;
     font-size: 18px;
-    font-family: Georgia, Times, 'Times New Roman', serif;
+    /* font-family: Georgia, Times, 'Times New Roman', serif; */
 }
 
 #login-button {
@@ -90,6 +90,7 @@ button:hover {
     margin: 10px;
     font-size: 18px;
 }
+
 #signup-button {
     margin: 15px;
     margin-bottom: 50px;
@@ -97,8 +98,27 @@ button:hover {
     font-family: Georgia, Times, 'Times New Roman', serif;
 }
 
+#signup-form {
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 1500px;
+    border: 1px solid lightgrey;
+    border-radius: 6px;
+    background-color: lightblue;
+}
+
+
+/* Sign-up Page Confirmation Styling */
+
+#signup-created-div {
+    margin-top: 100px;
+}
+#signup-created-text {
+    color: rgb(51, 51, 51);
+}
 
 /* Sign-out Page Styling */
+
 #signout-div {
     margin-top: 100px;
 }
