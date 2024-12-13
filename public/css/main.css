@@ -43,6 +43,7 @@ a:hover {
 button {
     background-color: darkblue;
     color: white;
+    border-radius: 4px;
 }
 button:hover {
     background-color: blue; 
@@ -79,7 +80,6 @@ button:hover {
     margin: 15px;
     margin-bottom: 50px;
     padding: 5px;
-    border-radius: 4px;
     font-family: Georgia, Times, 'Times New Roman', serif;
 }
 
