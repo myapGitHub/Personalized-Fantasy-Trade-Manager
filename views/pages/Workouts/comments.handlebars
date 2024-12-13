@@ -6,9 +6,30 @@
     <title>{{title}}</title>
 </head>
 <body>
+    <header>
+      <nav>
+        {{#if loggedIn}}
+          <a href="/workouts/getAllWorkoutsOfUser">View All Workouts</a>
+          <a href="/workouts/userWorkouts">View Your Workouts</a>
+          <a href="/workouts/createWorkout">Create A Workout</a>
+          {{!-- <a href="/workouts/removeWorkout">Remove A Workout</a> --}}
+          <a href="/workouts/getWorkoutById">Get a Specific Workout</a>
+        {{else}}
+          <a href="/">Home</a>
+          <a href="/login" id="login-button">Login</a>
+          <a href="/sign-up" id="sign-up-button">Sign Up</a>
+          <p>not logged?</p>
+        {{/if}}
+      </nav>
+
+    </header>
     <ul>
     {{#each comments}}
-        <li>{{this}}</li>
+        {{this.likes}}
+        <li>{{this.text}} {{this.date}} {{this.userId}} 
+            <span data-workoutid = {{this.workoutId}} data-id="likebutton-{{this.commentId}}" class="likebutton">likes: </span><span id="likecount-{{this.commentId}}">{{this.likes}}</span>
+            <span data-workoutid= {{this.workoutId}} data-id="dislikebutton-{{this.commentId}}" class="dislikebutton">dislikes: </span><span id="dislikecount-{{this.commentId}}">{{this.dislikes}}</span>
+        </li>
     {{/each}}
     </ul>
     <form action="/comments/{{id}}" method="POST">
@@ -16,5 +37,6 @@
         <input type="text" name="comment" id="comment">
         <button type="submit">Submit comment</button>
     </form>
+    <script src="/public/js/comments.js"></script>
 </body>
 </html>

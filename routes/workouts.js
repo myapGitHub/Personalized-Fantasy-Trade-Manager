@@ -22,7 +22,7 @@ router.get("/userWorkouts", async (req, res) => {
   const userId = req.session.user.userId
   const results = await workoutData.getAllWorkoutsOfUserBilly(userId)
   // console.log(results)
-  res.render("pages/Workouts/getAllWorkoutsOfUser.handlebars", {title: "userWorkouts", workouts: results})
+  res.render("pages/Workouts/getAllWorkoutsOfUser.handlebars", {title: "userWorkouts", workouts: results, loggedIn: true})
 })
 
 router.get("/workoutsPage", (req, res) => {
@@ -75,5 +75,15 @@ router.post("/createWorkout", async (req, res) => {
       .render("pages/workouts/createWorkout", { error: e.message });
   }
 });
+
+router.delete("/:id", async (req, res) => {
+  try {
+    const id = req.params.id
+    const result = await workoutData.removeWorkout(id)
+    res.redirect("/userWorkouts")
+  } catch (error) {
+    console.log(error.message)
+  }
+})
 
 export default router;

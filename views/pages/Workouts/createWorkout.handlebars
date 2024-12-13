@@ -5,6 +5,23 @@
     <title>Create Workout</title>
   </head>
   <body>
+    <header>
+      <nav>
+        {{#if loggedIn}}
+          <a href="/workouts/getAllWorkoutsOfUser">View All Workouts</a>
+          <a href="/workouts/userWorkouts">View Your Workouts</a>
+          <a href="/workouts/createWorkout">Create A Workout</a>
+          {{!-- <a href="/workouts/removeWorkout">Remove A Workout</a> --}}
+          <a href="/workouts/getWorkoutById">Get a Specific Workout</a>
+        {{else}}
+          <a href="/">Home</a>
+          <a href="/login" id="login-button">Login</a>
+          <a href="/sign-up" id="sign-up-button">Sign Up</a>
+          <p>not logged?</p>
+        {{/if}}
+      </nav>
+
+    </header>
     <h1>Create a New Workout</h1>
 
     {{#if error}}

@@ -98,7 +98,7 @@ const removeWorkout = async (id) => {
   });
 
   if (!deletionInfo) {
-    throw `Error: Could not delete team with id of ${id}`;
+    throw `Error: Could not delete workout with id of ${id}`;
   }
   return `${deletionInfo.workoutType} with exercises
   ${deletionInfo.exercises} have been successfully deleted!`;
@@ -134,7 +134,6 @@ const updateWorkout = async (workoutId, workoutType, exercises, comments) => {
     exercises: exercises,
     comments: comments,
   };
-  console.log({workoutId})
   const workoutCollection = await workouts();
   const updatedInfo = await workoutCollection.findOneAndUpdate(
     { _id: new ObjectId(workoutId) },
