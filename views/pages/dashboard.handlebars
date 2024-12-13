@@ -1,14 +1,15 @@
-<header>
-    <nav>
-        <a href="/dashboard">Home</a>
-        <a>Profile</a>
-        <a href="/signout">Logout</a>
-        <a href="/workouts/workoutsPage">Workouts</a>
-        <a href="/settings/account">Settings</a>
-    </nav>
-</header>
 
+<nav id="dashboard">
+    <a href="/dashboard">Workout App Home</a>
+    <a href="/profile">Profile</a> {{!-- Navigate to same page with /profile --}}
+    <a href="/workouts/workoutsPage">Workouts</a>
+    <a href="/settings/account">Settings</a>
+</nav>
 
-<h1>DashBoard</h1>
-<p>User is logged in</p>
-<p>{{{ userId }}}</p>
+<div>
+    <h1>DashBoard</h1>
+    <h4 id=welcome>Welcome {{{ userId }}}</h4>
+    {{!-- <p id="">You are now signed in!</p> --}}
+</div>
+
+<a href="/signout">Logout</a>
