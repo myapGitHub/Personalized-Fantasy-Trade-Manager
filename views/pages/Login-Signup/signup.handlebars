@@ -1,16 +1,13 @@
 
-<header>
-    <nav>
-          <a href="/">Workout App Home</a>
-          <a href="/signin" id="login-button">Login</a>
-    </nav>
-</header>
+<nav>
+    <a href="/">Workout App Home</a>
+    <a href="/signin" id="login-button">Login</a>
+</nav>
 
-
-<h1>Sign Up</h1>
-    <div class="error" id="error">{{{ error }}}</div>
 
     <form id="signup-form" method="post">
+        <h1>Sign Up</h1>
+        <div class="error" id="error">{{{ error }}}</div>
         <div>
             <label for="userId-signup">Username:</label>
             <input value="{{userId}}" name="userId-signup" id="userId-signup" type="text" placeholder="Create Username" required>
