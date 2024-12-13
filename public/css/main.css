@@ -23,6 +23,10 @@ nav {
     margin-left: 100px;
 }
 
+input {
+    font-family: Georgia, Times, 'Times New Roman', serif;
+}
+
 h1 {
     color: #6185cd;
 }
@@ -44,10 +48,15 @@ button {
     background-color: darkblue;
     color: white;
     border-radius: 4px;
+    font-family: Georgia, Times, 'Times New Roman', serif;
+
 }
 button:hover {
     background-color: blue; 
     color: grey;
+}
+select {
+    font-family: Georgia, Times, 'Times New Roman', serif;
 }
 
 /* Sign-in Page Styling */
@@ -73,14 +82,12 @@ button:hover {
 #userId, #password {
     margin: 10px;
     font-size: 18px;
-    /* font-family: Georgia, Times, 'Times New Roman', serif; */
 }
 
 #login-button {
     margin: 15px;
     margin-bottom: 50px;
     padding: 5px;
-    font-family: Georgia, Times, 'Times New Roman', serif;
 }
 
 
