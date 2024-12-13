@@ -20,43 +20,98 @@ app.use(
     secret: "Billy is a freak",
     saveUninitialized: false,
     resave: false,
-    cookie: { maxAge: 60000 },
+    cookie: { maxAge: 30 * 60 * 1000},
   })
 );
 
-app.use("/private", (req, res, next) => {
+app.use('/', (req, res, next) => {
+  console.log(new Date().toUTCString());
+  console.log(req.method);
+  console.log(req.originalUrl);
+
+  if (req.originalUrl === '/') {
+    if (req.session.user) {
+      req.session.cookie.maxAge = 30 * 60 * 1000;
+      return res.redirect('/dashboard');
+    } else {
+      return res.redirect('/home');
+    }
+  }
+  next();
+});
+
+// SIGN/SIGNIN UP MIDDLEWARE
+app.use('/signin', (req, res, next) => {
+  if (req.session.user) {
+    return res.redirect('/dashboard');
+  }
+  next();
+})
+
+app.use('/signup', (req, res, next) => {
+  if (req.session.user) {
+    return res.redirect('/dashboard');
+  }
+  next();
+})
+// DASHBOARDS MIDDLEWARES
+app.use('/home', (req, res, next) => {
+  if (req.session.user) {
+    return res.redirect('/dashboard');
+  }
+  next();
+})
+
+app.use('/dashboard', (req, res, next) => {
   if (!req.session.user) {
-    return res.redirect("/");
-  } else {
-    next();
+    return res.redirect('/home');
   }
-});
+  req.session.cookie.maxAge = 30 * 60 * 1000;
+  next();
+})
 
-app.use("/login", (req, res, next) => {
-  if (req.session.user) {
-    return res.redirect("/private");
-  } else {
-    next();
+app.use('/signout', (req, res, next) => {
+  if (!req.session.user) {
+    return res.redirect('/signin');
   }
-});
-
-app.use("/sign-up", (req, res, next) => {
-  if (req.session.user) {
-    return res.redirect("/private");
-  } else {
-    next();
-  }
-});
-
+  next();
+})
+// WORKOUT MIDDLEWARES
 app.use("/workouts", (req, res, next) => {
   // console.log("Middleware for /workouts");
   // console.log("Session:", req.session);
   if (!req.session.user) {
-    return res.redirect("/sign-up");
+    return res.redirect("/signup");
   } else {
     next();
   }
 });
+
+
+// SETTINGS MIDDLEWARES
+app.use('/settings', (req, res, next) => {
+  if (req.originalUrl === '/settings') {
+    if (!req.session.user) {
+      return res.redirect("/signin");
+    } else {
+      return res.redirect('/settings/account');
+    }
+  }
+  next();
+})
+app.use('/settings/account', (req, res, next) => {
+  if (!req.session.user) {
+    return res.redirect('/signin');
+  }
+  next();
+})
+
+app.use('/settings/delete', (req, res, next) => {
+  if (!req.session.user) {
+    return res.redirect('/signin');
+  }
+  next();
+})
 
 // sets up routes
 constructorMethod(app);

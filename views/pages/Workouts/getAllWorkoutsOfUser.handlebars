@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+</head>
+<body>
+    <h1>Workout Types</h1>
+    {{#each workouts}}
+        <h2>{{foundWorkout.workoutType}}</h2>
+        <h3>{{foundWorkout.description}}</h3>
+            {{#each foundWorkout.exercises}}
+                <p>{{this}}</p>
+            {{/each}}
+            <a href="/comments/{{foundWorkout._id}}">View Comments</a>
+    {{/each}}
+</body>
+</html>

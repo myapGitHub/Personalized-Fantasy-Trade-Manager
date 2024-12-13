@@ -1,76 +1,81 @@
-import { users } from "../config/mongoCollections.js"; 
+import { ObjectId } from "mongodb";
+import { users, workouts } from "../config/mongoCollections.js"; 
 import bcrypt from 'bcrypt';
 
-// checks username to make sure it is string, not empty, and unique in the database
-const checkUserNameSignUp = async (userName) => {
-    if (!userName) throw "No username provided";
-    if (typeof userName !== 'string') throw "Not valid username";
 
-    userName = userName.trim().toLowerCase();
-    if (userName.length === 0) throw "Not valid username";
 
-    const userCollection = await users();
-    const user = await userCollection.findOne({ userName: userName }); 
+export const checkUserId = (userId) => {
+    if (userId === undefined || userId === null) throw "userId is not supplied";
+    if (typeof userId !== 'string' || userId.trim().length === 0) throw "userId not string or empty string";
 
-    if (user) throw "A user with that username already exists";
+    userId = userId.trim();
+    if (userId.length < 5 || userId.length > 10) throw "user id has to be 2 >= or 10 <= in length"; 
 
-    return userName;
+    for (const char of userId) {
+        if (!isNaN(char) && char !== ' ') {
+            throw "userid contains number";
+        }
+    }
+    return userId;
 }
+const checkPassword = async (password) => {
+    if (password === undefined || password === null) throw "password is not supplied";
+    if (typeof password !== 'string' || password.trim().length === 0) throw "passord is not string or emtpy";
 
-// checks to make sure the email has correct structure and is unique
-const checkEmailSignUp = async (email) => {
-    if (!email) throw "No email provided";
-    if (typeof email !== 'string') throw "Not valid email";
-    email = email.trim().toLowerCase();
-    if (email.length === 0 || email.includes(' ')) throw "Not valid email";
+    // NO TRIMING PASSWORD
+    //password = password.trim();
 
-    const splitOne = email.split('@');
-    if (splitOne.length !== 2) throw "Not valid email";
+    //password constraints
+    let capitalLetter= false;
+    let specialChar= false;
+    let number= false;
 
-    const username = splitOne[0];
-    const domain = splitOne[1];
+    
+    // object of special chars
+    const specialChars = {
+        "!": true, "@": true, "#": true, "$": true, "%": true, "^": true, "&": true,
+        "*": true, "(": true, ")": true, "_": true, "+": true, "-": true, "=": true,
+        "[": true, "]": true, "{": true, "}": true, "|": true, ";": true, ":": true,
+        "'": true, ",": true, ".": true, "<": true, ">": true, "/": true, "?": true,
+        "`": true, "~": true, "\"": true
+    };
 
-    if (username.length === 0) throw "Not valid email";
-
-    const splitPeriod = domain.split('.');
-    if (splitPeriod.length < 2) throw "Not valid email";
-
-    for (const part of splitPeriod) {
-        if (part.length === 0) throw "Not valid email";
+    if (password.length < 8) throw "password not long enough";
+    for (const char of password) {
+        if (char === ' ') throw "password has space";
+        if (!isNaN(char)) number= true; 
+        if (char <= 'Z' && char >='A') capitalLetter= true
+        if (char in specialChars) specialChar = true;
     }
 
-    const userCollection = await users();
-    const user = await userCollection.findOne({ email: email }); // Fixed missing `await`
+    if (!number || !capitalLetter || !specialChar) throw "password doesnt contain Captial Letter, Number or special character";
 
-    if (user) throw "A user with that email exists";
-
-    return email;
-};
-
-// checks the password to ensure it is a string and at least 8 characters, then hashes it
-const checkPasswordAndHash = async (password) => {
-    if (!password) throw "No password provided";
-    if (typeof password !== 'string') throw "Password must be a string";
-    if (password.trim().length < 8) throw "Password must be at least 8 characters";
-
-    const saltRounds = 10;
-    const hash = await bcrypt.hash(password, saltRounds);
+    const hash = await bcrypt.hash(password, 10);
     return hash;
 }
+const checkFirstOrLastName= (name) => {
+    if (name === undefined || name === null) throw "first or last name not provided";
+    if (typeof name !== 'string' || name.trim().length === 0) throw "first name or last name is not string or empty";
+    name = name.trim();
+    if (name.length < 2 || name.length > 25) throw "at least 2 characters long with a max of 25 characters.";
 
-// checks to ensure input is a string and not empty
-const checkStr = (str) => {
-    if (!str) throw "No string provided";
-    if (typeof str !== 'string' || str.trim().length === 0) throw "String cannot be empty";
+    for (const char of name) {
+        if (!isNaN(char) && char !== ' ') {
+            throw "last or first name cotains number";
+        }
+    }
 
-    return str.trim();
-}
+    return name;
+};
+
 
 // checks to ensure the input is a number
 const checkNum = (num) => {
     if (num === undefined || num === null) throw "No number provided"; // Fixed to handle `null` or `undefined`
     if (typeof num !== 'number') throw "Not a valid number";
     if (isNaN(num)) throw "Not a valid number"; // Fixed logic
+
+    return num;
 }
 
 // checks gender to ensure it matches 'male', 'female', or 'other'
@@ -79,12 +84,11 @@ const checkGender = (gender) => {
     if (typeof gender !== 'string' || gender.trim().length === 0) throw "Invalid gender type";
     gender = gender.trim();
     if (gender !== 'male' && gender !== 'female' && gender !== 'other') throw "Invalid gender option";
-
     return gender;
 }
-
 // checks experience level to ensure it matches 'beginner', 'intermediate', or 'advanced'
 const checkExperience = (experience) => {
+    console.log(experience);
     if (!experience) throw "No experience provided"; // Fixed variable name
     if (typeof experience !== 'string' || experience.trim().length === 0) throw "Invalid experience type";
     experience = experience.trim();
@@ -92,7 +96,6 @@ const checkExperience = (experience) => {
 
     return experience;
 }
-
 // calculates estimated max lifts based on user data
 const calculateMaxes = ({ experience, age, weight, height, gender }) => {
     const experienceMultipliers = {
@@ -129,26 +132,41 @@ const calculateMaxes = ({ experience, age, weight, height, gender }) => {
     };
 };
 
-// creates a new user
-export const createUser = async (userName, email, password, firstName, lastName, height, weight, age, gender, benchMax, squatMax, deadLiftMax, level) => {
-    userName = await checkUserNameSignUp(userName);
-    email = await checkEmailSignUp(email);
-    password = await checkPasswordAndHash(password);
-
-    firstName = checkStr(firstName);
-    lastName = checkStr(lastName);
-    level = checkExperience(level);
-
-    height = parseInt(height);
-    weight = parseInt(weight);
-    age = parseInt(age);
-
-    checkNum(height);
-    checkNum(weight);
-    checkNum(age);
-
+export const signUp = async (
+    userId,
+    password,
+    firstName,
+    lastName,
+    height,
+    weight,
+    age,
+    gender,
+    benchMax,
+    squatMax,
+    deadLiftMax,
+    level
+) => {
+    // checsk to make sure the userId is valid
+    userId = checkUserId(userId);
+    // checks to make sure that the userId is not in db
+    const userCollection = await users();
+    let user = await userCollection.findOne({userId: userId.toLowerCase()});
+    if (user) throw "User exists with that userId";
+    // checks the password must cotain capital, specialchar
+    password = await checkPassword(password);
+    //checks the firstName and last
+    firstName = checkFirstOrLastName(firstName); 
+    lastName = checkFirstOrLastName(lastName);
+    // checks the height
+    height = checkNum(parseInt(height));
+    // checks weight #TODO maybe add requirments
+    weight = checkNum(parseInt(weight));
+    // checks age #TODO maybe add requirments
+    age = checkNum(parseInt(age));
+    // checks the gender
     gender = checkGender(gender);
-
+    // checks experience
+    level = checkExperience(level);    
     const { benchMax: estBenchMax, squatMax: estSquatMax, deadliftMax: estDeadLiftMax } = calculateMaxes({
         experience: level,
         age: age,
@@ -156,19 +174,18 @@ export const createUser = async (userName, email, password, firstName, lastName,
         height: height,
         gender: gender,
     });
-
+    // if no bechMax is supplied use the calc
     if (!benchMax) benchMax = estBenchMax;
     else checkNum(parseInt(benchMax));
-
+    // if no squatMax is supplied use the calc
     if (!squatMax) squatMax = estSquatMax;
     else checkNum(parseInt(squatMax));
-
+    // if no deadLiftMax is supplied use the calc
     if (!deadLiftMax) deadLiftMax = estDeadLiftMax;
     else checkNum(parseInt(deadLiftMax));
-
+    // creates a new user obj to insert
     const newUser = {
-        userName: userName,
-        email: email,
+        userId: userId.toLowerCase(),
         password: password,
         firstName: firstName,
         lastName: lastName,
@@ -181,46 +198,100 @@ export const createUser = async (userName, email, password, firstName, lastName,
         deadLiftMax: deadLiftMax,
         experience: level,
     };
-
-    const userCollection = await users();
+    // inserts the new user
     const newInsertUser = await userCollection.insertOne(newUser); // Fixed missing `await`
     if (!newInsertUser.insertedId) throw "Insert Failed";
 
+    return {registrationCompleted: true};
+}
+
+export const checkPasswordSignIn = (password) => {
+    if (password === undefined || password === null) throw "password is not supplied";
+    if (typeof password !== 'string' || password.trim().length === 0) throw "passord is not string or emtpy";
+
+    // Trims PASSOWORD
+    //password = password.trim();
+
+    //password constraints
+    let capitalLetter= false;
+    let specialChar= false;
+    let number= false;
+
+    
+    // object of special chars
+    const specialChars = {
+        "!": true, "@": true, "#": true, "$": true, "%": true, "^": true, "&": true,"*": true, "(": true, ")": true, "_": true, "+": true, "-": true, "=": true,
+        "[": true, "]": true, "{": true, "}": true, "|": true, ";": true, ":": true,"'": true, ",": true, ".": true, "<": true, ">": true, "/": true, "?": true,"`": true, "~": true, "\"": true
+    };
+
+    if (password.length < 8) throw "password not long enough";
+    for (const char of password) {
+        if (char === ' ') throw "password has space :" + password;
+        if (!isNaN(char)) number= true; 
+        if (char <= 'Z' && char >='A') capitalLetter= true
+        if (char in specialChars) specialChar = true;
+    }
+
+    if (!number || !capitalLetter || !specialChar) throw "password doesnt contain Captial Letter, Number or special character";
+
+    
+}
+export const userLogin = async (userIdParam, password) => {
+    // checks the userId valid
+    userIdParam = checkUserId(userIdParam);
+    // checks the password to be valid
+   checkPasswordSignIn(password);
+
+   const userCollection = await users();
+   const validUserIdFinder = await userCollection.findOne({userId: userIdParam.toLowerCase()});
+   
+   // if there is no user with that id 
+   if (!validUserIdFinder) throw "Either UserId or Password is Invalid";
+
+   // gets the hashed password from the object 
+   const foundHashedPassword = validUserIdFinder['password'];
+   // compares the provided password and the one in the object
+   const compareToSherlock = await bcrypt.compare(password, foundHashedPassword);
+   if (!compareToSherlock) throw "Either the userId or password is invalid";
+
+   const {_id, userId, firstName, lastName, height, weight, age, gender, benchMax, squatMax, deadLiftMax, level} =  validUserIdFinder;
+   // need to figure out what to return
+   return {_id, userId, firstName, lastName, height, weight, age, gender, benchMax, squatMax, deadLiftMax, level};
+
 };
 
 
-export const userLogin = async (user, password) => {
-    if (!user || !password) throw "Invalid username or password";
-    if (typeof user !=='string' || typeof password !== 'string'
-        || user.trim().length === 0 || password.trim().length === 0
-        || password.trim().length < 8) {
-        throw "Invalid username or password";
-    }
 
-    user = user.trim().toLowerCase();
-    password = password.trim();
-
+export const deleteAccount = async (userId) => {
+    userId = checkUserId(userId);
+    // deletes the user from user collection
     const userCollection = await users();
-    const validEmailFinder = await userCollection.findOne({email: user});
-    const validUserNameFinder = await userCollection.findOne({userName: user});
-    if (!validEmailFinder && !validUserNameFinder) throw "Invalid username or password";
-
-    let correctPassword = false;
-    let hashedPassword;
-    let id;
-    if (validEmailFinder) {
-        hashedPassword = validEmailFinder.password;
-        id = validEmailFinder._id.toString();
-    } else {
-        hashedPassword = validUserNameFinder.password;
-        id = validUserNameFinder._id.toString();
+    const deleteProfile = await userCollection.deleteOne({userId: userId.toLowerCase()});
+    if (deleteProfile.delettedCount === 0) {
+        throw "No user found to delete";
     }
-    try {
-        correctPassword = await bcrypt.compare(password, hashedPassword);
-    } catch(e) {
-        throw e;
-    }
-    if (!correctPassword) throw "Invalid username or password";
+    // deletes all the user workout from collection
+    const workoutCollection = await workouts();
+    const deleteWorkouts = await workoutCollection.deleteMany({userId: userId.toLowerCase()});
 
-    return id; 
-};
+    // returns confirmation that
+    return {deletionCompleted: true}
+}
+
+
+export const updateUserId = async (id,updateUserId) => {
+    updateUserId = checkUserId(updateUserId);
+    
+    // checks if a user with that id already exists 
+    const userCollection = await users();
+    const userExists = await userCollection.findOne({userId: updateUserId.toLowerCase()});
+
+    if (userExists) throw "A user with that id exists";
+
+    const update = await userCollection.updateOne(
+        {_id: new ObjectId(id)},
+        {$set: {userId: updateUserId.toLowerCase()}}
+    );
+
+    return {changeSuccess: true};
+}

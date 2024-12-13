@@ -1,7 +1,29 @@
 import { Router } from "express";
 import { workoutData } from "../data/index.js";
+import workouts from "../data/workouts.js";
 
 const router = Router();
+
+router.post("/", async (req, res) => {
+  // console.log(req.body)
+  // console.log(req.session.user)
+  let { workoutType, description, exercises} = req.body
+  const userId = req.session.user.userId
+  exercises = exercises.split(",")
+  try {
+    await workoutData.createWorkout(workoutType, userId, exercises, description)
+    res.redirect("/workouts/userWorkouts")
+  } catch (error) {
+    console.log(error.message)
+  }
+})
+
+router.get("/userWorkouts", async (req, res) => {
+  const userId = req.session.user.userId
+  const results = await workoutData.getAllWorkoutsOfUserBilly(userId)
+  // console.log(results)
+  res.render("pages/Workouts/getAllWorkoutsOfUser.handlebars", {title: "userWorkouts", workouts: results})
+})
 
 router.get("/workoutsPage", (req, res) => {
   if (!req.session.user || !req.session.user.userId) {

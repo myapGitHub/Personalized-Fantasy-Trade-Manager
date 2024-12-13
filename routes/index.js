@@ -1,25 +1,20 @@
-import path from "path";
-import signupRoutes from "./sign-up.js";
-import signinRoutes from "./login.js";
-import privateRoutes from "./private.js";
 import workoutRoutes from "./workouts.js";
+import signupRoutes from "./signup.js";
+import signinRoutes from './signin.js';
+import authRoutes from './auth.js';
+import settingRoutes from './settings.js';
+import commentRoutes from './comments.js';
 
 export const constructorMethod = (app) => {
-  app.use("/sign-up", signupRoutes);
-  app.use("/login", signinRoutes);
+  app.use('/', authRoutes);
+  app.use('/signup', signupRoutes);
+  app.use('/signin', signinRoutes);
+  app.use('/settings', settingRoutes);
+  app.use("/comments", commentRoutes);
 
-  app.use("/logout", async (req, res) => {
-    req.session.destroy();
-    res.redirect("/");
-  });
-  app.use("/private", privateRoutes);
   app.use("/workouts", workoutRoutes);
-  app.use("/", (req, res) => {
-    res.render("pages/home", { loggedIn: req.isLoggedIn, user: req.user });
-    //res.render('pages/home', {loggedIn: true, user: req.user});
-  });
   app.use("*", (req, res) => {
-    res.redirect("/");
+    res.sendStatus(404);
   });
 };
 

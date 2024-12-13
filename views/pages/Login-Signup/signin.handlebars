@@ -1,0 +1,27 @@
+<header>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/signup" id="sign-up-button">Sign Up</a>
+    </nav>
+</header>
+
+<h1>Login</h1>
+<div id="login-error">{{{error}}}</div> 
+
+<form id="signin-form" method="post"> 
+    <div>
+        <label for="userId">Enter Username</label>
+        <input id="userId" name="userId" type="text" required>
+    </div>
+
+    <div>
+        <label for="password">Enter Password</label>
+        <input id="password" name="password" type="password" required>
+    </div>
+    
+    <div>
+        <button type="submit">Login</button>
+    </div>
+</form>
+
+<script src="/public/js/signup-signin.js"></script>
