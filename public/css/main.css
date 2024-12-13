@@ -83,6 +83,11 @@ button:hover {
     font-family: Georgia, Times, 'Times New Roman', serif;
 }
 
-#signoutView {
-    color: grey;
+
+/* Sign-out Page Styling */
+#signout-div {
+    margin-top: 100px;
+}
+#logout-text {
+    color: rgb(51, 51, 51);
 }
