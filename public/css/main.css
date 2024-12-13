@@ -1,5 +1,88 @@
 
+
+/* General CSS styling */
+
 .error {
     color: red;
     size: 2.0em;
+}
+title {
+    color: darkblue;
+}
+h1 {
+    color: blue;
+}
+body {
+    text-align: center;
+    background-color: rgb(121, 201, 228);
+}
+nav {
+    text-align: left;
+    font-size: 22px;
+    margin: 20px auto;
+    margin-left: 100px;
+}
+
+h1 {
+    color: #6185cd;
+}
+h3 {
+    color: rgb(7, 7, 63);
+}
+form {
+    color: grey;
+}
+a {
+    text-decoration: none; /* removes line underneath links */ 
+    font-weight: bold;
+    color: blue; /* Blue links */
+}
+a:hover {
+    color: orange; /* Orange on hover */
+}
+button {
+    background-color: darkblue;
+    color: white;
+}
+button:hover {
+    background-color: blue; 
+    color: grey;
+}
+
+/* Sign-in Page Styling */
+
+#home-link {
+    text-align: left;  
+}
+
+#signin-form {
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 300px;
+    border: 1px solid lightgrey;
+    border-radius: 6px;
+    background-color: lightblue;
+}
+
+#login-header {
+    text-align: left;
+    margin-Left: 50px;
+}
+
+#userId, #password {
+    margin: 10px;
+    font-size: 18px;
+    font-family: Georgia, Times, 'Times New Roman', serif;
+}
+
+#login-button {
+    margin: 15px;
+    margin-bottom: 50px;
+    padding: 5px;
+    border-radius: 4px;
+    font-family: Georgia, Times, 'Times New Roman', serif;
+}
+
+#signoutView {
+    color: grey;
 }
