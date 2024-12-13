@@ -84,6 +84,20 @@ button:hover {
 }
 
 
+/* Sign-up Page Styling */
+
+#userId-signup, #password-signup, #confirm-password {
+    margin: 10px;
+    font-size: 18px;
+}
+#signup-button {
+    margin: 15px;
+    margin-bottom: 50px;
+    padding: 5px;
+    font-family: Georgia, Times, 'Times New Roman', serif;
+}
+
+
 /* Sign-out Page Styling */
 #signout-div {
     margin-top: 100px;
