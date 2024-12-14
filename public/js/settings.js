@@ -33,9 +33,9 @@ if (deleteForm) {
 
 // Ajax settings update
 const changeUserIdForm = document.getElementById('change-userId');
-const changeBenchMaxForm = document.getElementById('change-benchMax');
-const changeSquatMaxForm = document.getElementById('change-squatMax');
-const changeDeadLiftMaxForm = document.getElementById('change-deadLiftMax');
+// const changeBenchMaxForm = document.getElementById('change-benchMax');
+// const changeSquatMaxForm = document.getElementById('change-squatMax');
+// const changeDeadLiftMaxForm = document.getElementById('change-deadLiftMax');
 
 if (changeUserIdForm) {
     changeUserIdForm.addEventListener('submit', async (event) => {
@@ -84,3 +84,54 @@ if (changeUserIdForm) {
         }
     });
 }
+
+
+// Code for the make private make public
+const statusButton = document.getElementById('account-status-btn');
+if (statusButton) {
+    statusButton.addEventListener('click', async () => {
+        const errorDiv = document.getElementById('account-status-error');
+        let currStatus = statusButton.dataset.status;
+
+        // empty and hide any current errors
+        errorDiv.innerHTML = '';
+        errorDiv.hidden = true;
+
+        if (!currStatus || (currStatus !== 'public' && currStatus !== 'private')) {
+            errorDiv.innerHTML = "Error Occured";
+            errorDiv.hidden = false;
+            return
+        }
+        let requestConfig = {
+            method: 'POST',
+            url: '/settings/account',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                type: 'status',
+                data: currStatus
+            })
+        }
+        try {
+            const response = await $.ajax(requestConfig);
+            // Check for response validity
+            if (response && response.completed) {
+                // Update the button
+                const newStatus = response.newStatus ? 'public' : 'private'; 
+                statusButton.dataset.status = newStatus;
+                statusButton.textContent = newStatus === 'public' ? 'Make Private' : 'Make Public';
+        
+                errorDiv.innerHTML = "Successfully Updated!";
+                errorDiv.hidden = false;
+            } else {
+                errorDiv.innerHTML = "Update not Successful";
+                errorDiv.hidden = false;
+            }
+        } catch (e) {
+            const errorMessage = e.responseJSON?.error || "An unknown error occurred.";
+            errorDiv.innerHTML = errorMessage;
+            errorDiv.hidden = false;
+        }
+    });
+}
+
+

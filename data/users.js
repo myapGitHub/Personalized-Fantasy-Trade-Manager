@@ -197,6 +197,7 @@ export const signUp = async (
         squatMax: squatMax,
         deadLiftMax: deadLiftMax,
         experience: level,
+        isPublic: true
     };
     // inserts the new user
     const newInsertUser = await userCollection.insertOne(newUser); // Fixed missing `await`
@@ -254,9 +255,9 @@ export const userLogin = async (userIdParam, password) => {
    const compareToSherlock = await bcrypt.compare(password, foundHashedPassword);
    if (!compareToSherlock) throw "Either the userId or password is invalid";
 
-   const {_id, userId, firstName, lastName, height, weight, age, gender, benchMax, squatMax, deadLiftMax, level} =  validUserIdFinder;
+   const {_id, userId, firstName, lastName, height, weight, age, gender, benchMax, squatMax, deadLiftMax, level, isPublic} =  validUserIdFinder;
    // need to figure out what to return
-   return {_id, userId, firstName, lastName, height, weight, age, gender, benchMax, squatMax, deadLiftMax, level};
+   return {_id, userId, firstName, lastName, height, weight, age, gender, benchMax, squatMax, deadLiftMax, level, isPublic};
 
 };
 
@@ -280,6 +281,7 @@ export const deleteAccount = async (userId) => {
 
 
 export const updateUserId = async (id,updateUserId) => {
+    id = checkId(id);
     updateUserId = checkUserId(updateUserId);
     
     // checks if a user with that id already exists 
@@ -288,10 +290,61 @@ export const updateUserId = async (id,updateUserId) => {
 
     if (userExists) throw "A user with that id exists";
 
+    // checks if id in the db
+    const userIdExists = await userCollection.findOne({_id: new ObjectId(id)});
+    if (!userIdExists) throw 'A user with that id doesnt exist';
+
     const update = await userCollection.updateOne(
         {_id: new ObjectId(id)},
         {$set: {userId: updateUserId.toLowerCase()}}
     );
 
     return {changeSuccess: true};
+}
+
+const checkCurrStatus = (status) => {
+    if (!status) throw "Must provide status";
+    if (typeof status !== 'string' || status.trim().length === 0) throw "Status must be a string and not empty";
+    if (status !== 'public' && status !== 'private') throw "Status must be 'public' or 'private'"
+
+    return status;
+}
+
+const checkId = (id) => {
+    if (!id) throw "ID must be supplied";
+    if (typeof id !== 'string') throw "Id must be a string";
+    if (id.trim().length === 0) throw "id cannot be empty"
+    id = id.trim();
+
+    if (!ObjectId.isValid(id)) throw 'invalid object id';
+
+    return id
+
+}
+
+export const updateProfileStatus = async (id, currStatus) => {
+    id = checkId(id);
+    currStatus = checkCurrStatus(currStatus);
+
+    const userCollection = await users();
+
+    // checks to make sure the userId is valid in db
+    const userExists = await userCollection.findOne({_id: new ObjectId(id)});
+    if (!userExists) throw "A user with that id doesnt exists";
+
+    let newStatus;
+    if (currStatus === 'public') {
+        newStatus = false;
+    } else if (currStatus === 'private') {
+        newStatus = true;
+    } else {
+        throw "Curr status must be 'private' or 'public'";
+    }
+
+    const update = await userCollection.updateOne(
+        {_id: new ObjectId(id)},
+        {$set: {isPublic: newStatus}}
+    );
+
+    return {newStatus, completed: true} 
 }

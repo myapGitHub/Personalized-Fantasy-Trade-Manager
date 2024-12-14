@@ -17,7 +17,7 @@ router
 
         // checks login
         try {
-            const {_id, userId, firstName, lastName, height, weight, age, gender, benchMax, squatMax, deadLiftMax, level} = await userData.userLogin(userIdSend, passwordSend);
+            const {_id, userId, firstName, lastName, height, weight, age, gender, benchMax, squatMax, deadLiftMax, level, isPublic} = await userData.userLogin(userIdSend, passwordSend);
             req.session.user = {
                 _id: _id,
                 userId: userId,
@@ -29,7 +29,8 @@ router
                 benchMax: benchMax,
                 squatMax: squatMax,
                 deadLiftMax: deadLiftMax,
-                level: level
+                level: level,
+                isPublic: isPublic
             };
 
             res.redirect('/dashboard');

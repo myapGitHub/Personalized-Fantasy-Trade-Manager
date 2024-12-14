@@ -14,7 +14,8 @@ router.route('/account').get(async (req, res) => {
         userId: req.session.user.userId,
         maxBench: req.session.user.benchMax,
         maxSquat: req.session.user.squatMax,
-        maxDeadLift: req.session.user.deadLiftMax
+        maxDeadLift: req.session.user.deadLiftMax,
+        isPublic: req.session.user.isPublic
     })
 })
 
@@ -29,10 +30,18 @@ router.route('/account').post(async (req, res) => {
         return res.status(400).json({ error: "Type and data are required" });
     }
     try {
+        // to change userId
         if (type === 'userId') {
             const id = req.session.user._id;
             const result = await userData.updateUserId(id,updateField);
             req.session.user.userId = updateField.toLowerCase();
+            return res.json(result);
+        // for the change profile status
+        } else if (type === 'status') {
+            const id= req.session.user._id;
+            const {newStatus, completed}= await userData.updateProfileStatus(id, updateField);
+            req.session.user.isPublic = newStatus; 
+            const result = {newStatus: newStatus, completed: completed};
             return res.json(result);
         } else {
             return res.status(400).json({ error: "Invalid Type" });

@@ -17,7 +17,7 @@ app.set("view engine", "handlebars");
 app.use(
   session({
     name: "WorkoutApp",
-    secret: "Billy is a freak",
+    secret: "The Party Never Ends",
     saveUninitialized: false,
     resave: false,
     cookie: { maxAge: 30 * 60 * 1000},
