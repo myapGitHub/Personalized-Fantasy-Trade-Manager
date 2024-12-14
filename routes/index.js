@@ -4,6 +4,7 @@ import signinRoutes from './signin.js';
 import authRoutes from './auth.js';
 import settingRoutes from './settings.js';
 import commentRoutes from './comments.js';
+import searchUserRoutes from './search-user.js';
 
 export const constructorMethod = (app) => {
   app.use('/', authRoutes);
@@ -11,6 +12,7 @@ export const constructorMethod = (app) => {
   app.use('/signin', signinRoutes);
   app.use('/settings', settingRoutes);
   app.use("/comments", commentRoutes);
+  app.use("/search-user", searchUserRoutes);
 
   app.use("/workouts", workoutRoutes);
   app.use("*", (req, res) => {

@@ -18,9 +18,27 @@
     </nav>
 </header>
 
+{{#if empty}}
+<div>
+    <h2>NO USERS FOUND</h2>
+</div>
+{{else}}
+    {{#if userIdArr}}
+        <ul>
+            {{#each userIdArr}}
+                <li>
+                    <a data-id="{{this}}">{{this}}</a>
+                </li>
+            {{/each}}
+        </ul>
+    {{else}}
+    <div>
+        <h2>NO USERS FOUND</h2>
+    </div>
+    {{/if}}
+{{/if}}
 
-<h1>DashBoard</h1>
-<p>User is logged in</p>
-<p>{{{ userId }}}</p>
+
+
 
 <script src="/public/js/dashboard.js"></script>

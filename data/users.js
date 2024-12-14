@@ -348,3 +348,39 @@ export const updateProfileStatus = async (id, currStatus) => {
 
     return {newStatus, completed: true} 
 }
+
+
+export const searchUser = async (currUserId, searchUserId) => {
+    // Validate inputs
+    searchUserId = checkUserId(searchUserId);
+    currUserId = checkUserId(currUserId);
+
+    if (searchUserId.toLowerCase() === currUserId.toLowerCase()) {
+        throw 'Cannot search for yourself';
+    }
+    const userCollection = await users();
+    let foundSearchUserIdArr = [];
+    // Find the exact match
+    // add let exactMatchUser = await userCollection.findOne({ userId: searchUserId.toLowerCase(), isPublic: true }); if you want to only search private
+    let exactMatchUser = await userCollection.findOne({ userId: searchUserId.toLowerCase()});
+    if (exactMatchUser) {
+        foundSearchUserIdArr.push(exactMatchUser.userId);
+    }
+    // .find({ userId: { $regex: searchUserId, $options: 'i' },isPublic: true }) if you only want to search private
+    let similarMatches = await userCollection
+        .find({ userId: { $regex: searchUserId, $options: 'i' }}) 
+        .toArray();
+
+    // Add similar matches to the array, avoiding duplicates
+    for (let similar of similarMatches) {
+        let { userId } = similar;
+        if (
+            userId.toLowerCase() !== currUserId.toLowerCase() && 
+            !foundSearchUserIdArr.includes(userId) 
+        ) {
+            foundSearchUserIdArr.push(userId);
+        }
+    }
+
+    return foundSearchUserIdArr;
+};

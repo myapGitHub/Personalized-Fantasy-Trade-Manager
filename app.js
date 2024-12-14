@@ -113,6 +113,13 @@ app.use('/settings/delete', (req, res, next) => {
   next();
 })
 
+app.use('/search-user', (req,res,next) => {
+  if (!req.session.user) {
+    return res.redirect('/signin');
+  }
+  next();
+})
+
 // sets up routes
 constructorMethod(app);
 
