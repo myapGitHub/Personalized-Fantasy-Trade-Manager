@@ -1,12 +1,14 @@
-<nav id="dashboard">
-    <a href="/workouts/workoutsPage">Workouts</a>
-    <a href="/settings/account">Settings</a>
-</nav>
-
 <div>
-    <h1>DashBoard</h1>
-    <h4 id=welcome>Welcome {{{ userId }}}</h4>
-    {{!-- <p id="">You are now signed in!</p> --}}
+    <h1>Your Workout App Name Dashboard</h1>
+    <h4 id="welcome">Welcome {{ userId }}!</h4>
+</div>
+
+<div class="dashboard">
+    <a href="/workouts/workoutsPage">Workouts</a>
+</div>
+
+<div class="dashboard">
+    <a href="/settings/account">Settings</a>
 </div>
 
 <a href="/signout">Logout</a>

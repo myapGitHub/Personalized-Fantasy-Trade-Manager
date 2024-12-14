@@ -22,7 +22,7 @@ router.get("/userWorkouts", async (req, res) => {
   const userId = req.session.user.userId
   const results = await workoutData.getAllWorkoutsOfUserBilly(userId)
   // console.log(results)
-  res.render("pages/Workouts/getAllWorkoutsOfUser.handlebars", {title: "userWorkouts", workouts: results})
+  res.render("pages/Workouts/getAllWorkoutsOfUser", {title: "userWorkouts", workouts: results})
 })
 
 router.get("/workoutsPage", (req, res) => {
@@ -75,5 +75,7 @@ router.post("/createWorkout", async (req, res) => {
       .render("pages/workouts/createWorkout", { error: e.message });
   }
 });
+
+//removeWorkout
 
 export default router;
