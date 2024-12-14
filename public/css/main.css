@@ -73,7 +73,7 @@ select {
 
 /* HOMEPAGE STYLING */
 .homeScreen {
-    background-image: url('/static/background-image.avif');
+    background-image: url('/static/background-image.jpeg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat; 
