@@ -12,6 +12,7 @@ h1 {
     color: blue;
 }
 body {
+    margin-top: 0;
     text-align: center;
     background-color: rgb(121, 201, 228);
     font-family: Georgia, Times, 'Times New Roman', serif;
@@ -19,11 +20,18 @@ body {
 nav {
     text-align: left;
     font-size: 22px;
-    margin: 20px auto;
-    margin-left: 100px;
-    display: flex; /* Add spacing in nav*/
+    margin: 0 auto;
     gap: 25px; /* Determines gap between each link */
+    background-color:#000000;
+    padding: 10px 20px;
+    display: inline-block;
+    border-radius: 5px;
+}.home-link{
+    position: absolute;
+    left: 10px;
+    top: 0;
 }
+
 
 input {
     font-family: Georgia, Times, 'Times New Roman', serif;
@@ -63,6 +71,26 @@ select {
     font-family: Georgia, Times, 'Times New Roman', serif;
 }
 
+/* HOMEPAGE STYLING */
+.homeScreen {
+    background-image: url('/static/background-image.avif');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat; 
+    height: 100vh;              
+    width: 100%;                 
+    align-items: center;   
+}
+
+#homepage-welcome{
+    background-color: #000000a8;   
+    color: white;
+}
+
+#homepage-signup{
+background-color: rgba(0, 0, 0, 0.641);
+color:wheat;
+}
 /* DASHBOARD STYLING */
 
 #welcome {
@@ -118,6 +146,7 @@ select {
 /* Sign-up Page Confirmation Styling */
 
 #signup-created-div {
+    background-color: lightblue;
     margin-top: 100px;
 }
 #signup-created-text {

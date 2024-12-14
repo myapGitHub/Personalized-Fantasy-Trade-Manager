@@ -6,6 +6,7 @@ import session from "express-session";
 
 // static files and allows parsing of req
 app.use("/public", express.static("public"));
+app.use('/static', express.static("static"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
