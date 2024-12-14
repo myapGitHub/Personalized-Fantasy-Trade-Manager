@@ -13,8 +13,8 @@ router.route('/').get(async (req, res) => {
     console.log(searchTerm);
     console.log(currUserId);
 
-    if (!searchTerm) {
-        return res.render('pages/search-user', { error: 'Search term is required.' });
+    if (!searchTerm || !currUserId) {
+        return  res.status(400).redirect('/dashboard')
     }
 
     try {
@@ -24,6 +24,25 @@ router.route('/').get(async (req, res) => {
 
     } catch(e) {
         return res.status(400).render('pages/dashboard', {error: e, userId: req.session.user.userId});
+    }
+
+});
+
+router.route('/:userId').get(async (req, res) => {
+    if (!req.body) return res.status(400).redirect('/dashboard'); 
+    // #TODO ROUTE ERROR CHECKING
+    const requestUserId = xss(req.params.userId);
+    console.log(requestUserId);
+    if (!requestUserId) {
+        return  res.status(400).redirect('/dashboard')
+    }
+    try {
+        const profileStatus = await userData.profilePrivacyStatus(requestUserId);
+        if (!profileStatus) return res.render('pages/Profiles/private', {searchUser: requestUserId});
+        const {userId} = await userData.getUserProfile(requestUserId)
+        res.render('pages/Profiles/public', {userId: requestUserId});
+    } catch(e) {
+        return res.status(400).render('pages/search-user', {error: e, userId: req.session.user.userId});
     }
 
 });

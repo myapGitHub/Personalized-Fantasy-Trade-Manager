@@ -384,3 +384,27 @@ export const searchUser = async (currUserId, searchUserId) => {
 
     return foundSearchUserIdArr;
 };
+
+// checks the privacy of the userProfile
+export const profilePrivacyStatus = async (userId) => {
+    // Error checking
+    userId = checkUserId(userId);
+    const userCollection = await users();
+    const findUser = await userCollection.findOne({userId: userId.toLowerCase()});
+    if (!findUser) throw "No user with the id exist";
+
+    if (findUser.isPublic) return true;
+    return false;
+}
+
+export const getUserProfile = async (requstUserId) => {
+    // Error checking
+    requstUserId = checkUserId(requstUserId);
+    const userCollection = await users();
+    const findUser = await userCollection.findOne({userId: requstUserId.toLowerCase()});
+    if (!findUser) throw "No user with that id exist";
+
+    // Can return more like workouts such whoever is doing that 
+    const {userId} = findUser;
+    return userId;
+}
