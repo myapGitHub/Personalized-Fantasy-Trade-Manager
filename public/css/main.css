@@ -1,5 +1,163 @@
 
+/* GENERAL CSS STYLING */
+
 .error {
     color: red;
     size: 2.0em;
+}
+title {
+    color: darkblue;
+}
+h1 {
+    color: blue;
+}
+body {
+    margin-top: 0;
+    text-align: center;
+    background-color: rgb(121, 201, 228);
+    font-family: Georgia, Times, 'Times New Roman', serif;
+}
+nav {
+    text-align: left;
+    font-size: 22px;
+    margin: 0 auto;
+    gap: 25px; /* Determines gap between each link */
+    background-color:#000000;
+    padding: 10px 20px;
+    display: inline-block;
+    border-radius: 5px;
+}.home-link{
+    position: absolute;
+    left: 10px;
+    top: 0;
+}
+
+
+input {
+    font-family: Georgia, Times, 'Times New Roman', serif;
+}
+
+h1 {
+    color: #6185cd;
+}
+h3 {
+    color: rgb(7, 7, 63);
+}
+form {
+    color: grey;
+}
+a {
+    text-decoration: none; /* removes line underneath links */ 
+    font-weight: bold;
+    color: blue; /* Blue links */
+}
+a:hover {
+    color: orange; /* Orange on hover */
+}
+button {
+    background-color: darkblue;
+    color: white;
+    border-radius: 4px;
+    font-family: Georgia, Times, 'Times New Roman', serif;
+    margin: 15px;
+    margin-bottom: 50px;
+    padding: 5px;
+}
+button:hover {
+    background-color: blue; 
+    color: grey;
+}
+select {
+    font-family: Georgia, Times, 'Times New Roman', serif;
+}
+
+/* HOMEPAGE STYLING */
+.homeScreen {
+    background-image: url('/static/background-image.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat; 
+    height: 100vh;              
+    width: 100%;                 
+    align-items: center;   
+}
+
+#homepage-welcome{
+    background-color: #000000a8;   
+    color: white;
+}
+
+#homepage-signup{
+background-color: rgba(0, 0, 0, 0.641);
+color:wheat;
+}
+/* DASHBOARD STYLING */
+
+#welcome {
+    margin-top: 50px;
+}
+
+
+/* LOGIN-SIGNUP STYLING */
+
+/* Sign-in Page Styling */
+
+#home-link {
+    text-align: left;  
+}
+
+#signin-form {
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 300px;
+    border: 1px solid lightgrey;
+    border-radius: 6px;
+    background-color: lightblue;
+}
+
+#login-header {
+    text-align: left;
+    margin-Left: 50px;
+}
+
+#userId, #password {
+    margin: 10px;
+    font-size: 18px;
+}
+
+
+/* Sign-up Page Styling */
+
+#userId-signup, #password-signup, #confirm-password {
+    margin: 10px;
+    font-size: 18px;
+}
+
+#signup-form {
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 1500px;
+    border: 1px solid lightgrey;
+    border-radius: 6px;
+    background-color: lightblue;
+}
+
+
+/* Sign-up Page Confirmation Styling */
+
+#signup-created-div {
+    background-color: lightblue;
+    margin-top: 100px;
+}
+#signup-created-text {
+    color: rgb(51, 51, 51);
+}
+
+/* Sign-out Page Styling */
+
+#signout-div {
+    margin-top: 100px;
+}
+#logout-text {
+    color: rgb(51, 51, 51);
 }

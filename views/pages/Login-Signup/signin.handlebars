@@ -1,24 +1,24 @@
-<nav>
-    <a href="/">Home</a>
-    <a href="/signup" id="sign-up-button">Sign Up</a>
-</nav>
-
-<h1>Login</h1>
-<div id="login-error">{{{error}}}</div> 
-
 <form id="signin-form" method="post"> 
+    <h1 id="login-header">Login</h1>
+    <div id="login-error">{{{error}}}</div> 
     <div>
-        <label for="userId">Enter Username</label>
-        <input id="userId" name="userId" type="text" required>
+        {{!-- <label for="userId">Enter Username</label> --}}
+        <input id="userId" name="userId" placeholder="Username" type="text" required>
     </div>
 
     <div>
-        <label for="password">Enter Password</label>
-        <input id="password" name="password" type="password" required>
+        {{!-- <label for="password">Enter Password</label> --}}
+        <input id="password" name="password" placeholder="Password" type="password" required>
     </div>
     
     <div>
-        <button type="submit">Login</button>
+        <button type="submit" id="login-button">Login</button>
+    </div>
+
+    <div>
+        <p>Or use the link below to sign up: </p>
+        <a href="/signup" id="signup-link">Sign Up</a>
+
     </div>
 </form>
 

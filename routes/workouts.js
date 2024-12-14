@@ -22,7 +22,7 @@ router.get("/userWorkouts", async (req, res) => {
   const userId = req.session.user.userId
   const results = await workoutData.getAllWorkoutsOfUserBilly(userId)
   // console.log(results)
-  res.render("pages/Workouts/getAllWorkoutsOfUser.handlebars", {title: "userWorkouts", workouts: results, loggedIn: true})
+  res.render("pages/Workouts/getAllWorkoutsOfUser", {title: "userWorkouts", workouts: results})
 })
 
 router.get("/workoutsPage", (req, res) => {
@@ -76,6 +76,7 @@ router.post("/createWorkout", async (req, res) => {
   }
 });
 
+
 router.delete("/:id", async (req, res) => {
   try {
     const id = req.params.id
@@ -84,6 +85,6 @@ router.delete("/:id", async (req, res) => {
   } catch (error) {
     console.log(error.message)
   }
-})
+});
 
 export default router;

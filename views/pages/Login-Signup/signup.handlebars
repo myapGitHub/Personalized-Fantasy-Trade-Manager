@@ -1,19 +1,15 @@
-
-<header>
-    <nav>
-          <a href="/">Home</a>
-          <a href="/signin" id="login-button">Login</a>
-    </nav>
-</header>
+<nav>
+    <a href="/signin" id="login-button">Login</a>
+</nav>
 
 
-<h1>Sign Up</h1>
-    <div class="error" id="error">{{{ error }}}</div>
 
     <form id="signup-form" method="post">
+        <h1>Sign Up</h1>
+        <div class="error" id="error">{{{ error }}}</div>
         <div>
             <label for="userId">Username:</label>
-            <input  value="{{userId}}" name="userId" id="userId" type="text" placeholder="Create Username" required>
+            <input value="{{userId}}" name="userId" id="userId" type="text" placeholder="Create Username" required>
         </div>
 
         <div>
@@ -22,8 +18,8 @@
         </div>
 
         <div>
-            <labe for="confirmPassword">Confirm Password</labe>
-            <input type="password" name="confrimPassword" id="cofrimPassword" placeholder="Confrim Password" required>
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Retype Password" required>
         </div>
 
         <div>
@@ -59,9 +55,9 @@
 
         <div>
             <h2>Training Experience</h2>
-            <h4>Beginner: Less than 1 year</h4>
-            <h4>Intermediate: 1-3 years</h4>
-            <h4>Advanced: 3+ years</h4>
+            <p>Beginner: Less than 1 year</p>
+            <p>Intermediate: 1-3 years</p>
+            <p>Advanced: 3+ years</p>
             <label for="level">Experience:</label>
             <select id="level" name="level">
                 <option value="beginner">Beginner</option>
@@ -71,7 +67,7 @@
         </div>
 
         <div>
-            <button type="submit">Setup Account</button>
+            <button type="submit" id="signup-button">Setup Account</button>
         </div>
     </form>
     <script src="/public/js/signup-signin.js"></script>
