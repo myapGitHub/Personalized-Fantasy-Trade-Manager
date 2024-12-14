@@ -23,6 +23,17 @@
 </div>
 
 <div>
+    <div id="account-status-error">{{error}}</div>
+    <button id="account-status-btn" data-status="{{#if isPublic}}public{{else}}private{{/if}}">
+        {{#if isPublic}}
+        Make Private
+        {{else}}
+        Make public
+        {{/if}}
+    </button>
+</div>
+
+{{!-- <div>
     <div id="benchMax-error">{{error}}</div>
     <form id="change-benchMax">
         <label for="benchMax">Change Bench Max</label>
@@ -47,7 +58,7 @@
         <input type="number" name="deadLiftMax" id="deadLiftMax" value="{{maxDeadLift}}">
         <button type="submit">Submit</button>
     </form>
-</div>
+</div> --}}
 
 <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
     crossorigin="anonymous"></script>
