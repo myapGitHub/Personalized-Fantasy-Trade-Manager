@@ -51,7 +51,9 @@ button {
     color: white;
     border-radius: 4px;
     font-family: Georgia, Times, 'Times New Roman', serif;
-
+    margin: 15px;
+    margin-bottom: 50px;
+    padding: 5px;
 }
 button:hover {
     background-color: blue; 
@@ -95,25 +97,12 @@ select {
     font-size: 18px;
 }
 
-#login-button {
-    margin: 15px;
-    margin-bottom: 50px;
-    padding: 5px;
-}
-
 
 /* Sign-up Page Styling */
 
 #userId-signup, #password-signup, #confirm-password {
     margin: 10px;
     font-size: 18px;
-}
-
-#signup-button {
-    margin: 15px;
-    margin-bottom: 50px;
-    padding: 5px;
-    font-family: Georgia, Times, 'Times New Roman', serif;
 }
 
 #signup-form {
