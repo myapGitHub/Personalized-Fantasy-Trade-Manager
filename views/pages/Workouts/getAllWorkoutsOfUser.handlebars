@@ -25,11 +25,15 @@
     </header>
     <h1>Workout Types</h1>
     {{#each workouts}}
-        <h2>{{foundWorkout.workoutType}}</h2>
-        <h3>{{foundWorkout.description}}</h3>
+        <h2>{{foundWorkout.workoutName}}</h2>
+        <h3>Type: {{foundWorkout.workoutType}}</h3>
             {{#each foundWorkout.exercises}}
-                <p>{{this}}</p>
+                <p>Exercise Name: {{this.name}}</p>
+                <p>Sets: {{this.sets}}</p>
+                <p>Reps: {{this.reps}}</p>
+                <p>Weight: {{this.weight}}</p>
             {{/each}}
+        <h3>Difficulty: {{foundWorkout.rating}}</h2>
             <a href="/comments/{{foundWorkout._id}}">View Comments</a>
             <button class="workoutRemove" data-id={{foundWorkout._id}}>Remove this workout</button>
     {{/each}}
