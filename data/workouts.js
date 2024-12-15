@@ -4,6 +4,7 @@ import { workouts } from "../config/mongoCollections.js";
 import { users } from "../config/mongoCollections.js"; // for creating workout plan, need user details
 import { ObjectId } from "mongodb";
 import validateDate from "validate-date";
+import { getUserProfile } from "./users.js";
 
 const workoutCollection = await workouts();
 
@@ -267,6 +268,18 @@ const getAllWorkoutsOfUser = async (userId) => {
   }
 
   return resultList;
+};
+
+const getSavedWorkouts = async (userId) => {
+  const user = await getUserProfile(userId);
+  const workoutList = user.savedWorkouts;
+  
+  const results = [];
+  if (!workoutList) throw new Error("No workouts found!");
+  for (const workout of workoutList) {
+    results.push(getWorkoutById(workout._id))
+  }
+  return results;
 };
 
 //////////////
@@ -798,6 +811,7 @@ async function checkGame(
   }
 }
 export default {
+  getSavedWorkouts,
   createWorkout,
   createWorkoutPlan,
   getAllWorkouts,

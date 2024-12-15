@@ -1,0 +1,27 @@
+<header>
+    <nav>
+        {{!-- {{#if loggedIn}} --}}
+        <a href="/pages/workouts/getAllWorkoutsOfUser">View Your Workouts</a>
+        <a href="/workouts/userWorkouts">View All Workouts</a>
+        <a href="/workouts/createWorkout">Create A Workout</a>
+        <a href="/workouts/getWorkoutById">Get a Specific Workout</a>
+        {{!-- {{else}} --}}
+        <a href="/">Home</a>
+        <a href="/login" id="login-button">Login</a>
+        <a href="/sign-up" id="sign-up-button">Sign Up</a>
+        {{!-- <p>not logged?</p> --}}
+        {{!-- {{/if}} --}}
+    </nav>
+</header>
+
+<h1>Workout Types</h1>
+{{#each workouts}}
+    <h2>{{foundWorkout.workoutType}}</h2>
+    <h3>{{foundWorkout.description}}</h3>
+    {{#each foundWorkout.exercises}}
+        <p>{{this}}</p>
+    {{/each}}
+    <a href="/comments/{{foundWorkout._id}}">View Comments</a>
+    <button class="workoutRemove" data-id={{foundWorkout._id}}>Remove this workout</button>
+{{/each}}
+<script src="/public/js/removeWorkout.js"></script>
