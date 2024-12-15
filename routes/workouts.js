@@ -18,6 +18,13 @@ router.post("/", async (req, res) => {
   }
 })
 
+router.get("/savedWorkouts", async (req, res) => {
+  const userId = req.session.user.userId
+  const results = await workoutData.getSavedWorkouts(userId)
+  // console.log(results)
+  res.render("pages/Workouts/savedWorkouts", {workouts: results})
+})
+
 router.get("/userWorkouts", async (req, res) => {
   const userId = req.session.user.userId
   const results = await workoutData.getAllWorkoutsOfUserBilly(userId)
