@@ -578,3 +578,32 @@ export const removeFriend = async (currUserId, requestUserId) => {
     return { success: true };
 };
 
+
+export const getAllFriends = async (userId) => {
+    userId = checkUserId(userId);
+
+    const userCollection = await users();
+    const findUser = await userCollection.findOne({ userId: userId.toLowerCase() }); // Add await here
+    if (!findUser) throw "User not in db";
+
+    const { friends } = findUser;
+    if (!friends || typeof friends !== 'object') throw "User doesnt have friend list"; 
+    
+
+    const friendArr = Object.keys(friends); 
+    return friendArr;
+};
+
+export const getInboxFriends = async (userId) => {
+    userId = checkUserId(userId);
+
+    const userCollection = await users();
+    const findUser = await userCollection.findOne({ userId: userId.toLowerCase() }); // Add await here
+    if (!findUser) throw "User not in db";
+
+    const { friendInbox } = findUser;
+    if (!friendInbox || typeof friendInbox!== 'object') throw "User doesnt have friend list"; 
+
+    const friendIboxArr = Object.keys(friendInbox); 
+    return friendIboxArr;
+}

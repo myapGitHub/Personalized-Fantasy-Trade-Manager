@@ -114,7 +114,15 @@ app.use('/settings/delete', (req, res, next) => {
   next();
 })
 
+// SEARCHING MIDDLEWARE
 app.use('/search-user', (req,res,next) => {
+  if (!req.session.user) {
+    return res.redirect('/signin');
+  }
+  next();
+})
+// FRIEND MIDDLEWARE
+app.use('/friends', (req, res, next) => {
   if (!req.session.user) {
     return res.redirect('/signin');
   }

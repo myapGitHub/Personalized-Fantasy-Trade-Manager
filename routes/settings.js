@@ -6,7 +6,8 @@ import xss from 'xss';
 
 
 router.route('/').get(async (req, res) => {
-    return res.json({error: "YOU SHOUD NOT BE HERE"});
+    //return res.json({error: "YOU SHOUD NOT BE HERE"});
+    return res.redirect('/settings/account');
 })
 
 router.route('/account').get(async (req, res) => {
