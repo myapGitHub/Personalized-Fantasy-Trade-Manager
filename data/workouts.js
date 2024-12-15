@@ -1,6 +1,7 @@
 // This data file should export all functions using the ES6 standard as shown in the lecture code
 import axios from "axios";
 import { workouts } from "../config/mongoCollections.js";
+import { users } from "../config/mongoCollections.js"; // for creating workout plan, need user details
 import { ObjectId } from "mongodb";
 import validateDate from "validate-date";
 import { getUserProfile } from "./users.js";
@@ -8,6 +9,7 @@ import { getUserProfile } from "./users.js";
 const workoutCollection = await workouts();
 
 //Creates a workout with workoutType, userId (who created the workout), and exercises, and a description of the workout
+/* Old workout system */
 const createWorkout = async (workoutType, userId, exercises, description) => {
   //Check args exist
   checkExists(workoutType);
@@ -41,6 +43,107 @@ const createWorkout = async (workoutType, userId, exercises, description) => {
     comments: [],
     description: description,
   };
+
+  
+// Creates a workout with workouts based on preferences. 
+/* New workout system, replaces createWorkout */
+const createWorkoutPlan = async (userId, workoutName, workoutType, exercises, rating) => {
+
+  // For now, workout type and name remain the same
+/*
+  userId: user's id
+  workoutName: name of workout: string (text input)
+  workoutType: type of workout (dropdown of options): string (dropdown input)
+  exercises: [
+    {
+      name (exercise name): string (dropdown input)
+      sets: num 
+      reps: num
+      weight (lb): num
+    }
+  ] 
+  rating (level of difficulty of workout): number 
+  // all required attributes
+*/
+
+  // console.log("User Id: " + userId);
+  // console.log("Workout Name: " + workoutName);
+  // console.log("Workout type: " + workoutType);
+  // console.log("Exercises: " + exercises);
+  // console.log("Rating: " + rating);
+
+
+
+  // Check args exist
+  checkExists(userId);
+  checkExists(workoutName);
+  checkExists(workoutType);
+  checkExists(exercises);
+  checkExists(rating);
+
+  //Check valid strings
+  checkString(workoutName);
+  workoutName = workoutName.trim();
+  checkString(workoutType);
+  workoutType = workoutType.trim();
+
+  // Check user Id
+  checkId(userId);
+
+  // Check number
+  checkNumber(rating);
+  checkArray(exercises);
+  checkEmptyArray(exercises);
+
+
+  for (let exercise of exercises) {
+    checkString(exercise.name);
+    exercise.name = exercise.name.trim();
+    checkStringLength(exercise.name);
+
+    checkNumber(exercise.sets);
+    if (checkWholeNumber(exercise.sets)) {
+      throw new Error("Sets not an integer");
+    }
+
+    checkNumber(exercise.reps);
+    if (checkWholeNumber(exercise.reps)) {
+      throw new Error("Reps not an integer");
+    }
+
+    checkNumber(exercise.weight);
+    // no need to check if weight is integer.
+    
+  }
+
+  if (checkWholeNumber(rating)) {
+    throw new Error("Rating is not an integer");
+  }
+
+  if (rating < 1 || rating > 5) {
+    throw new Error("Rating should be between 1-5");
+  }
+
+  let newWorkout = {
+    userId: userId,
+    workoutName: workoutName,
+    workoutType: workoutType,
+    exercises: exercises,
+    rating: rating
+  };
+
+  const insertInfo = await workoutCollection.insertOne(newWorkout);
+  if (!insertInfo.acknowledged || !insertInfo.insertedId)
+    throw new Error(" Could not add workout");
+
+  const newId = insertInfo.insertedId.toString();
+
+  const workout = await getWorkoutById(newId);
+  // console.log("Workout from Data: " + newWorkout);
+  return workout;
+
+}
+
 
   const insertInfo = await workoutCollection.insertOne(newWorkout);
   if (!insertInfo.acknowledged || !insertInfo.insertedId)
