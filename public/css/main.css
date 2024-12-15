@@ -184,6 +184,9 @@ color:wheat;
     background-color: lightblue;
 }
 
+#streak {
+  background-color: #f7f7f7; 
+}
 #each-workout {
     padding: 20px;
     background-color: rgb(92, 122, 213);

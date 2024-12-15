@@ -8,7 +8,6 @@ import { getUserProfile } from "./users.js";
 
 const workoutCollection = await workouts();
 
-
 //Creates a workout with workoutType, userId (who created the workout), and exercises, and a description of the workout
 /* Old workout system */
 const createWorkout = async (workoutType, userId, exercises, description) => {
@@ -55,12 +54,18 @@ const createWorkout = async (workoutType, userId, exercises, description) => {
   return workout;
 };
 
-// Creates a workout with workouts based on preferences. 
+// Creates a workout with workouts based on preferences.
 /* New workout system, replaces createWorkout */
-const createWorkoutPlan = async (userId, workoutName, workoutType, exercises, rating) => {
-  console.log(exercises)
+const createWorkoutPlan = async (
+  userId,
+  workoutName,
+  workoutType,
+  exercises,
+  rating
+) => {
+  console.log(exercises);
   // For now, workout type and name remain the same
-/*
+  /*
   userId: user's id
   workoutName: name of workout: string (text input)
   workoutType: type of workout (dropdown of options): string (dropdown input)
@@ -81,8 +86,6 @@ const createWorkoutPlan = async (userId, workoutName, workoutType, exercises, ra
   console.log("Workout type: " + workoutType);
   console.log("Exercises: " + exercises);
   console.log("Rating: " + rating);
-
-  
 
   // Check args exist
   checkExists(userId);
@@ -105,7 +108,6 @@ const createWorkoutPlan = async (userId, workoutName, workoutType, exercises, ra
   checkArray(exercises);
   checkEmptyArray(exercises);
 
-
   for (let exercise of exercises) {
     checkString(exercise.name);
     exercise.name = exercise.name.trim();
@@ -123,7 +125,6 @@ const createWorkoutPlan = async (userId, workoutName, workoutType, exercises, ra
 
     checkNumber(exercise.weight);
     // no need to check if weight is integer.
-    
   }
 
   if (checkWholeNumber(rating)) {
@@ -140,7 +141,7 @@ const createWorkoutPlan = async (userId, workoutName, workoutType, exercises, ra
     workoutType: workoutType,
     exercises: exercises,
     // rating: rating,
-    comments: []
+    comments: [],
   };
 
   const insertInfo = await workoutCollection.insertOne(newWorkout);
@@ -149,11 +150,94 @@ const createWorkoutPlan = async (userId, workoutName, workoutType, exercises, ra
 
   const newId = insertInfo.insertedId.toString();
 
+  const updatedStreak = await updateUserStreak(userId);
+
   const workout = await getWorkoutById(newId);
   console.log("Workout from Data: " + newWorkout);
-  return workout;
+  return { workout, streak: updatedStreak };
+};
 
-}
+//Get user streak based on userId
+
+const getUserStreak = async (userId) => {
+  checkExists(userId);
+  checkId(userId)
+  const userCollection = await users();
+  const user = await userCollection.findOne({ userId: userId.toLowerCase() });
+
+  if (!user) throw "Error: User not found.";
+
+  let streakCount = 0;
+  let lastStreakDate = null;
+
+  if(user.streakCount) streakCount = user.streakCount;
+
+  if(user.lastStreakDate) lastStreakDate = user.lastStreakDate;
+
+  return {
+    streakCount: user.streakCount,
+    lastStreakDate: user.lastStreakDate,
+  };
+};
+
+
+//Updates user streak dpepending on when they create a workout
+//https://stackoverflow.com/questions/2627473/how-to-calculate-the-number-of-days-between-two-dates
+const updateUserStreak = async (userId) => {
+  checkExists(userId);
+  checkId(userId);
+
+  const userCollection = await users();
+  const user = await userCollection.findOne({ userId: userId.toLowerCase() });
+
+  if (!user) {
+    throw "Error: User not found.";
+  }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); 
+
+  let lastStreakDate = null;
+  if (user.lastStreakDate) {
+    lastStreakDate = new Date(user.lastStreakDate);
+    lastStreakDate.setHours(0, 0, 0, 0);
+  }
+
+  let streakCount = 0;
+  if (user.streakCount) {
+    streakCount = user.streakCount;
+  }
+
+  if (lastStreakDate) {
+    const differenceInDays =
+      (today.getTime() - lastStreakDate.getTime()) / (1000 * 60 * 60 * 24);
+
+    if (differenceInDays === 1) {
+      streakCount += 1;
+    } else if (differenceInDays > 1) {
+      streakCount = 1;
+    }
+  } else {
+    streakCount = 1;
+  }
+
+  const updateInfo = await userCollection.updateOne(
+    { userId: userId.toLowerCase() },
+    {
+      $set: {
+        streakCount: streakCount,
+        lastStreakDate: today,
+      },
+    }
+  );
+
+  if (updateInfo.matchedCount === 0) {
+    throw "Error: Could not update user's streak.";
+  }
+
+  return streakCount;
+};
+
 
 //Gets all workouts in the database
 const getAllWorkouts = async () => {
@@ -178,7 +262,7 @@ const getWorkoutById = async (id) => {
   checkString(id);
   id = id.trim();
   checkStringLength(id);
-  console.log(id, id.length)
+  console.log(id, id.length);
   if (!ObjectId.isValid(id)) throw new Error(" invalid object ID");
   const workoutCollection = await workouts();
   const workout = await workoutCollection.findOne({ _id: new ObjectId(id) });
@@ -274,11 +358,11 @@ const getAllWorkoutsOfUser = async (userId) => {
 const getSavedWorkouts = async (userId) => {
   const user = await getUserProfile(userId);
   const workoutList = user.savedWorkouts;
-  
+
   const results = [];
   if (!workoutList) throw new Error("No workouts found!");
   for (const workout of workoutList) {
-    results.push(getWorkoutById(workout._id))
+    results.push(getWorkoutById(workout._id));
   }
   return results;
 };
@@ -305,14 +389,12 @@ const getAllWorkoutsOfUserBilly = async (userId) => {
 async function findByWorkoutIdExercisesOnlyBilly(workoutId) {
   if (!workoutId) throw "You must provide a workout ID";
   const workoutCollection = await workouts();
-  const foundWorkout = await workoutCollection.findOne(
-    { _id: workoutId }
-  );
+  const foundWorkout = await workoutCollection.findOne({ _id: workoutId });
 
   if (!foundWorkout) throw "Workout not found";
 
   return {
-    foundWorkout
+    foundWorkout,
   };
 }
 ///////////////
@@ -616,7 +698,9 @@ function checkPlayers(players) {
       playerKeys.length !== 3 ||
       !properKeys.every((key) => playerKeys.includes(key))
     ) {
-      throw new Error(" Each player must have firstName, lastName, and position as keys");
+      throw new Error(
+        " Each player must have firstName, lastName, and position as keys"
+      );
     }
     for (let key in player) {
       checkExists(player[key]);
@@ -822,4 +906,6 @@ export default {
   getAllWorkoutsOfUser,
   getAllWorkoutsOfUserBilly,
   rateWorkout,
+  getUserStreak,
+  updateUserStreak,
 };
