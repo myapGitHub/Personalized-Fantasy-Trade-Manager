@@ -15,11 +15,6 @@
       </nav>
 
     </header>
-    <h1>Create a New Workout</h1>
-
-    {{#if error}}
-      <p style="color: red;">{{error}}</p>
-    {{/if}}
 
 {{!-- userId,
       workout.name,
@@ -28,7 +23,12 @@
       workout.rating --}}
 
 
-    <form action="/workouts" method="POST">
+    <form id="createWorkout-form" action="/workouts" method="POST">
+      <h1>Create a New Workout</h1>
+
+      {{#if error}}
+        <p style="color: red;">{{error}}</p>
+      {{/if}}
       <div>
         <label for="workoutName">Workout Name:</label>
         <input

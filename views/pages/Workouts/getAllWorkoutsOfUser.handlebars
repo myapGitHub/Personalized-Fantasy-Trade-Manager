@@ -15,28 +15,29 @@
           {{!-- <a href="/workouts/removeWorkout">Remove A Workout</a> --}}
           <a href="/workouts/getWorkoutById">Get a Specific Workout</a>
         {{!-- {{else}} --}}
-          <a href="/">Home</a>
-          <a href="/login" id="login-button">Login</a>
-          <a href="/sign-up" id="sign-up-button">Sign Up</a>
           {{!-- <p>not logged?</p> --}}
         {{!-- {{/if}} --}}
       </nav>
 
     </header>
-    <h1>Workout Types</h1>
-    {{#each workouts}}
-        <h2>{{foundWorkout.workoutName}}</h2>
-        <h3>Type: {{foundWorkout.workoutType}}</h3>
-            {{#each foundWorkout.exercises}}
-                <p>Exercise Name: {{this.name}}</p>
-                <p>Sets: {{this.sets}}</p>
-                <p>Reps: {{this.reps}}</p>
-                <p>Weight: {{this.weight}}</p>
-            {{/each}}
-        <h3>Difficulty: {{foundWorkout.rating}}</h2>
-            <a href="/comments/{{foundWorkout._id}}">View Comments</a>
-            <button class="workoutRemove" data-id={{foundWorkout._id}}>Remove this workout</button>
-    {{/each}}
+    <div id="all-workouts">
+      <h1 id="all-workouts-title">Your Workouts</h1>
+        {{#each workouts}}
+        <div id="each-workout">
+            <h2>{{foundWorkout.workoutName}}</h2>
+            <h3>Type: {{foundWorkout.workoutType}}</h3>
+                {{#each foundWorkout.exercises}}
+                    <p>Exercise Name: {{this.name}}</p>
+                    <p>Sets: {{this.sets}}</p>
+                    <p>Reps: {{this.reps}}</p>
+                    <p>Weight: {{this.weight}}</p>
+                {{/each}}
+            <h3>Difficulty: {{foundWorkout.rating}}</h2>
+                <a href="/comments/{{foundWorkout._id}}">View Comments</a>
+                <button class="workoutRemove" data-id={{foundWorkout._id}}>Remove this workout</button>
+        </div>
+        {{/each}}
+    </div>
     <script src="/public/js/removeWorkout.js"></script>
 </body>
 </html>

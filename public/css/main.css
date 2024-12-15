@@ -161,3 +161,40 @@ color:wheat;
 #logout-text {
     color: rgb(51, 51, 51);
 }
+
+/* WORKOUTS STYLING */
+
+/* Create Workout */
+#createWorkout-form {
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 500px;
+    border: 1px solid lightgrey;
+    border-radius: 8px;
+    background-color: lightblue;
+}
+
+/* Workouts Page */
+#all-workouts {
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 500px;
+    border: 1px solid lightgrey;
+    border-radius: 8px;
+    background-color: lightblue;
+}
+
+#each-workout {
+    padding: 20px;
+    background-color: rgb(92, 122, 213);
+    border: 4px solid navy;
+}
+
+#all-workouts-title {
+    padding: 20px;
+    background-color: navy;
+    border: 4px solid navy;
+    border-radius: 4px;
+
+}
+
