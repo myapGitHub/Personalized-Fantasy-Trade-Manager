@@ -190,6 +190,10 @@ color:wheat;
     border: 4px solid navy;
 }
 
+#streak {
+  background-color: #f7f7f7; 
+}
+
 #all-workouts-title {
     padding: 20px;
     background-color: navy;
