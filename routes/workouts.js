@@ -1,14 +1,15 @@
 import { Router } from "express";
 import { workoutData } from "../data/index.js";
 import workouts from "../data/workouts.js";
+import xss from "xss"
 
 const router = Router();
 
 router.post("/", async (req, res) => {
   // console.log(req.body)
   // console.log(req.session.user)
-  let { workoutType, description, exercises} = req.body
-  const userId = req.session.user.userId
+  let { workoutType, description, exercises} = xss(req.body)
+  const userId = xss(req.session.user.userId)
   exercises = exercises.split(",")
   try {
     await workoutData.createWorkout(workoutType, userId, exercises, description)
@@ -19,7 +20,7 @@ router.post("/", async (req, res) => {
 })
 
 router.get("/userWorkouts", async (req, res) => {
-  const userId = req.session.user.userId
+  const userId = xss(req.session.user.userId)
   const results = await workoutData.getAllWorkoutsOfUserBilly(userId)
   // console.log(results)
   res.render("pages/Workouts/getAllWorkoutsOfUser", {title: "userWorkouts", workouts: results})
@@ -47,13 +48,13 @@ router.get("/createWorkout", (req, res) => {
 });
 
 router.post("/createWorkout", async (req, res) => {
-  const workout = req.body;
+  const workout = xss(req.body);
 
   if (!req.session.user || !req.session.user.userId) {
     return res.status(401).json({ error: "User not authenticated" });
   }
 
-  const userId = req.session.user.userId;
+  const userId = xss(req.session.user.userId);
 
   if (!workout || Object.keys(workout).length === 0) {
     return res
@@ -83,7 +84,7 @@ router.get("/:id&u=:userId"), async (req, res) => {
 
   router.get("/:id"), async (req, res) => { // planning to add an id for the workouts user after users
   try {
-    const id = req.params.id;
+    const id = xss(req.params.id);
     const workout = await workoutData.getWorkoutById(id);
     res.redirect(`/${id}&u=${workout.userId}`);
   } catch(e){
@@ -93,7 +94,7 @@ router.get("/:id&u=:userId"), async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   try {
-    const id = req.params.id
+    const id = xss(req.params.id)
     const result = await workoutData.removeWorkout(id)
     res.redirect("/userWorkouts")
   } catch (error) {

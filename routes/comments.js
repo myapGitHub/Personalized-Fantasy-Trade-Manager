@@ -9,7 +9,7 @@ const router = Router();
 const workoutCollection = await workouts();
 
 router.get("/:id", async (req, res) => {
-    const id = req.params.id;
+    const id = xss(req.params.id);
     try {
         const workout = await workoutFuncs.getWorkoutById(id);
         res.render("pages/Workouts/comments.handlebars", {
@@ -24,10 +24,10 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/:id", async (req, res) => {
-    const workoutId = req.params.id;
-    const text = req.body.comment;
+    const workoutId = xss(req.params.id);
+    const text = xss(req.body.comment);
     const date = new Date();
-    const userId = req.session.user.userId;
+    const userId = xss(req.session.user.userId);
     const likes = 0;
     const dislikes = 0;
     const commentId = uuidv4();
@@ -44,8 +44,8 @@ router.post("/:id", async (req, res) => {
 });
 
 router.post("/:commentId/:workoutId/toggle-like", async (req, res) => {
-    const { commentId, workoutId } = req.params;
-    const userId = req.session.user.userId;
+    const { commentId, workoutId } = xss(req.params);
+    const userId = xss(req.session.user.userId);
 
     try {
         const workout = await workoutCollection.findOne({ _id: new ObjectId(workoutId) });
@@ -78,8 +78,8 @@ router.post("/:commentId/:workoutId/toggle-like", async (req, res) => {
 });
 
 router.post("/:commentId/:workoutId/toggle-dislike", async (req, res) => {
-    const { commentId, workoutId } = req.params;
-    const userId = req.session.user.userId;
+    const { commentId, workoutId } = xss(req.params);
+    const userId = xss(req.session.user.userId);
 
     try {
         const workout = await workoutCollection.findOne({ _id: new ObjectId(workoutId) });
