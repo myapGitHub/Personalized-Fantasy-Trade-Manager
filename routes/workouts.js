@@ -75,20 +75,22 @@ router.get("/userWorkouts", async (req, res) => {
   res.render("pages/Workouts/getAllWorkoutsOfUser", {
     title: "userWorkouts",
     workouts: results,
-    streakCount: streakData.streakCount,
   });
 });
 
-router.get("/workoutsPage", (req, res) => {
+router.get("/workoutsPage", async (req, res) => {
   if (!req.session.user || !req.session.user.userId) {
     console.log(req.session.user);
     console.log(req.session.user.userId);
     return res.redirect("/login");
   }
+
+  const userId = req.session.user.userId;
+  const streakData = await workoutData.getUserStreak(userId);
   //   console.log("Session data:", req.session);
   //   console.log("Session user:", req.session.user);
   //   console.log("Reached /create route");
-  res.render("pages/workouts/workoutsPage", { loggedIn: true });
+  res.render("pages/workouts/workoutsPage", { loggedIn: true, streakCount: streakData.streakCount});
 });
 
 router.get("/createWorkout", (req, res) => {
