@@ -198,11 +198,14 @@ export const signUp = async (
         deadLiftMax: deadLiftMax,
         experience: level,
         isPublic: true,
+        friendRequest:  {},
+        friendInbox:  {},
+        friends: {},
         pastWorkouts: [],
-        savedWorkouts: []
+        savedWorkouts: [],
     };
     // inserts the new user
-    const newInsertUser = await userCollection.insertOne(newUser); // Fixed missing `await`
+    const newInsertUser = await userCollection.insertOne(newUser); 
     if (!newInsertUser.insertedId) throw "Insert Failed";
 
     return {registrationCompleted: true};
@@ -408,5 +411,170 @@ export const getUserProfile = async (requstUserId) => {
 
     // Can return more like workouts such whoever is doing that 
     const {userId} = findUser;
-    return userId;
+    return {userId};
 }
+
+const isUserIdInCollection = async (userId) => {
+    const userCollection = await users();
+    const findUser = await userCollection.findOne({userId: userId.toLowerCase()});
+    if (!findUser) throw "No user with the id exists";
+
+    
+} 
+
+
+// Options friend, already requested, nothing, pending
+// friend = remove
+// already requested = button that just says request
+// nothing = add friend
+// pending  = accept button
+export const friendStatus = async (currUserId, requestUserId) => {
+    // Error 
+    currUserId = checkUserId(currUserId);
+    requestUserId = checkUserId(requestUserId);
+
+    await isUserIdInCollection(currUserId);
+    await isUserIdInCollection(requestUserId);
+
+    const userCollection = await users();
+    const foundUser = await userCollection.findOne({userId: currUserId.toLowerCase()});
+    if (!foundUser) throw "No user with the id exists";
+
+    const {friendRequest, friendInbox, friends} = foundUser;
+
+    if (requestUserId in friendRequest) {
+        return 'sent';
+
+    } else if (requestUserId in friendInbox) {
+        return 'inbox';
+
+    } else if (requestUserId in friends) {
+        return 'friend';
+    } else {
+        return 'send';
+    }
+};
+
+
+export const sendFriendRequest = async (currUserId, requestUserId) => {
+    currUserId = checkUserId(currUserId);
+    requestUserId = checkUserId(requestUserId);
+
+    await isUserIdInCollection(currUserId);
+    await isUserIdInCollection(requestUserId);
+
+    const userCollection = await users();
+
+    const currUser = await userCollection.findOne({ userId: currUserId.toLowerCase() });
+    const requestedUser = await userCollection.findOne({ userId: requestUserId.toLowerCase() });
+
+    if (!currUser || !requestedUser) throw "No user with the specified ID exists";
+
+    // Add the friend request
+    const updatedFriendRequest = { ...currUser.friendRequest, [requestUserId]: true };
+    const updatedFriendInbox = { ...requestedUser.friendInbox, [currUserId]: true };
+
+    // Update the database
+    await userCollection.updateOne(
+        { userId: currUserId.toLowerCase() },
+        { $set: { friendRequest: updatedFriendRequest } }
+    );
+
+    await userCollection.updateOne(
+        { userId: requestUserId.toLowerCase() },
+        { $set: { friendInbox: updatedFriendInbox } }
+    );
+
+    return { success: true };
+};
+
+
+const checkAction = (action) => {
+    if (!action) throw "Has to be accept or decline";
+    if (typeof action !== 'string' || action.trim().length === 0) throw "has to be accept or decline";
+    action = action.trim();
+    if (action !== 'accept' && action !== 'decline') throw "Has to be accept or decline";
+    return action;
+}
+
+export const AcceptOrDeclineFriendRequest = async (currUserId, requestUserId, action) => {
+    currUserId = checkUserId(currUserId);
+    requestUserId = checkUserId(requestUserId);
+    action = checkAction(action);
+
+    await isUserIdInCollection(currUserId);
+    await isUserIdInCollection(requestUserId);
+
+    const userCollection = await users();
+
+    const currUser = await userCollection.findOne({ userId: currUserId.toLowerCase() });
+    const requestedUser = await userCollection.findOne({ userId: requestUserId.toLowerCase() });
+
+    if (!currUser || !requestedUser) throw "No user with the specified ID exists";
+
+    if (action === 'accept') {
+        if (currUser.friendInbox && currUser.friendInbox[requestUserId]) {
+            delete currUser.friendInbox[requestUserId]; 
+        }
+        currUser.friends[requestUserId] = true; 
+
+        if (requestedUser.friendRequest && requestedUser.friendRequest[currUserId]) {
+            delete requestedUser.friendRequest[currUserId]; 
+        }
+        requestedUser.friends[currUserId] = true; 
+    } else {
+        if (currUser.friendInbox && currUser.friendInbox[requestUserId]) {
+            delete currUser.friendInbox[requestUserId]; 
+        }
+
+        if (requestedUser.friendRequest && requestedUser.friendRequest[currUserId]) {
+            delete requestedUser.friendRequest[currUserId]; 
+        }
+    }
+    await userCollection.updateOne(
+        { userId: currUserId.toLowerCase() },
+        { $set: { friendInbox: currUser.friendInbox, friends: currUser.friends } }
+    );
+
+    await userCollection.updateOne(
+        { userId: requestUserId.toLowerCase() },
+        { $set: { friendRequest: requestedUser.friendRequest, friends: requestedUser.friends } }
+    );
+
+    return { success: true };
+};
+
+export const removeFriend = async (currUserId, requestUserId) => {
+    currUserId = checkUserId(currUserId);
+    requestUserId = checkUserId(requestUserId);
+
+    await isUserIdInCollection(currUserId);
+    await isUserIdInCollection(requestUserId);
+
+    const userCollection = await users();
+
+    const currUser = await userCollection.findOne({ userId: currUserId.toLowerCase() });
+    const requestedUser = await userCollection.findOne({ userId: requestUserId.toLowerCase() });
+
+    if (!currUser || !requestedUser) throw "No user with the specified ID exists";
+
+    if (currUser.friends && currUser.friends[requestUserId]) {
+        delete currUser.friends[requestUserId]; 
+    }
+    if (requestedUser.friends && requestedUser.friends[currUserId]) {
+        delete requestedUser.friends[currUserId]; 
+    }
+
+    await userCollection.updateOne(
+        { userId: currUserId.toLowerCase() },
+        { $set: { friends: currUser.friends } }
+    );
+
+    await userCollection.updateOne(
+        { userId: requestUserId.toLowerCase() },
+        { $set: { friends: requestedUser.friends } }
+    );
+
+    return { success: true };
+};
+

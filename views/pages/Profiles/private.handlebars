@@ -1,5 +1,35 @@
 
-
+<div>{{error}}</div>
 <h2>UserName: {{userId}}</h2>
 <h1>User is Profile Private</h1>
 
+<div>
+    <p>Friend Status:</p>
+    {{#if requested}}
+        <p>Request Sent</p>
+    {{/if}}
+    {{#if inbox}}
+        <form id="accept-friend-request" method="POST" action="/search-user/{{userId}}/accept-request">
+            <input type="hidden" name="accept" id="accept" hidden>
+            <button type="submit">Accept</button>
+        </form>
+        <form id="decline-friend-request" method="POST" action="/search-user{{userId}}/decline-request">
+            <input type="hidden" name="decline" id="decline" hidden>
+            <button type="submit">Decline</button>
+        </form>
+    {{/if}}
+    {{#if friends}}
+        <form id="remove-friend-request" method="POST" action="/search-user/{{userId}}/remove-friend">
+            <input type="hidden" name="remove" id="remove" hidden>
+            <button type="submit">Remove</button>
+        </form>
+    {{/if}}
+    {{#if send}}
+        <form id="send-friend-request" method="POST" action="/search-user/{{userId}}/add-friend">
+            <input type="hidden" name="sendRequest" id="sendRequest">
+            <button type="submit">Add</button>
+        </form>
+    {{/if}}
+</div>
+
+<script src="public/js/Profile/friend.js"></script>
