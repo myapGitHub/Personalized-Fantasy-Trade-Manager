@@ -5,18 +5,35 @@ import workouts from "../data/workouts.js";
 const router = Router();
 
 router.post("/", async (req, res) => {
-  // console.log(req.body)
-  // console.log(req.session.user)
-  let { workoutType, description, exercises} = req.body
-  const userId = req.session.user.userId
-  exercises = exercises.split(",")
   try {
-    await workoutData.createWorkout(workoutType, userId, exercises, description)
-    res.redirect("/workouts/userWorkouts")
+    console.log(req.body);
+    
+    // let { workoutName, workoutType, exerciseName, sets, reps, weight, rating} = xss(req.body);
+
+    const userId = req.session.user.userId;
+
+    const workoutName = xss(req.body.workoutName);
+    const workoutType = xss(req.body.workoutType);
+    const exerciseName = xss(req.body.exerciseName);
+    const sets = parseInt(xss(req.body.sets));
+    const reps = parseInt(xss(req.body.reps));
+    const weight = parseFloat(xss(req.body.weight));
+    const rating = parseInt(xss(req.body.rating));
+
+    const exercises = [{
+      name: exerciseName,
+      sets: sets,
+      reps: reps,
+      weight: weight
+    }];
+
+    await workoutData.createWorkoutPlan(userId, workoutName, workoutType, exercises, rating);
+    res.redirect("/workouts/userWorkouts");
+
   } catch (error) {
     console.log(error.message)
   }
-})
+});
 
 router.get("/savedWorkouts", async (req, res) => {
   const userId = req.session.user.userId
@@ -54,13 +71,15 @@ router.get("/createWorkout", (req, res) => {
 });
 
 router.post("/createWorkout", async (req, res) => {
-  const workout = req.body;
+  const workout = xss(req.body);
+
+  // console.log(workout);
 
   if (!req.session.user || !req.session.user.userId) {
     return res.status(401).json({ error: "User not authenticated" });
   }
 
-  const userId = req.session.user.userId;
+  const userId = xss(req.session.user.userId);
 
   if (!workout || Object.keys(workout).length === 0) {
     return res
@@ -69,12 +88,20 @@ router.post("/createWorkout", async (req, res) => {
   }
 
   try {
-    const newWorkout = await workoutData.createWorkout(
-      workout.workoutType,
+    const exercises = [{
+      name: workout.exerciseName,
+      sets: parseInt(workout.sets),
+      reps: parseInt(workout.reps),
+      weight: parseFloat(workout.weight)
+    }];
+    const newWorkout = await workoutData.createWorkoutPlan(
       userId,
-      workout.exercises,
-      workout.description
+      workout.workoutName,
+      workout.workoutType,
+      exercises,
+      workout.rating
     );
+    // console.log("New Workout in Routes: " + newWorkout);
     res.redirect(`/workouts/${newWorkout._id}`);
   } catch (e) {
     res
