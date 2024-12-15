@@ -76,6 +76,20 @@ router.post("/createWorkout", async (req, res) => {
   }
 });
 
+router.get("/:id&u=:userId"), async (req, res) => {
+  const workout = await workoutData.getWorkoutById(req.params.id);
+  res.render("/pages/Workouts/getWorkoutById", {workout : workout});
+}
+
+  router.get("/:id"), async (req, res) => { // planning to add an id for the workouts user after users
+  try {
+    const id = req.params.id;
+    const workout = await workoutData.getWorkoutById(id);
+    res.redirect(`/${id}&u=${workout.userId}`);
+  } catch(e){
+    console.log(error.message)
+  }
+}
 
 router.delete("/:id", async (req, res) => {
   try {
