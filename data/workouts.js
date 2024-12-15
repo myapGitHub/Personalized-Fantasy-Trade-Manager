@@ -162,6 +162,90 @@ const createWorkoutPlan = async (userId, workoutName, workoutType, exercises, ra
 
 }
 
+
+//Get user streak based on userId
+
+const getUserStreak = async (userId) => {
+  checkExists(userId);
+  checkId(userId)
+  const userCollection = await users();
+  const user = await userCollection.findOne({ userId: userId.toLowerCase() });
+
+  if (!user) throw "Error: User not found.";
+
+  let streakCount = 0;
+  let lastStreakDate = null;
+
+  if(user.streakCount) streakCount = user.streakCount;
+
+  if(user.lastStreakDate) lastStreakDate = user.lastStreakDate;
+
+  return {
+    streakCount: user.streakCount,
+    lastStreakDate: user.lastStreakDate,
+  };
+};
+
+
+//Updates user streak dpepending on when they create a workout
+//https://stackoverflow.com/questions/2627473/how-to-calculate-the-number-of-days-between-two-dates
+const updateUserStreak = async (userId) => {
+  checkExists(userId);
+  checkId(userId);
+
+  const userCollection = await users();
+  const user = await userCollection.findOne({ userId: userId.toLowerCase() });
+
+  if (!user) {
+    throw "Error: User not found.";
+  }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); 
+
+  let lastStreakDate = null;
+  if (user.lastStreakDate) {
+    lastStreakDate = new Date(user.lastStreakDate);
+    lastStreakDate.setHours(0, 0, 0, 0);
+  }
+
+  let streakCount = 0;
+  if (user.streakCount) {
+    streakCount = user.streakCount;
+  }
+
+  if (lastStreakDate) {
+    const differenceInDays =
+      (today.getTime() - lastStreakDate.getTime()) / (1000 * 60 * 60 * 24);
+
+    if (differenceInDays === 1) {
+      streakCount += 1;
+    } else if (differenceInDays > 1) {
+      streakCount = 1;
+    }
+  } else {
+    streakCount = 1;
+  }
+
+  const updateInfo = await userCollection.updateOne(
+    { userId: userId.toLowerCase() },
+    {
+      $set: {
+        streakCount: streakCount,
+        lastStreakDate: today,
+      },
+    }
+  );
+
+  if (updateInfo.matchedCount === 0) {
+    throw "Error: Could not update user's streak.";
+  }
+
+  return streakCount;
+};
+
+
+
 //Gets all workouts in the database
 const getAllWorkouts = async () => {
   const workoutCollection = await workouts();
@@ -590,4 +674,6 @@ export default {
   updateWorkout,
   getPastWorkouts,
   rateWorkout,
+  getUserStreak,
+  updateUserStreak,
 };

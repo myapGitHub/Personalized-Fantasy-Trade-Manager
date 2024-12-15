@@ -202,6 +202,9 @@ export const signUp = async (
         friendInbox:  {},
         friends: {},
         pastWorkouts: [],
+        savedWorkouts: [],
+        streakCount: 0,
+        lastStreakDate: "",
     };
     // inserts the new user
     const newInsertUser = await userCollection.insertOne(newUser); 
@@ -259,9 +262,11 @@ export const userLogin = async (userIdParam, password) => {
    const compareToSherlock = await bcrypt.compare(password, foundHashedPassword);
    if (!compareToSherlock) throw "Either the userId or password is invalid";
 
-   const {_id, userId, firstName, lastName, height, weight, age, gender, benchMax, squatMax, deadLiftMax, level, isPublic, pastWorkouts, savedWorkouts} =  validUserIdFinder;
+   const {_id, userId, firstName, lastName, height, weight, age, gender, benchMax, squatMax, deadLiftMax, level, isPublic, pastWorkouts, savedWorkouts, streakCount,
+    lastStreakDate,} =  validUserIdFinder;
    // need to figure out what to return
-   return {_id, userId, firstName, lastName, height, weight, age, gender, benchMax, squatMax, deadLiftMax, level, isPublic, pastWorkouts, savedWorkouts};
+   return {_id, userId, firstName, lastName, height, weight, age, gender, benchMax, squatMax, deadLiftMax, level, isPublic, pastWorkouts, savedWorkouts, streakCount,
+    lastStreakDate,};
 
 };
 

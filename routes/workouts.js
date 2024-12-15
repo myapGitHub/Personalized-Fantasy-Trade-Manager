@@ -68,22 +68,29 @@ router.get("/public", async (req, res) => {
 })
 
 router.get("/userWorkouts", async (req, res) => {
-  const userId = req.session.user.userId
-  const results = await workoutData.getAllWorkoutsOfUserBilly(userId)
+  const userId = req.session.user.userId;
+  const results = await workoutData.getAllWorkoutsOfUserBilly(userId);
+  const streakData = await workoutData.getUserStreak(userId);
   // console.log(results)
-  res.render("pages/Workouts/savedWorkouts", {title: "userWorkouts", workouts: results})
-})
+  res.render("pages/Workouts/getAllWorkoutsOfUser", {
+    title: "userWorkouts",
+    workouts: results,
+  });
+});
 
-router.get("/workoutsPage", (req, res) => {
+router.get("/workoutsPage", async (req, res) => {
   if (!req.session.user || !req.session.user.userId) {
     console.log(req.session.user);
     console.log(req.session.user.userId);
     return res.redirect("/login");
   }
+
+  const userId = req.session.user.userId;
+  const streakData = await workoutData.getUserStreak(userId);
   //   console.log("Session data:", req.session);
   //   console.log("Session user:", req.session.user);
   //   console.log("Reached /create route");
-  res.render("pages/workouts/workoutsPage", { loggedIn: true });
+  res.render("pages/workouts/workoutsPage", { loggedIn: true, streakCount: streakData.streakCount});
 });
 
 router.get("/createWorkout", (req, res) => {
@@ -113,12 +120,14 @@ router.post("/createWorkout", async (req, res) => {
   }
 
   try {
-    const exercises = [{
-      name: workout.exerciseName,
-      sets: parseInt(workout.sets),
-      reps: parseInt(workout.reps),
-      weight: parseFloat(workout.weight)
-    }];
+    const exercises = [
+      {
+        name: workout.exerciseName,
+        sets: parseInt(workout.sets),
+        reps: parseInt(workout.reps),
+        weight: parseFloat(workout.weight),
+      },
+    ];
     const newWorkout = await workoutData.createWorkoutPlan(
       userId,
       workout.workoutName,
@@ -126,6 +135,10 @@ router.post("/createWorkout", async (req, res) => {
       exercises,
       workout.rating
     );
+
+    const updatedStreak = await workoutData.updateUserStreak(userId);
+
+    console.log("Updated Streak: ", updatedStreak);
     // console.log("New Workout in Routes: " + newWorkout);
     res.redirect(`/workouts/${newWorkout._id}`);
   } catch (e) {
@@ -134,6 +147,7 @@ router.post("/createWorkout", async (req, res) => {
       .render("pages/workouts/createWorkout", { error: e.message });
   }
 });
+
 
 router.get("/:id&u=:userId"), async (req, res) => {
   const workout = await workoutData.getWorkoutById(req.params.id);
