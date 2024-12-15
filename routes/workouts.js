@@ -15,17 +15,29 @@ router.post("/", async (req, res) => {
 
     const workoutName = xss(req.body.workoutName);
     const workoutType = xss(req.body.workoutType);
-    const exerciseName = xss(req.body.exerciseName);
+    //const exerciseName = xss(req.body.exerciseName);
+    let exerciseNames = req.body.exerciseName
     const sets = parseInt(xss(req.body.sets));
     const reps = parseInt(xss(req.body.reps));
     const weight = parseFloat(xss(req.body.weight));
     const rating = parseInt(xss(req.body.rating));
     const info = req.body
-    const exercises = []
-    for (let i = 0; i < info.exerciseName.length; i++) {
-      let exercise = {name: info.exerciseName[i], sets, reps, weight, rating}
-      exercises.push(exercise)
+    //const exercises = []
+
+    if (!Array.isArray(exerciseNames)) {
+      exerciseNames = [exerciseNames]; // Convert to array if it's not
     }
+    //for (let i = 0; i < info.exerciseName.length; i++) {
+     // let exercise = {name: info.exerciseName[i], sets, reps, weight, rating}
+     // exercises.push(exercise)
+    //}
+    const exercises = exerciseNames.map(name => ({
+      name: xss(name),
+      sets: sets,
+      reps: reps,
+      weight: weight,
+      rating: rating
+    }));
     // const exercises = [{
     //   name: exerciseName,
     //   sets: sets,
