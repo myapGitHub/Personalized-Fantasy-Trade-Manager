@@ -1,43 +1,38 @@
-const likeArray = Array.from(document.getElementsByClassName("likebutton"))
-const dislikeArray = Array.from(document.getElementsByClassName("dislikebutton"))
+const likeArray = Array.from(document.getElementsByClassName("likebutton"));
+const dislikeArray = Array.from(document.getElementsByClassName("dislikebutton"));
 
 likeArray.forEach(el => {
-    el.addEventListener("click", incrementLikes)
-})
+    el.addEventListener("click", toggleLike);
+});
 
-async function incrementLikes(e)  {
-    const commentId = e.target.dataset.id.slice(11)
-    const workoutId = e.target.dataset.workoutid
-    console.log({commentId,workoutId})
+dislikeArray.forEach(el => {
+    el.addEventListener("click", toggleDislike);
+});
+
+async function toggleLike(e) {
+    const commentId = e.target.dataset.id.slice(11);
+    const workoutId = e.target.dataset.workoutid;
     try {
-        const response = await fetch(`/comments/${commentId}/${workoutId}/likes`, {
+        await fetch(`/comments/${commentId}/${workoutId}/toggle-like`, {
             method: "POST",
-            headers: {"Content-Type": "applications/json"}
-        })
-        // if (response.ok) {
-            window.location.reload()
-        // }
+            headers: { "Content-Type": "application/json" }
+        });
+        window.location.reload();
     } catch (error) {
-        console.log(error.message)
+        console.error(error.message);
     }
 }
 
-dislikeArray.forEach(el => {
-    el.addEventListener("click", incrementDislikes)
-})
-
-async function incrementDislikes(e)  {
-    const commentId = e.target.dataset.id.slice(14)
-    const workoutId = e.target.dataset.workoutid
+async function toggleDislike(e) {
+    const commentId = e.target.dataset.id.slice(14);
+    const workoutId = e.target.dataset.workoutid;
     try {
-        const response = await fetch(`/comments/${commentId}/${workoutId}/dislikes`, {
+        await fetch(`/comments/${commentId}/${workoutId}/toggle-dislike`, {
             method: "POST",
-            headers: {"Content-Type": "applications/json"}
-        })
-        // if (response.ok) {
-            window.location.reload()
-        // }
+            headers: { "Content-Type": "application/json" }
+        });
+        window.location.reload();
     } catch (error) {
-        console.log(error.message)
+        console.error(error.message);
     }
 }
