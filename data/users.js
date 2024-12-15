@@ -202,7 +202,6 @@ export const signUp = async (
         friendInbox:  {},
         friends: {},
         pastWorkouts: [],
-        savedWorkouts: [],
     };
     // inserts the new user
     const newInsertUser = await userCollection.insertOne(newUser); 

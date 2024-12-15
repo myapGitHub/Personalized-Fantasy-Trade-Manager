@@ -1,36 +1,22 @@
-<html lang="en">
+<header>
+  <nav>
+    {{#if loggedIn}}
+    <a href="/workouts/public">View Other Users Workouts</a>
+    <a href="/workouts/userWorkouts">View Your Workouts</a>
+    <a href="/workouts/createWorkout">Create A Workout</a>
+    {{!-- <a href="/workouts/removeWorkout">Remove A Workout</a> --}}
+    {{else}}
+    <a href="/">Home</a>
+    <a href="/login" id="login-button">Login</a>
+    <a href="/sign-up" id="sign-up-button">Sign Up</a>
+    <p>not logged?</p>
+    {{/if}}
+  </nav>
 
-  <head>
-    <meta charset="utf-8" />
-    <title>Workout App</title>
-    <link rel="stylesheet" href="/public/css/main.css" />
-  </head>
+</header>
 
-  <body>
-    <header>
-      <nav>
-        {{#if loggedIn}}
-          <a href="/workouts/getAllWorkoutsOfUser">View All Workouts</a>
-          <a href="/workouts/userWorkouts">View Your Workouts</a>
-          <a href="/workouts/createWorkout">Create A Workout</a>
-          {{!-- <a href="/workouts/removeWorkout">Remove A Workout</a> --}}
-          <a href="/workouts/getWorkoutById">Get a Specific Workout</a>
-        {{else}}
-          <a href="/">Home</a>
-          <a href="/login" id="login-button">Login</a>
-          <a href="/sign-up" id="sign-up-button">Sign Up</a>
-          <p>not logged?</p>
-        {{/if}}
-      </nav>
+<main>
+  {{{body}}}
+</main>
 
-    </header>
-
-    <main>
-      {{{body}}}
-    </main>
-
-    <script src="/public//js/main.js"></script>
-
-  </body>
-
-</html>
+<script src="/public/js/main.js"></script>

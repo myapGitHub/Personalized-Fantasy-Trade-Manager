@@ -5,6 +5,11 @@ import xss from 'xss';
 
 const router = Router();
 
+router.get("/", async (req, res) => {
+  console.log("redirect in middleware (currently through routes)");
+  res.redirect("/workoutsPage")
+})
+
 router.post("/", async (req, res) => {
   try {
     console.log(req.body);
@@ -53,18 +58,20 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/savedWorkouts", async (req, res) => {
+router.get("/public", async (req, res) => {
   const userId = req.session.user.userId
+  console.log("TODO");
+  return;
   const results = await workoutData.getSavedWorkouts(userId)
   // console.log(results)
-  res.render("pages/Workouts/savedWorkouts", {workouts: results})
+  res.render("pages/Workouts/allWorkotus", {workouts: results})
 })
 
 router.get("/userWorkouts", async (req, res) => {
   const userId = req.session.user.userId
   const results = await workoutData.getAllWorkoutsOfUserBilly(userId)
   // console.log(results)
-  res.render("pages/Workouts/getAllWorkoutsOfUser", {title: "userWorkouts", workouts: results})
+  res.render("pages/Workouts/savedWorkouts", {title: "userWorkouts", workouts: results})
 })
 
 router.get("/workoutsPage", (req, res) => {

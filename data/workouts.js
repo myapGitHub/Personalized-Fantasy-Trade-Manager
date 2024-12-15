@@ -149,6 +149,11 @@ const createWorkoutPlan = async (userId, workoutName, workoutType, exercises, ra
 
   const newId = insertInfo.insertedId.toString();
 
+  const userCollection = await users();
+  const pastWorkouts = getPastWorkouts(userId);
+  pastWorkouts.push(newId);
+  await userCollection.findOneAndUpdate({userId: userId}, {$set:{pastWorkouts : pastWorkouts}});
+
   const workout = await getWorkoutById(newId);
   console.log("Workout from Data: " + newWorkout);
   return workout;
@@ -244,6 +249,7 @@ const updateWorkout = async (workoutId, workoutType, exercises, comments) => {
     { $set: updatedWorkout },
     { returnDocument: "after" }
   );
+  const userCollection = await users(); 
 
   if (!updatedInfo) {
     throw new Error(" Could not update workout successfully");
@@ -253,37 +259,34 @@ const updateWorkout = async (workoutId, workoutType, exercises, comments) => {
 };
 
 //Gets all workouts of a specific user based on passed in userId
-const getAllWorkoutsOfUser = async (userId) => {
-  const workoutCollection = await workouts();
-  const workoutList = await workoutCollection.find({}).toArray();
-
-  if (!workoutList) throw new Error(" Could not get all workouts");
-
-  const resultList = [];
-
-  for (const workout of workoutList) {
-    if (workout.userId === userId) {
-      const nameID = await findByWorkoutIdExercisesOnly(workout._id);
-      resultList.push(nameID);
+const getPastWorkouts = async (userId) => {
+  const user = await getUserProfile(userId);
+  const workoutList = user.pastWorkouts;
+  
+  const results = [];
+  if(workoutList){
+    for (const workout of workoutList) {
+      results.push(getWorkoutById(workout._id))
     }
   }
-
-  return resultList;
+  return results;
 };
 
+/*
 const getSavedWorkouts = async (userId) => {
   const user = await getUserProfile(userId);
   const workoutList = user.savedWorkouts;
   
   const results = [];
-  if (!workoutList) throw new Error("No workouts found!");
-  for (const workout of workoutList) {
-    results.push(getWorkoutById(workout._id))
+  if(workoutList){
+    for (const workout of workoutList) {
+      results.push(getWorkoutById(workout._id))
+    }
   }
   return results;
-};
+};*/
 
-//////////////
+////////////////
 const getAllWorkoutsOfUserBilly = async (userId) => {
   const workoutCollection = await workouts();
   const workoutList = await workoutCollection.find({}).toArray();
@@ -315,7 +318,7 @@ async function findByWorkoutIdExercisesOnlyBilly(workoutId) {
     foundWorkout
   };
 }
-///////////////
+////////////////////
 
 const rateWorkout = async (workoutId, userRating) => {
   checkExists(workoutId);
@@ -528,105 +531,6 @@ function trimAll(...parameters) {
   return parameters;
 }
 
-function checkValidStateAbbreviation(state) {
-  checkLengthIsTwo(state);
-
-  const validStates = [
-    "AL",
-    "AK",
-    "AZ",
-    "AR",
-    "CA",
-    "CO",
-    "CT",
-    "DE",
-    "FL",
-    "GA",
-    "HI",
-    "ID",
-    "IL",
-    "IN",
-    "IA",
-    "KS",
-    "KY",
-    "LA",
-    "ME",
-    "MD",
-    "MA",
-    "MI",
-    "MN",
-    "MS",
-    "MO",
-    "MT",
-    "NE",
-    "NV",
-    "NH",
-    "NJ",
-    "NM",
-    "NY",
-    "NC",
-    "ND",
-    "OH",
-    "OK",
-    "OR",
-    "PA",
-    "RI",
-    "SC",
-    "SD",
-    "TN",
-    "TX",
-    "UT",
-    "VT",
-    "VA",
-    "WA",
-    "WV",
-    "WI",
-    "WY",
-  ];
-  state = state.toUpperCase();
-
-  if (!validStates.includes(state)) {
-    throw new Error(" State is not valid");
-  }
-}
-
-function checkYearFounded(yearFounded) {
-  checkNumber(yearFounded);
-  const today = new Date();
-  let todayYear = today.getFullYear();
-  if (yearFounded < 1850 || yearFounded > todayYear) {
-    throw new Error(" Invalid yearFounded");
-  }
-}
-
-function checkPlayers(players) {
-  //   console.log(`Checking Players: `);
-  checkArray(players);
-  checkEmptyArray(players);
-  for (let player of players) {
-    checkObj(player);
-    checkObjectEmpty(player);
-    let properKeys = ["firstName", "lastName", "position"];
-    let playerKeys = Object.keys(player);
-    //Learned something new, for future me
-    //.every() checks if every element from properKeys satisfies the () condition
-    //In this case, it is that playerKeys has all the keys of ProperKeys
-    //Use negation to check if at least one is missing, then we throw error
-    if (
-      playerKeys.length !== 3 ||
-      !properKeys.every((key) => playerKeys.includes(key))
-    ) {
-      throw new Error(" Each player must have firstName, lastName, and position as keys");
-    }
-    for (let key in player) {
-      checkExists(player[key]);
-      checkString(player[key]);
-      player[key] = player[key].trim();
-      checkStringLength(player[key]);
-    }
-  }
-}
-
 //Given a workoutId, returns the id and the workoutType
 async function findByWorkoutIdExercisesOnly(workoutId) {
   if (!workoutId) throw "You must provide a workout ID";
@@ -673,153 +577,15 @@ function checkBool(bool) {
   }
 }
 
-function checkTeam(
-  name,
-  sport,
-  yearFounded,
-  city,
-  state,
-  stadium,
-  championshipsWon,
-  players
-) {
-  //Check args exist
-  //   checkExists(id);
-  checkExists(name);
-  checkExists(sport);
-  checkExists(yearFounded);
-  checkExists(city);
-  checkExists(state);
-  checkExists(stadium);
-  checkExists(championshipsWon);
-  checkExists(players);
-
-  //Check valid strings
-  function checkArgsString() {
-    // checkExists(id);
-    checkString(name);
-    checkString(sport);
-    checkString(city);
-    checkString(state);
-    checkString(stadium);
-  }
-  checkArgsString();
-  function trimAll() {
-    // id = id.trim();
-    name = name.trim();
-    sport = sport.trim();
-    city = city.trim();
-    state = state.trim();
-    stadium = stadium.trim();
-  }
-  trimAll();
-  function checkStrLength() {
-    // checkStringLength(id);
-    checkStringLength(name);
-    checkStringLength(sport);
-    checkStringLength(city);
-    checkStringLength(state);
-    checkStringLength(stadium);
-  }
-  checkStrLength();
-  //   if (!ObjectId.isValid(id)) throw new Error(" invalid object ID";
-  checkValidStateAbbreviation(state);
-  checkYearFounded(yearFounded);
-  function checkChampsWon() {
-    checkNumber(championshipsWon);
-    checkPos(championshipsWon);
-    checkWholeNumber(championshipsWon);
-  }
-  checkChampsWon();
-  checkPlayers(players);
-}
-
-async function checkGame(
-  teamId,
-  gameDate,
-  opposingTeamId,
-  homeOrAway,
-  finalScore,
-  win
-) {
-  checkExists(teamId);
-  checkExists(gameDate);
-  checkExists(opposingTeamId);
-  checkExists(homeOrAway);
-  checkExists(finalScore);
-  checkExists(win);
-
-  checkString(teamId);
-  checkString(gameDate);
-  checkString(opposingTeamId);
-  checkString(homeOrAway);
-  checkString(finalScore);
-
-  teamId = teamId.trim();
-  gameDate = gameDate.trim();
-  opposingTeamId = opposingTeamId.trim();
-  homeOrAway = homeOrAway.trim();
-  finalScore = finalScore.trim();
-
-  checkStringLength(teamId);
-  checkStringLength(gameDate);
-  checkStringLength(opposingTeamId);
-  checkStringLength(homeOrAway);
-  checkStringLength(finalScore);
-
-  checkValidObjId(teamId);
-  let mainTeam;
-  try {
-    mainTeam = await teamFun.getTeamById(teamId);
-  } catch (e) {
-    throw e;
-  }
-
-  // let date = new Date(gameDate);
-  checkValidDate(gameDate);
-
-  let opposingTeam;
-  try {
-    opposingTeam = await teamFun.getTeamById(opposingTeamId);
-  } catch (e) {
-    throw e;
-  }
-
-  if (homeOrAway !== "Home" && homeOrAway !== "Away") {
-    throw new Error(" Not Home or Away");
-  }
-
-  let finalScoreCheck = finalScore.split("");
-  checkWholeNumber(parseInt(finalScoreCheck[0]));
-  checkWholeNumber(parseInt(finalScoreCheck[2]));
-  if (
-    parseInt(finalScoreCheck[0]) < 0 ||
-    parseInt(finalScoreCheck[2]) < 0 ||
-    parseInt(finalScoreCheck[0]) === parseInt(finalScoreCheck[2]) ||
-    finalScoreCheck[1] !== "-"
-  ) {
-    throw new Error(" finalScore is not in proper format");
-  }
-
-  checkBool(win);
-
-  if (mainTeam.sport !== opposingTeam.sport) {
-    throw new Error(" Teams do not play the same sport");
-  }
-
-  if (mainTeam._id === opposingTeam._id) {
-    throw new Error(" Team cannot play itself");
-  }
-}
 export default {
-  getSavedWorkouts,
+  getAllWorkoutsOfUserBilly,
+  //getSavedWorkouts,
   createWorkout,
   createWorkoutPlan,
   getAllWorkouts,
   getWorkoutById,
   removeWorkout,
   updateWorkout,
-  getAllWorkoutsOfUser,
-  getAllWorkoutsOfUserBilly,
+  getPastWorkouts,
   rateWorkout,
 };
