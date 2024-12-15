@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { workoutData } from "../data/index.js";
 import workouts from "../data/workouts.js";
+import xss from 'xss';
 
 const router = Router();
 

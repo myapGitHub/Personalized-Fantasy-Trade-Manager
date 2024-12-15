@@ -4,9 +4,9 @@ import { workouts } from "../config/mongoCollections.js";
 import { users } from "../config/mongoCollections.js"; // for creating workout plan, need user details
 import { ObjectId } from "mongodb";
 import validateDate from "validate-date";
-import { getUserProfile } from "./users.js";
 
 const workoutCollection = await workouts();
+
 
 //Creates a workout with workoutType, userId (who created the workout), and exercises, and a description of the workout
 /* Old workout system */
@@ -44,7 +44,16 @@ const createWorkout = async (workoutType, userId, exercises, description) => {
     description: description,
   };
 
-  
+  const insertInfo = await workoutCollection.insertOne(newWorkout);
+  if (!insertInfo.acknowledged || !insertInfo.insertedId)
+    throw new Error(" Could not add workout");
+
+  const newId = insertInfo.insertedId.toString();
+
+  const workout = await getWorkoutById(newId);
+  return workout;
+};
+
 // Creates a workout with workouts based on preferences. 
 /* New workout system, replaces createWorkout */
 const createWorkoutPlan = async (userId, workoutName, workoutType, exercises, rating) => {
@@ -66,11 +75,11 @@ const createWorkoutPlan = async (userId, workoutName, workoutType, exercises, ra
   // all required attributes
 */
 
-  // console.log("User Id: " + userId);
-  // console.log("Workout Name: " + workoutName);
-  // console.log("Workout type: " + workoutType);
-  // console.log("Exercises: " + exercises);
-  // console.log("Rating: " + rating);
+  console.log("User Id: " + userId);
+  console.log("Workout Name: " + workoutName);
+  console.log("Workout type: " + workoutType);
+  console.log("Exercises: " + exercises);
+  console.log("Rating: " + rating);
 
 
 
@@ -139,21 +148,10 @@ const createWorkoutPlan = async (userId, workoutName, workoutType, exercises, ra
   const newId = insertInfo.insertedId.toString();
 
   const workout = await getWorkoutById(newId);
-  // console.log("Workout from Data: " + newWorkout);
+  console.log("Workout from Data: " + newWorkout);
   return workout;
 
 }
-
-
-  const insertInfo = await workoutCollection.insertOne(newWorkout);
-  if (!insertInfo.acknowledged || !insertInfo.insertedId)
-    throw new Error(" Could not add workout");
-
-  const newId = insertInfo.insertedId.toString();
-
-  const workout = await getWorkoutById(newId);
-  return workout;
-};
 
 //Gets all workouts in the database
 const getAllWorkouts = async () => {
@@ -269,21 +267,6 @@ const getAllWorkoutsOfUser = async (userId) => {
   }
 
   return resultList;
-};
-
-const getSavedWorkouts = async (userId) => {
-  const user = await getUserProfile(userId);
-  const workoutList = user.savedWorkouts;
-  
-  const results = [];
-
-  if (!workoutList) throw new Error("No workouts found!");
-
-  for (const workout of workoutList) {
-    results.push(getWorkoutById(workout._id))
-  }
-
-  return results;
 };
 
 //////////////
@@ -815,8 +798,8 @@ async function checkGame(
   }
 }
 export default {
-  getSavedWorkouts,
   createWorkout,
+  createWorkoutPlan,
   getAllWorkouts,
   getWorkoutById,
   removeWorkout,
