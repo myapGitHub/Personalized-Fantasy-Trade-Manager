@@ -20,14 +20,19 @@ router.post("/", async (req, res) => {
     const reps = parseInt(xss(req.body.reps));
     const weight = parseFloat(xss(req.body.weight));
     const rating = parseInt(xss(req.body.rating));
-
-    const exercises = [{
-      name: exerciseName,
-      sets: sets,
-      reps: reps,
-      weight: weight
-    }];
-
+    const info = req.body
+    const exercises = []
+    for (let i = 0; i < info.exerciseName.length; i++) {
+      let exercise = {name: info.exerciseName[i], sets, reps, weight, rating}
+      exercises.push(exercise)
+    }
+    // const exercises = [{
+    //   name: exerciseName,
+    //   sets: sets,
+    //   reps: reps,
+    //   weight: weight
+    // }];
+    console.log(exercises)
     await workoutData.createWorkoutPlan(userId, workoutName, workoutType, exercises, rating);
     res.redirect("/workouts/userWorkouts");
 
@@ -74,7 +79,7 @@ router.get("/createWorkout", (req, res) => {
 router.post("/createWorkout", async (req, res) => {
   const workout = xss(req.body);
 
-  // console.log(workout);
+  console.log(workout);
 
   if (!req.session.user || !req.session.user.userId) {
     return res.status(401).json({ error: "User not authenticated" });

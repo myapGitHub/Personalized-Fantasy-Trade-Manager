@@ -4,6 +4,7 @@ import workoutFuncs from "../data/workouts.js";
 import { workouts } from "../config/mongoCollections.js";
 import { ObjectId } from "mongodb";
 import { v4 as uuidv4 } from "uuid";
+import xss from "xss"
 
 const router = Router();
 const workoutCollection = await workouts();
@@ -27,7 +28,7 @@ router.post("/:id", async (req, res) => {
     const workoutId = req.params.id;
     const text = req.body.comment;
     const date = new Date();
-    const userId = req.session.user.userId;
+    const userId = xss(req.session.user.userId);
     const likes = 0;
     const dislikes = 0;
     const commentId = uuidv4();
@@ -35,6 +36,7 @@ router.post("/:id", async (req, res) => {
 
     try {
         const workout = await workoutCollection.findOne({ _id: new ObjectId(workoutId) });
+        console.log(workout)
         workout.comments.push(comment);
         await workoutFuncs.updateWorkout(workoutId, workout.workoutType, workout.exercises, workout.comments);
         res.redirect(`/comments/${workoutId}`);

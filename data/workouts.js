@@ -58,7 +58,7 @@ const createWorkout = async (workoutType, userId, exercises, description) => {
 // Creates a workout with workouts based on preferences. 
 /* New workout system, replaces createWorkout */
 const createWorkoutPlan = async (userId, workoutName, workoutType, exercises, rating) => {
-
+  console.log(exercises)
   // For now, workout type and name remain the same
 /*
   userId: user's id
@@ -82,7 +82,7 @@ const createWorkoutPlan = async (userId, workoutName, workoutType, exercises, ra
   console.log("Exercises: " + exercises);
   console.log("Rating: " + rating);
 
-
+  
 
   // Check args exist
   checkExists(userId);
@@ -139,7 +139,8 @@ const createWorkoutPlan = async (userId, workoutName, workoutType, exercises, ra
     workoutName: workoutName,
     workoutType: workoutType,
     exercises: exercises,
-    rating: rating
+    // rating: rating,
+    comments: []
   };
 
   const insertInfo = await workoutCollection.insertOne(newWorkout);
@@ -226,11 +227,11 @@ const updateWorkout = async (workoutId, workoutType, exercises, comments) => {
   checkArray(exercises);
   checkEmptyArray(exercises);
 
-  for (let exercise of exercises) {
-    checkString(exercise);
-    exercise = exercise.trim();
-    checkStringLength(exercise);
-  }
+  // for (let exercise of exercises) {
+  //   checkString(exercise);
+  //   exercise = exercise.trim();
+  //   checkStringLength(exercise);
+  // }
 
   const updatedWorkout = {
     workoutType: workoutType,
@@ -379,7 +380,7 @@ function checkStringWithName(strVal, varName) {
 //Helper Functions
 function checkString(input) {
   if (typeof input !== "string") {
-    throw new Error(" Input is not a string");
+    throw new Error(`${JSON.stringify(input)} is not a string`);
   }
 }
 
@@ -397,7 +398,7 @@ function checkZeroLen(input) {
 
 let checkNumber = (input) => {
   if (typeof input !== "number") {
-    throw new Error(" Element is not a number");
+    throw new Error(`${input} is not a number`);
   }
   if (isNaN(input)) {
     throw new Error(" Input contains NaN");

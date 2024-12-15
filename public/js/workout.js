@@ -1,66 +1,29 @@
-    <header>
-      <nav>
-        {{#if loggedIn}}
-          <a href="/workouts/getAllWorkoutsOfUser">View All Workouts</a>
-          <a href="/workouts/userWorkouts">View Your Workouts</a>
-          <a href="/workouts/createWorkout">Create A Workout</a>
-          {{!-- <a href="/workouts/removeWorkout">Remove A Workout</a> --}}
-          <a href="/workouts/getWorkoutById">Get a Specific Workout</a>
-        {{else}}
-          <a href="/">Home</a>
-          <a href="/login" id="login-button">Login</a>
-          <a href="/sign-up" id="sign-up-button">Sign Up</a>
-          <p>not logged?</p>
-        {{/if}}
-      </nav>
+const removeButtons = Array.from(document.getElementsByClassName("workoutRemove"))
 
-    </header>
+removeButtons.forEach(button => {
+    button.addEventListener("click", remove)
+})
 
-{{!-- userId,
-      workout.name,
-      workout.workoutType,
-      workout.exercises,
-      workout.rating --}}
-
-
-    <form id="createWorkout-form" action="/workouts" method="POST">
-    <h1>Create a New Workout</h1>
-     {{#if error}}
-        <p style="color: red;">{{error}}</p>
-      {{/if}}
+async function remove(e) {
+    try {
+        await fetch(`/workouts/${e.target.dataset.id}`, {
+            method: "DELETE"
+        })  
+        window.location.reload()
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+document.getElementById("addExercise").addEventListener("click", addExercise)
+function addExercise(e) {
+    e.preventDefault()
+    const exerciseBlock = document.getElementById("createWorkout-form")
+    const newInput = document.createElement("div")
+    newInput.classList.add("exercise")
+    newInput.innerHTML = 
+    `<br>
     <div>
-        <label for="workoutName">Workout Name:</label>
-        <input
-          type="text"
-          id="workoutName"
-          name="workoutName"
-          placeholder="Name your Workout"
-          required
-        />
-      </div>
-
-      <div>
-        <label for="workoutType">Workout Type:</label>
-        <select
-          {{!-- type="dropdown" --}}
-          id="workoutType"
-          name="workoutType"
-          placeholder="Brief description of the workout"
-          required
-        >
-          <option value="Bench">Bench</option>
-          <option value="Squat">Squat</option>
-          <option value="Deadlift">Deadlift</option>
-
-
-        </select>
-      </div>
-      {{!-- <div id="createWorkout"></div> --}}
-
-     
-      <div class="exercise">
-        <div>
-          <label for="exercises">Exercises:</label>
+    <label for="exercises">Exercises:</label>
 
             <select
               {{!-- type="dropdown" --}}
@@ -149,9 +112,6 @@
             <option value=5>5</option>
 
           </select>
-        </div>
-      </div>
-      <button id="addExercise">Add another exercise</button>
-      <button type="submit">Create Workout</button>
-    </form>
-    <script src="/public/js/workout.js"></script>
+        </div>`
+      exerciseBlock.appendChild(newInput)
+}
