@@ -150,9 +150,11 @@ const createWorkoutPlan = async (userId, workoutName, workoutType, exercises, ra
   const newId = insertInfo.insertedId.toString();
 
   const userCollection = await users();
-  const pastWorkouts = getPastWorkouts(userId);
-  pastWorkouts.push(newId);
-  await userCollection.findOneAndUpdate({userId: userId}, {$set:{pastWorkouts : pastWorkouts}});
+
+  //broken, will fix
+  //const pastWorkouts = getPastWorkouts(userId);
+  //pastWorkouts.push(newId);
+  //await userCollection.findOneAndUpdate({userId: userId}, {$set:{pastWorkouts : pastWorkouts}});
 
   const workout = await getWorkoutById(newId);
   console.log("Workout from Data: " + newWorkout);
