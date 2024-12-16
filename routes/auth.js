@@ -1,4 +1,5 @@
 import {Router} from 'express';
+import { workoutData } from '../data/index.js';
 const router = Router();
 
 
@@ -15,8 +16,11 @@ router.route('/dashboard').get(async (req, res) => {
     if (!req.session.user) {
         return res.status(400).json({error: "Error: User session does not exsist"});
     }
+    const userId = req.session.user.userId;
+    const streakData = await workoutData.getUserStreak(userId);
     res.render('pages/dashboard', {
-        userId: req.session.user.userId
+        userId: userId,
+        streakCount: streakData.streakCount
     })
 })
 
