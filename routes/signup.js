@@ -26,8 +26,8 @@ router
     checkExists(req.body.gender);
     checkExists(req.body.level);
 
-    checkId(req.body.userId);
-    checkPassword(req.body.password);
+    req.body.userId = checkUserId(req.body.userId);
+    req.body.password = checkPassword(req.body.password);
     checkString(req.body.firstName);
     req.body.firstName = req.body.firstName.trim();
     checkStringLength(req.body.firstName);
@@ -340,6 +340,23 @@ function checkValidRange(input, min, max, fieldName) {
     );
   }
 }
+
+export const checkUserId = (userId) => {
+  if (userId === undefined || userId === null) throw "userId is not supplied";
+  if (typeof userId !== "string" || userId.trim().length === 0)
+    throw "userId not string or empty string";
+
+  userId = userId.trim();
+  if (userId.length < 5 || userId.length > 10)
+    throw "user id has to be 2 >= or 10 <= in length";
+
+  for (const char of userId) {
+    if (!isNaN(char) && char !== " ") {
+      throw "userid contains number";
+    }
+  }
+  return userId;
+};
 
 const checkPassword = async (password) => {
   if (password === undefined || password === null)
