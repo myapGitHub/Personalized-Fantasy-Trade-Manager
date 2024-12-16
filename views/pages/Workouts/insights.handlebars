@@ -28,22 +28,22 @@
       <h2>Projected Maxes</h2>
       <div>
         <p>Projected Bench:</p>
-        <p id="value">{{projections.projBenchMax}}</p>
-        <p id="differential {{#if (gt differentials.bench 0)}}[+]{{else}}[-]{{/if}}"> 
+        <p class="value">{{projections.projBenchMax}}</p>
+        <p class="differential{{#if (gt differentials.bench 0)}}[+]{{else}}[-]{{/if}}"> 
           {{#if (gt differentials.bench 0)}}+{{/if}}{{differentials.bench}}
         </p>
       </div>
       <div>
         <p>Projected Squat:</p>
-        <p id="value">{{projections.projSquatMax}}</p>
-        <p id="differential {{#if (gt differentials.squat 0)}}positive{{else}}negative{{/if}}">
+        <p class="value">{{projections.projSquatMax}}</p>
+        <p class="differential {{#if (gt differentials.squat 0)}}positive{{else}}negative{{/if}}">
           {{#if (gt differentials.squat 0)}}+{{/if}}{{differentials.squat}}
         </p>
       </div>
       <div>
         <p>Projected Deadlift:</p>
-        <p id="value">{{projections.projDeadliftMax}}</p>
-        <p id="differential {{#if (gt differentials.deadlift 0)}}positive{{else}}negative{{/if}}">
+        <p class="value">{{projections.projDeadliftMax}}</p>
+        <p class="differential {{#if (gt differentials.deadlift 0)}}positive{{else}}negative{{/if}}">
           {{#if (gt differentials.deadlift 0)}}+{{/if}}{{differentials.deadlift}}
         </p>
       </div>
