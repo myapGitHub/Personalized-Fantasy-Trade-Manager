@@ -9,8 +9,8 @@
 <div id="all-workouts">
   <h1 id="all-workouts-title">Your Workouts</h1>
   {{#each workouts}}
-  <a href="/search-workout/{{foundWorkout._id}}" style="text-decoration: none; color: inherit;">
-    <div id="each-workout">
+  <div class="each-workout">
+    <a href="/search-workout/{{foundWorkout._id}}" style="text-decoration: none; color: inherit;">
       <h2>{{foundWorkout.workoutName}}</h2>
       <h3>Type: {{foundWorkout.workoutType}}</h3>
       <h3>Difficulty Rating: {{foundWorkout.rating}}</h3>
@@ -21,13 +21,13 @@
       <p>Weight: {{this.weight}}</p>
       <br>
       {{/each}}
-      <div>
-        <a href="/comments/{{foundWorkout._id}}">View Comments</a>
-        <button class="workoutClone" data-id={{foundWorkout._id}}>Copy this workout</button>
-        <button class="workoutRemove" data-id={{foundWorkout._id}}>Remove this workout</button>
-      </div>
+    </a>
+    <div>
+      <a href="/comments/{{foundWorkout._id}}">View Comments</a>
+      <button class="workoutClone" data-id="{{foundWorkout._id}}">Copy this workout</button>
+      <button class="workoutRemove" data-id="{{foundWorkout._id}}">Remove this workout</button>
     </div>
-  </a>
+  </div>
   {{/each}}
 </div>
 <script src="/public/js/workout.js"></script>

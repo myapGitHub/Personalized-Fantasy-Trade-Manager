@@ -245,7 +245,7 @@ select {
     background-color: lightblue;
 }
 
-#each-workout {
+.each-workout {
     padding: 20px;
     background-color: rgb(92, 122, 213);
     border: 4px solid navy;
