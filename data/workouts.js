@@ -151,7 +151,8 @@ const createWorkoutPlan = async (userId, workoutName, workoutType, exercises, ra
 
   const userCollection = await users();
 
-  let pastWorkouts = getAllWorkoutsOfUserBilly(userId);
+  let pastWorkouts = await getAllWorkoutsOfUserBilly(userId);
+  console.log(pastWorkouts);
   pastWorkouts.push(newId);
   await userCollection.findOneAndUpdate({userId: userId}, {$set:{savedWorkouts : pastWorkouts}});
 
@@ -254,7 +255,7 @@ const getAllPublicWorkouts = async (userId) => {
 
   if (!workoutList) throw new Error(" Could not get all workouts");
 
-  const resultList = [];
+  let resultList = [];
   for (const workout of workoutList) {
     if (profilePrivacyStatus(workout.userId) && !(userId === workout.userId)){
       const result = await findByWorkoutIdExercisesOnlyBilly(workout._id);
