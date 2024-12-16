@@ -16,15 +16,13 @@ body {
 
 main {
     position: relative;
+    text-align: center;
     z-index: 1;
 }
-#break-main{
-    text-align: center;
-    display: block;
-    background-color: black;
-}
+
 /* GENERAL CSS STYLING */
 nav {
+    background-color: #0000007a;
     text-align: center;
     font-size: 10px;
     justify-content: center;
@@ -36,7 +34,7 @@ nav {
     font-size: 10px;
     margin: 0 auto
 }.home-link{
-    position: fixed;
+    text-align: left;
 }
 
 nav a {
