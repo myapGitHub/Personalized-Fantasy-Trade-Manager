@@ -17,6 +17,9 @@ app.engine("handlebars", exphbs.engine({
     eq: function (a, b) {
       return a === b;
     },
+    gt: function (a,b) {
+      return a > b;
+    }
   },
 }));
 app.set("view engine", "handlebars");

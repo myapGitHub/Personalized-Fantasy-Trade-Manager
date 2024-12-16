@@ -42,7 +42,6 @@ router
       checkExists(req.body.gender);
       checkExists(req.body.level);
 
-      checkId(req.body.userId);
       checkString(req.body.firstName);
       req.body.firstName = req.body.firstName.trim();
       checkStringLength(req.body.firstName);
