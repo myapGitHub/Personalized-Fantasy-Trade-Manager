@@ -1,74 +1,71 @@
-
 /* GENERAL CSS STYLING */
 
 .error {
     color: red;
     size: 2.0em;
 }
+
 h1 {
     color: aqua;
 }
+
 body {
-    margin-top: 0;
-    text-align: center;
-    background-color:#b8b8b8;
+    align-items: center;
+
     font-family: Georgia, Times, 'Times New Roman', serif;
 }
+
+main {
+    position:relative;
+    z-index: 1;
+}
+
 /* GENERAL CSS STYLING */
 nav {
-    position:relative;
-    top: -10;
-    text-align: left;
+    position: relative;
+    text-align: center;
+    align-items: center;
     font-size: 10px;
-    margin: 0 auto;
-    background-color:#000000;
+    background-color: #000000;
     padding: 10px 20px;
     display: inline-block;
     border-radius: 5px;
-    white-space: normal; 
-    word-wrap: break-word; 
-    max-width: 100%; 
-    width: auto; 
-    max-width: 100%; 
+    white-space: normal;
+    word-wrap: break-word;
     font-size: 10px;
+}.home-link{
+    text-align: center;
 }
 
 nav a {
-    text-decoration: none; 
+    text-decoration: none;
     font-weight: bold;
-    color: aqua; 
-    display: inline-block; 
+    color: aqua;
+    display: inline-block;
     padding: 10px;
     background-color: #007BFF;
     border-radius: 5px;
     text-align: center;
-    white-space: normal; 
-    word-wrap: break-word; 
-    min-width: 100px; 
-    max-width: 150px; 
+    white-space: normal;
+    word-wrap: break-word;
+    min-width: 100px;
+    max-width: 150px;
 }
 
 nav a:hover {
-    color: orange; 
+    color: orange;
 }
 
-.home-link{
-    position: absolute;
-    left: 10px;
-    top: -15;
-}
-
-#streak{
-    
-    display: inline-block; 
+#streak {
+    display: inline-block;
     padding: 10px;
     background-color: #007BFF;
     border-radius: 5px;
     text-align: center;
-    white-space: normal; 
-    word-wrap: break-word; 
-    min-width: 300px; 
-    max-width: 150px; 
+    white-space: normal;
+    word-wrap: break-word;
+    min-width: 300px;
+    max-width: 150px;
 
 }
 
@@ -79,20 +76,27 @@ input {
 h1 {
     color: rgb(0, 178, 128);
 }
+
 h3 {
     color: rgb(7, 7, 63);
 }
+
 form {
     color: grey;
 }
+
 a {
-    text-decoration: none; /* removes line underneath links */ 
+    text-decoration: none;
     font-weight: bold;
-    color:aqua; /* aqua links */
+    color: aqua;
+    /* aqua links */
 }
+
 a:hover {
-    color: orange; /* Orange on hover */
+    color: orange;
+    /* Orange on hover */
 }
+
 button {
     background-color: blue;
     color: white;
@@ -102,52 +106,61 @@ button {
     margin-bottom: 50px;
     padding: 5px;
 }
+
 button:hover {
-    background-color: aqua; 
+    background-color: aqua;
     color: grey;
 }
+
 select {
     font-family: Georgia, Times, 'Times New Roman', serif;
 }
 
 /* HOMEPAGE STYLING */
 .homeScreen {
+    position: fixed;
+    left: 0;
+    top: 0;
     background-image: url('/static/background-image.jpeg');
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat; 
-    height: 100vh;              
-    width: 100%;                 
-    align-items: center;   
+    background-repeat: no-repeat;
+    height: 100vh;
+    width: 100%;
 }
 
-#homepage-welcome{
-    background-color: #000000a8;   
+
+#homepage-welcome {
+    text-align: center;
+    background-color: #000000a8;
     color: white;
 }
 
-#homepage-signup{
-background-color: rgba(0, 0, 0, 0.641);
-color:wheat;
+#homepage-signup {
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.641);
+    color: wheat;
 }
+
 /* DASHBOARD STYLING */
+
+#dashboard {
+    background-color: #0000007a;
+    background: scroll;
+}
 
 #welcome {
     margin-top: 50px;
 }
-#search-user-form{
-    align-items: left;
-    display:grid;
+
+#search-user-form {
+    display: grid;
 }
 
 
 /* LOGIN-SIGNUP STYLING */
 
 /* Sign-in Page Styling */
-
-#home-link {
-    text-align: left;  
-}
 
 #signin-form {
     margin: 20px auto;
@@ -158,12 +171,8 @@ color:wheat;
     background-color: cadetblue;
 }
 
-#login-header {
-    text-align: left;
-    margin-Left: 50px;
-}
-
-#userId, #password {
+#userId,
+#password {
     margin: 10px;
     font-size: 18px;
 }
@@ -171,7 +180,9 @@ color:wheat;
 
 /* Sign-up Page Styling */
 
-#userId-signup, #password-signup, #confirm-password {
+#userId-signup,
+#password-signup,
+#confirm-password {
     margin: 10px;
     font-size: 18px;
 }
@@ -192,6 +203,7 @@ color:wheat;
     background-color: lightblue;
     margin-top: 100px;
 }
+
 #signup-created-text {
     color: rgb(51, 51, 51);
 }
@@ -201,6 +213,7 @@ color:wheat;
 #signout-div {
     margin-top: 100px;
 }
+
 #logout-text {
     color: rgb(51, 51, 51);
 }
@@ -240,4 +253,3 @@ color:wheat;
     border-radius: 4px;
 
 }
-
