@@ -64,7 +64,11 @@
           <option value=5>5</option>
 
         </select>
-      </div>
+    <div class="add-submit">
+      <button id="addExercise">Add another exercise</button>
+      <button type="submit">Create Workout</button>
+    </div>
+      </div id="exercises-id">
       {{#if prefill}}
         {{#each prefill.exercises}}
           <div class="exercise">
@@ -215,10 +219,7 @@
     </div>
     </form>
 
-    <div class="add-submit">
-      <button id="addExercise">Add another exercise</button>
-      <button type="submit">Create Workout</button>
-    </div>
+
 
     <script src="/public/js/workout.js"></script>
 

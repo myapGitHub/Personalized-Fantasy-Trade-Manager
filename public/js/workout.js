@@ -35,7 +35,7 @@ async function copyWorkout(e) {
 document.getElementById("addExercise").addEventListener("click", addExercise)
 function addExercise(e) {
     e.preventDefault()
-    const exerciseBlock = document.getElementById("createWorkout-form")
+    const exerciseBlock = document.getElementById("createWorkout-form");
     const newInput = document.createElement("div")
     newInput.classList.add("exercise")
     newInput.innerHTML = 
