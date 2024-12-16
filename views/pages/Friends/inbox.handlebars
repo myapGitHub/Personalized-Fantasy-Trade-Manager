@@ -1,17 +1,10 @@
 <header>
     <nav>
-        <a href="/dashboard">Home</a>
-        <a>Profile</a>
+        <a href="/friends/friends">Back</a>
+        <a href="/friends/inbox">Inbox</a>
         <a href="/signout">Logout</a>
-        <a href="/workouts/workoutsPage">Workouts</a>
     </nav>
 </header>
-
-
-<nav>
-    <a href="/friends/friends">Friends</a>
-    <a href="/friends/inbox">Inbox</a>
-</nav>
 
 <div>{{error}}</div>
 
@@ -20,17 +13,17 @@
     <h3>Inbox Empty</h3>
 </div>
 {{else}}
-    {{#if inboxArr}}
-        <ul>
-            {{#each inboxArr}}
-                <li>
-                    <a href="/search-user/{{this}}" data-id="{{this}}">{{this}}</a>
-                </li>
-            {{/each}}
-        </ul>
-    {{else}}
-    <div>
-        <h3>Inbox Empty</h3>
-    </div>
-    {{/if}}
+{{#if inboxArr}}
+<ul>
+    {{#each inboxArr}}
+    <li>
+        <a href="/search-user/{{this}}" data-id="{{this}}">{{this}}</a>
+    </li>
+    {{/each}}
+</ul>
+{{else}}
+<div>
+    <h3>Inbox Empty</h3>
+</div>
+{{/if}}
 {{/if}}

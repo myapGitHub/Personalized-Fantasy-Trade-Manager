@@ -6,39 +6,72 @@
     size: 2.0em;
 }
 title {
-    color: darkblue;
+    color: rgb(0, 113, 113)
 }
 h1 {
-    color: blue;
+    color: aqua;
 }
 body {
     margin-top: 0;
     text-align: center;
-    background-color: rgb(121, 201, 228);
+    background-color:#b8b8b8;
     font-family: Georgia, Times, 'Times New Roman', serif;
 }
+/* GENERAL CSS STYLING */
 nav {
+    position:relative;
+    top: -10;
     text-align: left;
-    font-size: 22px;
+    font-size: 10px;
     margin: 0 auto;
-    gap: 25px; /* Determines gap between each link */
     background-color:#000000;
     padding: 10px 20px;
     display: inline-block;
     border-radius: 5px;
-}.home-link{
-    position: absolute;
-    left: 10px;
-    top: 0;
+    white-space: normal; 
+    word-wrap: break-word; 
+    max-width: 100%; 
+    width: auto; 
+    max-width: 100%; 
+    font-size: 10px;
 }
 
+nav a {
+    text-decoration: none; 
+    font-weight: bold;
+    color: aqua; 
+    display: inline-block; 
+    padding: 10px;
+    background-color: #007BFF;
+    border-radius: 5px;
+    text-align: center;
+    white-space: normal; 
+    word-wrap: break-word; 
+    min-width: 100px; 
+    max-width: 150px; 
+}
+
+nav a:hover {
+    color: orange; 
+}
+
+.home-link{
+    position: absolute;
+    left: 10px;
+    top: -15;
+}
+
+.settings-alt-nav{
+    position: relative;
+    top: -20;
+}
 
 input {
     font-family: Georgia, Times, 'Times New Roman', serif;
 }
 
 h1 {
-    color: #6185cd;
+    color: rgb(0, 158, 142);
 }
 h3 {
     color: rgb(7, 7, 63);
@@ -49,13 +82,13 @@ form {
 a {
     text-decoration: none; /* removes line underneath links */ 
     font-weight: bold;
-    color: blue; /* Blue links */
+    color:aqua; /* aqua links */
 }
 a:hover {
     color: orange; /* Orange on hover */
 }
 button {
-    background-color: darkblue;
+    background-color: blue;
     color: white;
     border-radius: 4px;
     font-family: Georgia, Times, 'Times New Roman', serif;
@@ -64,7 +97,7 @@ button {
     padding: 5px;
 }
 button:hover {
-    background-color: blue; 
+    background-color: aqua; 
     color: grey;
 }
 select {
@@ -96,6 +129,10 @@ color:wheat;
 #welcome {
     margin-top: 50px;
 }
+#search-user-form{
+    align-items: left;
+    display:grid;
+}
 
 
 /* LOGIN-SIGNUP STYLING */
@@ -112,7 +149,7 @@ color:wheat;
     max-width: 300px;
     border: 1px solid lightgrey;
     border-radius: 6px;
-    background-color: lightblue;
+    background-color: cadetblue;
 }
 
 #login-header {
@@ -169,7 +206,7 @@ color:wheat;
     margin: 20px auto;
     padding: 20px;
     max-width: 500px;
-    border: 1px solid lightgrey;
+    border: 1px solid lightblue;
     border-radius: 8px;
     background-color: lightblue;
 }
