@@ -8,7 +8,7 @@
         <a href="/settings/account">Settings</a>
         <div>
             <form id="search-user-form" method="GET" action="/search-user">
-                <label for="search-user">Search User:</label>
+                <label for="searchUser">Search User:</label>
                 <input id="currentUserId" name="currentUserId" type="hidden" value="{{userId}}">
                 <input id="searchUser" name="searchUser" type="text" placeholder="type user">
             </form>
@@ -23,22 +23,19 @@
     <h2>NO USERS FOUND</h2>
 </div>
 {{else}}
-    {{#if userIdArr}}
-        <ul>
-            {{#each userIdArr}}
-                <li>
-                    <a href="/search-user/{{this}}" data-id="{{this}}">{{this}}</a>
-                </li>
-            {{/each}}
-        </ul>
-    {{else}}
+{{#if userIdArr}}
+    <ul>
+        {{#each userIdArr}}
+            <li>
+                <a href="/search-user/{{this}}" data-id="{{this}}">{{this}}</a>
+            </li>
+        {{/each}}
+    </ul>
+{{else}}
     <div>
         <h2>NO USERS FOUND</h2>
     </div>
-    {{/if}}
 {{/if}}
-
-
-
+{{/if}}
 
 <script src="/public/js/dashboard.js"></script>
