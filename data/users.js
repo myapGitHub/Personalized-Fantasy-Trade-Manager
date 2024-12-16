@@ -174,9 +174,6 @@ const calculateMaxes = ({ experience, age, weight, height, gender }) => {
 };
 
 function checkValidRange(input, min, max, fieldName) {
-  if (!errors) {
-    errors = [];
-  }
   if (!input) {
     throw "A valid number is not provided";
   }
