@@ -40,12 +40,17 @@
           {{#if (gt differentials.squat 0)}}+{{/if}}{{differentials.squat}}
         </p>
       </div>
-      <div class="projection-item">
+      <div>
         <p>Projected Deadlift:</p>
         <p id="value">{{projections.projDeadliftMax}}</p>
         <p id="differential {{#if (gt differentials.deadlift 0)}}positive{{else}}negative{{/if}}">
           {{#if (gt differentials.deadlift 0)}}+{{/if}}{{differentials.deadlift}}
         </p>
+      </div>
+
+      <div>
+        <p>Differentials:</p>
+        <p>{{projections.projBenchMax}}</p>
       </div>
     </div>
   {{/if}}
