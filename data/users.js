@@ -176,13 +176,13 @@ export const signUp = async (
     });
     // if no bechMax is supplied use the calc
     if (!benchMax) benchMax = estBenchMax;
-    else checkNum(parseInt(benchMax));
+    else benchMax = checkNum(parseInt(benchMax));
     // if no squatMax is supplied use the calc
     if (!squatMax) squatMax = estSquatMax;
-    else checkNum(parseInt(squatMax));
+    else  squatMax = checkNum(parseInt(squatMax));
     // if no deadLiftMax is supplied use the calc
     if (!deadLiftMax) deadLiftMax = estDeadLiftMax;
-    else checkNum(parseInt(deadLiftMax));
+    else deadLiftMax = checkNum(parseInt(deadLiftMax));
     // creates a new user obj to insert
     const newUser = {
         userId: userId.toLowerCase(),
