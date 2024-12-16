@@ -313,6 +313,55 @@ const calculateSuggestedWeightForExercise = (user, workout, exercise) => {
 }
 
 
+export const getProjectedMaxes = async (userId) => {
+  const userCollection = await users();
+  const workoutCollection = await workouts();
+  
+  const recentWorkouts = await workoutCollection
+    .find({ userId: userId.toLowerCase() }) 
+    .sort({ date: -1 }) // get most recent date
+    .toArray();
+
+  if (!recentWorkouts || recentWorkouts.length === 0) {
+    return null;
+  }
+
+  // Get most recent workout for each type (SBD)
+  const latestBench = recentWorkouts.find(w => w.type === 'Bench');
+  const latestSquat = recentWorkouts.find(w => w.type === 'Squat');
+  const latestDeadlift = recentWorkouts.find(w => w.type === 'Deadlift');
+
+  const calculateAdjustedMax = (workout) => {
+    if (!workout) return null;
+    
+    const projectedMax = workout.weight * (1 + 0.0333 * workout.reps);
+    
+    // adjust projectedMax based on rating
+    let adjustment = 1;
+    if (workout.rating === 1) adjustment = 1.05;
+    else if (workout.rating === 2) adjustment = 1.025;
+    // 3 is just 1
+    else if (workout.rating === 4) adjustment = 0.975;
+    else if (workout.rating === 5) adjustment = 0.95;
+    
+    return Math.round(projectedMax * adjustment);
+  };
+
+  const projections = {
+    projBenchMax: calculateAdjustedMax(latestBench),
+    projSquatMax: calculateAdjustedMax(latestSquat),
+    projDeadliftMax: calculateAdjustedMax(latestDeadlift)
+  };
+
+  // Update user with projections
+  await userCollection.updateOne(
+    { userId: userId.toLowerCase() },
+    { $set: { projections: projections } }
+  );
+
+  return projections;
+};
+
 
 //Get user streak based on userId
 
@@ -821,6 +870,7 @@ export default {
   createWorkout,
   createWorkoutPlan,
   calculateSuggestedWeightForExercise,
+  getProjectedMaxes,
   getAllPublicWorkouts,
   getWorkoutById,
   removeWorkout,
