@@ -248,7 +248,7 @@ const updateUserStreak = async (userId) => {
 
 
 //Gets all workouts in the database
-const getAllPublicWorkouts = async () => {
+const getAllPublicWorkouts = async (userId) => {
   const workoutCollection = await workouts();
   const workoutList = await workoutCollection.find({}).toArray();
 
@@ -256,7 +256,7 @@ const getAllPublicWorkouts = async () => {
 
   const resultList = [];
   for (const workout of workoutList) {
-    if (profilePrivacyStatus(workout.userId)){
+    if (profilePrivacyStatus(workout.userId) && !(userId === workout.userId)){
       const result = await findByWorkoutIdExercisesOnlyBilly(workout._id);
       resultList.push(result);
     }

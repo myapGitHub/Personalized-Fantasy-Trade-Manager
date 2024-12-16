@@ -59,7 +59,7 @@ router.post("/", async (req, res) => {
 
 router.get("/public", async (req, res) => {
   const userId = req.session.user.userId;
-  const results = await workoutData.getAllPublicWorkouts();
+  const results = await workoutData.getAllPublicWorkouts(userId);
   const streakData = await workoutData.getUserStreak(userId);
   // console.log(results)
   res.render("pages/Workouts/allWorkouts", {workouts: results})
