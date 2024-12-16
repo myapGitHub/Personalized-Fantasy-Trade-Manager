@@ -47,6 +47,24 @@
 
         </select>
       </div>
+
+      <div>
+        <label for="rating">Difficulty Rating:</label>
+        <select
+          type="number"
+          id="rating"
+          name="rating"
+          placeholder="Rate 1-5"
+          required
+        >
+          <option value=1>1</option>
+          <option value=2>2</option>
+          <option value=3>3</option>
+          <option value=4>4</option>
+          <option value=5>5</option>
+
+        </select>
+      </div>
       {{#if prefill}}
         {{#each prefill.exercises}}
           <div class="exercise">
@@ -193,24 +211,6 @@
           </div>
         </div>
       {{/if}}
-
-        <div>
-          <label for="rating">Difficulty Rating:</label>
-          <select
-            type="number"
-            id="rating"
-            name="rating"
-            placeholder="Rate 1-5"
-            required
-          >
-            <option value=1>1</option>
-            <option value=2>2</option>
-            <option value=3>3</option>
-            <option value=4>4</option>
-            <option value=5>5</option>
-
-          </select>
-        </div>
       </div>
       <button id="addExercise">Add another exercise</button>
       <button type="submit">Create Workout</button>
