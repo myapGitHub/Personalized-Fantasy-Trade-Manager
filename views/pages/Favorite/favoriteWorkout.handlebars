@@ -8,26 +8,29 @@
 
 <div id="all-workouts">
   <h1 id="all-workouts-title">Your Workouts</h1>
+
   {{#each workouts}}
-  <a href="/search-workout/{{_id}}" style="text-decoration: none; color: inherit;">
     <div id="each-workout">
-      <h2>{{workoutName}}</h2>
-      <h3>Type: {{workoutType}}</h3>
-      {{#each exercises}}
-      <p>Exercise Name: {{this.name}}</p>
-      <p>Sets: {{this.sets}}</p>
-      <p>Reps: {{this.reps}}</p>
-      <p>Weight: {{this.weight}}</p>
-      <p>Difficulty Rating: {{this.rating}}</p>
-      <br>
-      {{/each}}
+      <a href="/search-workout/{{_id}}" style="text-decoration: none; color: inherit;">
+        <h2>{{workoutName}}</h2>
+        <h3>Type: {{workoutType}}</h3>
+
+        {{#each exercises}}
+          <p>Exercise Name: {{this.name}}</p>
+          <p>Sets: {{this.sets}}</p>
+          <p>Reps: {{this.reps}}</p>
+          <p>Weight: {{this.weight}}</p>
+          <p>Difficulty Rating: {{this.rating}}</p>
+          <br>
+        {{/each}}
+      </a>
+
       <div>
         <a href="/comments/{{_id}}">View Comments</a>
         <button class="workoutClone" data-id="{{_id}}">Copy this workout</button>
       </div>
     </div>
-  </a>
   {{/each}}
 </div>
-<script src="/public/js/workout.js"></script>
 
+<script src="/public/js/workout.js"></script>
