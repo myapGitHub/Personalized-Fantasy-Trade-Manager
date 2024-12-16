@@ -230,6 +230,11 @@ select {
     background-color: lightblue;
 }
 
+.add-submit {
+    text-align: center;
+    background-color: navy;
+}
+
 /* Workouts Page */
 #all-workouts {
     margin: 20px auto;
