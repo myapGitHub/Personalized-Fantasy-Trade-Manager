@@ -270,7 +270,7 @@ if (signupForm) {
     if (deadLiftMax.value) {
       checkNum(parseInt(deadLiftMax.value), errors, "Deadlift Max");
       checkValidRange(
-        parseInt(deadliftMax.value),
+        parseInt(deadLiftMax.value),
         1,
         1500,
         errors,
