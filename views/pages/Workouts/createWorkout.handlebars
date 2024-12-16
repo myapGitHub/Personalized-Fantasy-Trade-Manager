@@ -14,7 +14,7 @@
 
     </header>
 
-    <form id="createWorkout-form" action="/workouts" method="POST">
+    <form class="createWorkout-form" action="/workouts" method="POST">
     <h1>Create a New Workout</h1>
      {{#if error}}
         <p style="color: red;">{{error}}</p>
@@ -25,8 +25,8 @@
           type="text"
           id="workoutName"
           name="workoutName"
-          placeholder="Name your Workout"
           value="{{#if prefill}}{{prefill.workoutName}}{{/if}}"
+          placeholder = "Name your Workout"
           required
         />
       </div>
@@ -37,26 +37,23 @@
           {{!-- type="dropdown" --}}
           id="workoutType"
           name="workoutType"
-          placeholder="Brief description of the workout"
           required
         >
+          <option value="" disabled selected>Select Workout Type</option>
           <option value="Bench" {{#if prefill}}{{#if (eq prefill.workoutType "Bench")}}selected{{/if}}{{/if}}>Bench</option>
           <option value="Squat" {{#if prefill}}{{#if (eq prefill.workoutType "Squat")}}selected{{/if}}{{/if}}>Squat</option>
           <option value="Deadlift" {{#if prefill}}{{#if (eq prefill.workoutType "Deadlift")}}selected{{/if}}{{/if}}>Deadlift</option>
-
-
         </select>
       </div>
 
       <div>
         <label for="rating">Difficulty Rating:</label>
         <select
-          type="number"
           id="rating"
           name="rating"
-          placeholder="Rate 1-5"
           required
         >
+          <option value="" disabled selected>Rate 1-5</option>
           <option value=1>1</option>
           <option value=2>2</option>
           <option value=3>3</option>
@@ -64,16 +61,12 @@
           <option value=5>5</option>
 
         </select>
-    <div class="add-submit">
-      <button id="addExercise">Add another exercise</button>
-      <button type="submit">Create Workout</button>
-    </div>
-      </div id="exercises-id">
+      </div>
       {{#if prefill}}
         {{#each prefill.exercises}}
           <div class="exercise">
             <div>
-              <label for="exercises">Exercises:</label>
+              <label for="exerciseName">Exercises:</label>
               <select
                 id="exerciseName"
                 name="exerciseName"
@@ -86,11 +79,11 @@
               
               <label for="sets">Sets:</label>
               <select
-                type="number"
                 id="sets"
                 name="sets"
                 required
               >
+                <option value="" disabled selected>Select Sets</option>
                 <option value="1" {{#if (eq sets 1)}}selected{{/if}}>1</option>
                 <option value="2" {{#if (eq sets 2)}}selected{{/if}}>2</option>
                 <option value="3" {{#if (eq sets 3)}}selected{{/if}}>3</option>
@@ -105,11 +98,11 @@
 
               <label for="reps">Reps:</label>
               <select
-                type="number"
                 id="reps"
                 name="reps"
                 required
               >
+                <option value="" disabled selected>Select Reps</option>
                 <option value="1" {{#if (eq reps 1)}}selected{{/if}}>1</option>
                 <option value="2" {{#if (eq reps 2)}}selected{{/if}}>2</option>
                 <option value="3" {{#if (eq reps 3)}}selected{{/if}}>3</option>
@@ -146,12 +139,13 @@
       {{else}}
         <div class="exercise">
           <div>
-            <label for="exercises">Exercises:</label>
+            <label for="exerciseName">Exercises:</label>
             <select
               id="exerciseName"
               name="exerciseName"
               required
             >
+              <option value="" disabled selected>Select Workout Type</option>
               <option value="Bench">Bench</option>
               <option value="Squat">Squat</option>
               <option value="Deadlift">Deadlift</option>
@@ -159,11 +153,11 @@
             
             <label for="sets">Sets:</label>
             <select
-              type="number"
               id="sets"
               name="sets"
               required
             >
+              <option value="" disabled selected>Select Sets</option>
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -178,11 +172,11 @@
 
             <label for="reps">Reps:</label>
             <select
-              type="number"
               id="reps"
               name="reps"
               required
             >
+              <option value="" disabled selected>Select Reps</option>
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -216,10 +210,12 @@
         </div>
       {{/if}}
 
-    </div>
     </form>
 
-
+    <div class="add-submit">
+      <button id="addExercise">Add another exercise</button>
+      <button type="submit">Create Workout</button>
+    </div>
 
     <script src="/public/js/workout.js"></script>
 

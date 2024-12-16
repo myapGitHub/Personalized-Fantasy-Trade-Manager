@@ -221,7 +221,7 @@ select {
 /* WORKOUTS STYLING */
 
 /* Create Workout */
-#createWorkout-form {
+.createWorkout-form {
     margin: 20px auto;
     padding: 20px;
     max-width: 500px;
