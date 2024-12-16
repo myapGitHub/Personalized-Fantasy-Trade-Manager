@@ -4,7 +4,7 @@ import { userData } from "../data/index.js";
 import workouts from "../data/workouts.js";
 import xss from "xss";
 import { ObjectId } from "mongodb";
-import { users, workouts } from "../config/mongoCollections.js";
+import { users } from "../config/mongoCollections.js";
 import bcrypt from "bcrypt";
 
 const router = Router();
@@ -113,58 +113,57 @@ router.get("/userWorkouts", async (req, res) => {
     title: "userWorkouts",
     workouts: results,
   });
-
 });
 
-router.get('/insights', async (req, res) => {
+router.get("/insights", async (req, res) => {
   if (!req.session.user) {
-    return res.redirect('/login');
+    return res.redirect("/login");
   }
 
   // try {
-    const userId = req.session.user.userId;
-    const userProfile = await userData.getUserProfile(userId);
-    const projections = await workoutData.getProjectedMaxes(userId);
+  const userId = req.session.user.userId;
+  const userProfile = await userData.getUserProfile(userId);
+  const projections = await workoutData.getProjectedMaxes(userId);
 
-    console.log("User Id: " + userId);
-    console.log("get user profile: " + userProfile)
-    console.log("projections " + projections)
+  console.log("User Id: " + userId);
+  console.log("get user profile: " + userProfile);
+  console.log("projections " + projections);
 
-    if (!projections) {
-      res.render('pages/workouts/insights', {
-        title: 'Workout Insights',
-        loggedIn: true,
-        noWorkouts: true,
-        streakCount: userProfile.streakCount ? userProfile.streakCount : 0
-      });
-      return
-    }
-
-    let benchMax = userProfile.benchMax ? userProfile.benchMax : 0;
-    let squatMax = userProfile.squatMax ? userProfile.squatMax : 0;
-    let deadliftMax = userProfile.deadliftMax ? userProfile.deadliftMax : 0;
-
-    const differentials = {
-      bench: projections.projBenchMax - benchMax,
-      squat: projections.projSquatMax - squatMax,
-      deadlift: projections.projDeadliftMax - deadliftMax
-    };
-
-    const streakCount = userProfile.streakCount ? userProfile.streakCount : 0;
-
-    res.render('pages/workouts/insights', {
-      title: 'Workout Insights',
+  if (!projections) {
+    res.render("pages/workouts/insights", {
+      title: "Workout Insights",
       loggedIn: true,
-      currentMaxes: {
-        bench: benchMax,
-        squat: squatMax,
-        deadlift: deadliftMax
-      },
-      projections: projections,
-      differentials: differentials,
-      streakCount: streakCount
-    })
-    // });
+      noWorkouts: true,
+      streakCount: userProfile.streakCount ? userProfile.streakCount : 0,
+    });
+    return;
+  }
+
+  let benchMax = userProfile.benchMax ? userProfile.benchMax : 0;
+  let squatMax = userProfile.squatMax ? userProfile.squatMax : 0;
+  let deadliftMax = userProfile.deadliftMax ? userProfile.deadliftMax : 0;
+
+  const differentials = {
+    bench: projections.projBenchMax - benchMax,
+    squat: projections.projSquatMax - squatMax,
+    deadlift: projections.projDeadliftMax - deadliftMax,
+  };
+
+  const streakCount = userProfile.streakCount ? userProfile.streakCount : 0;
+
+  res.render("pages/workouts/insights", {
+    title: "Workout Insights",
+    loggedIn: true,
+    currentMaxes: {
+      bench: benchMax,
+      squat: squatMax,
+      deadlift: deadliftMax,
+    },
+    projections: projections,
+    differentials: differentials,
+    streakCount: streakCount,
+  });
+  // });
   // } catch (e) {
   //   res.status(500).render('error', { error: e });
   // }
@@ -218,6 +217,11 @@ router.post("/createWorkout", async (req, res) => {
   }
 
   try {
+    checkExists(workout);
+    checkExists(workout.exerciseName);
+    checkExists(workout.sets);
+    checkExists(workout.reps);
+    checkExists(workout.weight);
     const exercises = [
       {
         name: workout.exerciseName,
