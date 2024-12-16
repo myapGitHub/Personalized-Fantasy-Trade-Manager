@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { workoutData } from "../data/index.js";
+import { userData } from '../data/index.js'
 import workouts from "../data/workouts.js";
 import xss from 'xss';
 
@@ -155,19 +156,18 @@ router.post("/createWorkout", async (req, res) => {
   }
 });
 
-
 router.get('/copy/:id', async (req, res) => {
   // try {
-    const workoutId = xss(req.params.id);
     const workout = await workoutData.getWorkoutById(req.params.id);
-    const userId = workout.userId;
-    // const user = await userData.getUserProfile();
+
+    const user = req.session.user;
+
     const exercises = workout.exercises;
     const nameOfWorkoutToClone = workout.workoutName;
     const typeOfWorkoutToClone = workout.workoutType;
     const exercisesWithSuggestions = [];
     for (let exercise of exercises) {
-      let exerciseWithSuggestedWeights = await workoutData.calculateSuggestedWeightForExercise(userId, workoutId);
+      let exerciseWithSuggestedWeights = await workoutData.calculateSuggestedWeightForExercise(user, workout, exercise);
       let updatedExercise = {
         name: exercise.name,
         sets: exercise.sets,

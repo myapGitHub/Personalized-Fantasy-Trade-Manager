@@ -164,7 +164,7 @@ const createWorkoutPlan = async (userId, workoutName, workoutType, exercises, ra
 
 
 // Calculate suggested weight based on user's stats for each exercise
-const calculateSuggestedWeightForExercise = (userId, workoutId) => {
+const calculateSuggestedWeightForExercise = (user, workout, exercise) => {
   // for now exerciseName falls under workoutType subcategory
   // if no maxes included, just go off of experience level for specific workout
   // if (userId.experience 
@@ -173,68 +173,82 @@ const calculateSuggestedWeightForExercise = (userId, workoutId) => {
   // let experienceForLift = '';
   // if workout type selection doesn't match a filled in max, then go off of experience
   
-  console.log("User Id is: " + userId);
-  console.log("Workout Id is: " + workoutId); 
+  // console.log("User Id is: " + user.userId);
+  // // console.log("Workout Id is: " + workoutId); 
   
-  console.log("User Id Maxes are");
+  // console.log("User Id Maxes are");
 
+  // console.log("Bench Max" + user.benchMax);
+  // console.log("Squat Max" + user.squatMax);
+  // console.log("Deadlift Max" + user.deadliftMax);
+
+  // console.log('Exercise' + user.experience);
+
+  //   let suggestedExercise = {
+  //     name: exercise.name,
+  //     sets: exercise.sets,
+  //     reps: exercise.reps,
+  //     weight: 1
+  // }
+
+  console.log("User Max squat: " + user.squatMax);
 
   let calculatedMax = -1;
-  if (workoutId.workoutType === 'Bench') {
-    if (!userId.benchMax) { 
-      if (userId.experience === 'Advanced') {
-        let advancedMultiplier = 1.75
-        calculatedMax = advancedMultiplier * userId.weight;
+  if (workout.workoutType === 'Bench') {
+    if (!user.benchMax) { 
+      if (user.experience === 'Advanced') {
+        let advancedMultiplier = 1.75;
+        calculatedMax = advancedMultiplier * user.weight;
       }
-      else if (userId.experience === 'Intermediate') {
+      else if (user.experience === 'Intermediate') {
         let intermediateMultiplier = 1.25;
-        calculatedMax = intermediateMultiplier * userId.weight;
+        calculatedMax = intermediateMultiplier * user.weight;
       }
       else {
         let beginnerMultiplier = .5;
-        calculatedMax = beginnerMultiplier * userId.weight;
+        calculatedMax = beginnerMultiplier * user.weight;
       }
     }
     else { // go off experience level selection by default
-      calculatedMax = userId.benchMax;
+      calculatedMax = user.benchMax;
     }
   }
-  if (workoutId.workoutType === 'Squat') {
-    if (!userId.squatMax) {
-      if (userId.experience === 'Advanced') {
+  if (workout.workoutType === 'Squat') {
+    if (!user.squatMax) {
+      if (user.experience === 'Advanced') {
         let advancedMultiplier = 2.25;
-        calculatedMax = advancedMultiplier * userId.weight;
+        calculatedMax = advancedMultiplier * user.weight;
       } 
-      else if (userId.experience === 'Intermediate') {
+      else if (user.experience === 'Intermediate') {
         let intermediateMultiplier = 1.5;
-        calculatedMax = intermediateMultiplier * userId.weight;
+        calculatedMax = intermediateMultiplier * user.weight;
       } 
       else {
         let beginnerMultiplier = 0.75;
-        calculatedMax = beginnerMultiplier * userId.weight;
+        calculatedMax = beginnerMultiplier * user.weight;
       }
     }
     else {
-      calculatedMax = userId.squatMax;
+      calculatedMax = user.squatMax;
     }
   }
-  if (workoutId.workoutType === 'Deadlift') {
-    if (!userId.deadliftMax) {
-      if (userId.experience === 'Advanced') {
+  if (workout.workoutType === 'Deadlift') {
+    if (!user.deadliftMax) {
+      if (user.experience === 'Advanced') {
         let advancedMultiplier = 2.5;
-        calculatedMax = advancedMultiplier * userId.weight;
+        calculatedMax = advancedMultiplier * user.weight;
       } 
-      else if (userId.experience === 'Intermediate') {
+      else if (user.experience === 'Intermediate') {
         let intermediateMultiplier = 2;
-        calculatedMax = intermediateMultiplier * userId.weight;
+        calculatedMax = intermediateMultiplier * user.weight;
       } 
       else {
         let beginnerMultiplier = 1;
-        calculatedMax = beginnerMultiplier * userId.weight;
+        calculatedMax = beginnerMultiplier * user.weight;
       }
     }
     else {
-      calculatedMax = userId.deadliftMax;
+      calculatedMax = user.deadliftMax;
     }
   }
   if (calculatedMax < 0) {
@@ -249,7 +263,7 @@ const calculateSuggestedWeightForExercise = (userId, workoutId) => {
  //  calculatedMax has to be placed into a calculation for number of reps which will be consistent
   let liftPercentage = .75; // percent of projected max for a workout
   let percentOfMax = -1; 
-  switch(workoutId.exercises.reps) {
+  switch(exercise.reps) {
     case 1:
       percentOfMax = 1;
       break;
@@ -284,13 +298,17 @@ const calculateSuggestedWeightForExercise = (userId, workoutId) => {
       percentOfMax = 1; // if no result
       break;
   }
-  let liftWeight = liftPercentage * calculatedMax * percentOfMax // .75 is working sets percentage of max
+  // https://stackoverflow.com/questions/34077449/fastest-way-to-cast-a-float-to-an-int-in-javascript
+  let liftWeight = ~~(liftPercentage * calculatedMax * percentOfMax) // .75 is working sets percentage of max
   let suggestedExercise = {
-    name: workoutId.exercises.name,
-    sets: workoutId.exercises.sets,
-    reps: workoutId.exercises.reps,
+    name: exercise.name,
+    sets: exercise.sets,
+    reps: exercise.reps,
     weight: liftWeight
   }
+
+
+
   return suggestedExercise; // returns the whole exercise object for one exercise
 }
 

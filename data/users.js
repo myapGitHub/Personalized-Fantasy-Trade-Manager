@@ -412,10 +412,22 @@ export const getUserProfile = async (requstUserId) => {
     const userCollection = await users();
     const findUser = await userCollection.findOne({userId: requstUserId.toLowerCase()});
     if (!findUser) throw "No user with that id exist";
-
     // Can return more like workouts such whoever is doing that 
-    const {userId} = findUser;
-    return {userId};
+    const {
+        userId,
+        firstName,
+        lastName,
+        height,
+        weight,
+        age,
+        gender,
+        benchMax,
+        squatMax,
+        deadLiftMax,
+        experience,
+        isPublic
+    } = findUser;
+    return findUser;
 }
 
 const isUserIdInCollection = async (userId) => {
