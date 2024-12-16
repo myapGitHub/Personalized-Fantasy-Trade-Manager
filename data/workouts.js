@@ -181,8 +181,8 @@ const getUserStreak = async (userId) => {
   if(user.lastStreakDate) lastStreakDate = user.lastStreakDate;
 
   return {
-    streakCount: user.streakCount,
-    lastStreakDate: user.lastStreakDate,
+    streakCount: streakCount,
+    lastStreakDate: lastStreakDate,
   };
 };
 
@@ -194,9 +194,7 @@ const updateUserStreak = async (userId) => {
   checkId(userId);
 
   const userCollection = await users();
-  const user = await userCollection
-
-  .findOne({ userId: userId.toLowerCase() });
+  const user = await userCollection.findOne({ userId: userId.toLowerCase() });
 
   if (!user) {
     throw "Error: User not found.";

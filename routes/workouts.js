@@ -48,6 +48,9 @@ router.post("/", async (req, res) => {
     //   reps: reps,
     //   weight: weight
     // }];
+
+    const updatedStreak = await workoutData.updateUserStreak(userId);
+    console.log(updatedStreak)
     console.log(exercises)
     await workoutData.createWorkoutPlan(userId, workoutName, workoutType, exercises, rating);
     res.redirect("/workouts/userWorkouts");
@@ -89,6 +92,8 @@ router.get("/workoutsPage", async (req, res) => {
   //   console.log("Session data:", req.session);
   //   console.log("Session user:", req.session.user);
   //   console.log("Reached /create route");
+  // console.log(streakData);
+  // console.log("HELOALFOIMASOIFMOASFMN")
   res.render("pages/workouts/workoutsPage", { loggedIn: true, streakCount: streakData.streakCount});
 });
 
@@ -104,7 +109,8 @@ router.get("/createWorkout", (req, res) => {
 router.post("/createWorkout", async (req, res) => {
   const workout = xss(req.body);
 
-  console.log(workout);
+  // console.log("THis is the workoutA DSFSADF")
+  // console.log(workout);
 
   if (!req.session.user || !req.session.user.userId) {
     return res.status(401).json({ error: "User not authenticated" });
@@ -135,9 +141,11 @@ router.post("/createWorkout", async (req, res) => {
       workout.rating
     );
 
-    const updatedStreak = await workoutData.updateUserStreak(userId);
+    // const updatedStreak = await workoutData.updateUserStreak(userId);
 
-    console.log("Updated Streak: ", updatedStreak);
+    // console.log("ALOFNKSDNFKAJNFKJDN")
+
+    // console.log("Updated Streak: ", updatedStreak);
     // console.log("New Workout in Routes: " + newWorkout);
     res.redirect(`/workouts/${newWorkout._id}`);
   } catch (e) {
