@@ -1,29 +1,51 @@
 <header>
   <nav>
     {{#if loggedIn}}
-    <a href="/workouts/public">View Other Users Workouts</a>
-    <a href="/workouts/userWorkouts">View Your Workouts</a>
-    <a href="/workouts/createWorkout">Create A Workout</a>
-    <a href="/workouts/insights">View Insights</a>
-    <a href="/workouts/favorited">View Your Favorited Workouts</a>
+      <a href="/workouts/public">
+        View Other Users Workouts
+      </a>
+      <a href="/workouts/userWorkouts">
+        View Your Workouts
+      </a>
+      <a href="/workouts/createWorkout">
+        Create A Workout
+      </a>
+      <a href="/workouts/insights">
+        View Insights
+      </a>
+      <a href="/workouts/favorited">
+        View Your Favorited Workouts
+      </a>
     {{else}}
-    <a href="/">Home</a>
-    <a href="/login" id="login-button">Login</a>
-    <a href="/sign-up" id="sign-up-button">Sign Up</a>
-    <p>not logged?</p>
+      <a href="/">
+        Home
+      </a>
+      <a href="/login" id="login-button">
+        Login
+      </a>
+      <a href="/sign-up" id="sign-up-button">
+        Sign Up
+      </a>
+      <p>
+        not logged?
+      </p>
     {{/if}}
   </nav>
-
 </header>
 
-    <div id="streak">
-      <h2>Your Current Streak</h2>
-      <p><strong>Streak Count:</strong> {{streakCount}} day(s)</p>
-      <p>Maintain your streak by making a workout everyday!</p>
-    </div>
-    
-<main>
-  {{{body}}}
-</main>
+<div id="streak">
+  <h2>
+    Your Current Streak
+  </h2>
+  <p>
+    <strong>
+      Streak Count:
+    </strong>
+    {{streakCount}} day(s)
+  </p>
+  <p>
+    Maintain your streak by making a workout everyday!
+  </p>
+</div>
 
 <script src="/public/js/main.js"></script>
