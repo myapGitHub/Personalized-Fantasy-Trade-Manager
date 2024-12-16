@@ -139,7 +139,7 @@ const createWorkoutPlan = async (userId, workoutName, workoutType, exercises, ra
     workoutName: workoutName,
     workoutType: workoutType,
     exercises: exercises,
-    // rating: rating,
+    rating: rating,
     comments: [],
   };
 

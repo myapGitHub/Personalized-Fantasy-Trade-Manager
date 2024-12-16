@@ -112,24 +112,6 @@ function addExercise(e) {
             placeholder="Enter weight (lbs)"
             required
           >
-        </div>
-
-        <div>
-          <label for="rating">Difficulty Rating:</label>
-          <select
-            type="number"
-            id="rating"
-            name="rating"
-            placeholder="Rate 1-5"
-            required
-          >
-            <option value=1>1</option>
-            <option value=2>2</option>
-            <option value=3>3</option>
-            <option value=4>4</option>
-            <option value=5>5</option>
-
-          </select>
         </div>`
       exerciseBlock.appendChild(newInput)
 }

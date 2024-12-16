@@ -57,8 +57,8 @@ router.post("/", async (req, res) => {
       name: xss(name),
       sets: sets,
       reps: reps,
-      weight: weight,
-      rating: rating,
+      weight: weight
+      // rating: rating, // rating should only be for the workout
     }));
     // const exercises = [{
     //   name: exerciseName,

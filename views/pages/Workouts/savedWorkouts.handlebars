@@ -13,12 +13,12 @@
     <div id="each-workout">
       <h2>{{foundWorkout.workoutName}}</h2>
       <h3>Type: {{foundWorkout.workoutType}}</h3>
+      <h3>Difficulty Rating: {{foundWorkout.rating}}</h3>
       {{#each foundWorkout.exercises}}
       <p>Exercise Name: {{this.name}}</p>
       <p>Sets: {{this.sets}}</p>
       <p>Reps: {{this.reps}}</p>
       <p>Weight: {{this.weight}}</p>
-      <p>Difficulty Rating: {{this.rating}}</p>
       <br>
       {{/each}}
       <div>
