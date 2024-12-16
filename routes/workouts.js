@@ -105,14 +105,18 @@ router.get("/public", async (req, res) => {
 });
 
 router.get("/userWorkouts", async (req, res) => {
-  const userId = req.session.user.userId;
-  const results = await workoutData.getAllWorkoutsOfUserBilly(userId);
-  const streakData = await workoutData.getUserStreak(userId);
-  // console.log(results)
-  res.render("pages/Workouts/savedWorkouts", {
-    title: "userWorkouts",
-    workouts: results,
-  });
+  try {
+    const userId = req.session.user.userId;
+    const results = await workoutData.getAllWorkoutsOfUserBilly(userId);
+    const streakData = await workoutData.getUserStreak(userId);
+    // console.log(results)
+    res.render("pages/Workouts/savedWorkouts", {
+      title: "userWorkouts",
+      workouts: results,
+    });
+  } catch (e) {
+    res.status(400).json({ error: e });
+  }
 });
 
 router.get("/insights", async (req, res) => {
@@ -170,32 +174,40 @@ router.get("/insights", async (req, res) => {
 });
 
 router.get("/workoutsPage", async (req, res) => {
-  if (!req.session.user || !req.session.user.userId) {
-    console.log(req.session.user);
-    console.log(req.session.user.userId);
-    return res.redirect("/login");
-  }
+  try {
+    if (!req.session.user || !req.session.user.userId) {
+      console.log(req.session.user);
+      console.log(req.session.user.userId);
+      return res.redirect("/login");
+    }
 
-  const userId = req.session.user.userId;
-  const streakData = await workoutData.getUserStreak(userId);
-  //   console.log("Session data:", req.session);
-  //   console.log("Session user:", req.session.user);
-  //   console.log("Reached /create route");
-  // console.log(streakData);
-  // console.log("HELOALFOIMASOIFMOASFMN")
-  res.render("pages/workouts/workoutsPage", {
-    loggedIn: true,
-    streakCount: streakData.streakCount,
-  });
+    const userId = req.session.user.userId;
+    const streakData = await workoutData.getUserStreak(userId);
+    //   console.log("Session data:", req.session);
+    //   console.log("Session user:", req.session.user);
+    //   console.log("Reached /create route");
+    // console.log(streakData);
+    // console.log("HELOALFOIMASOIFMOASFMN")
+    res.render("pages/workouts/workoutsPage", {
+      loggedIn: true,
+      streakCount: streakData.streakCount,
+    });
+  } catch (e) {
+    res.status(400).json({ error: e });
+  }
 });
 
 router.get("/createWorkout", (req, res) => {
-  if (!req.session.user || !req.session.user.userId) {
-    console.log(req.session.user);
-    console.log(req.session.user?.userId);
-    return res.redirect("/login");
+  try {
+    if (!req.session.user || !req.session.user.userId) {
+      console.log(req.session.user);
+      console.log(req.session.user?.userId);
+      return res.redirect("/login");
+    }
+    res.render("pages/workouts/createWorkout", { loggedIn: true });
+  } catch (e) {
+    res.status(400).json({ error: e });
   }
-  res.render("pages/workouts/createWorkout", { loggedIn: true });
 });
 
 router.post("/createWorkout", async (req, res) => {
@@ -318,6 +330,7 @@ router.get("/:id"),
       res.redirect(`/${id}&u=${workout.userId}`);
     } catch (e) {
       console.log(error.message);
+      res.status(400).json({ error: e });
     }
   };
 
@@ -328,6 +341,7 @@ router.delete("/:id", async (req, res) => {
     res.redirect("/userWorkouts");
   } catch (error) {
     console.log(error.message);
+    res.status(400).json({ error: e });
   }
 });
 
