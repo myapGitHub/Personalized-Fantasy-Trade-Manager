@@ -6,6 +6,7 @@ import settingRoutes from './settings.js';
 import commentRoutes from './comments.js';
 import searchUserRoutes from './search-user.js';
 import friendRoutes from './friends.js';
+//import searchWorkoutRoutes from './search-workout.js';
 
 export const constructorMethod = (app) => {
   app.use('/', authRoutes);
@@ -15,6 +16,7 @@ export const constructorMethod = (app) => {
   app.use("/comments", commentRoutes);
   app.use("/search-user", searchUserRoutes);
   app.use('/friends', friendRoutes);
+  //app.use('/search-workout', searchWorkoutRoutes);
 
   app.use("/workouts", workoutRoutes);
   app.use("*", (req, res) => {

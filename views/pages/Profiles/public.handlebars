@@ -33,4 +33,30 @@
     {{/if}}
 </div>
 
+<div id="all-workouts">
+  <h1 id="all-workouts-title">{{reqUserId}} Workouts</h1>
+  {{#if workouts}}
+  {{#each workouts}}
+  <div id="each-workout">
+    <h2>{{foundWorkout.workoutName}}</h2>
+    <h3>Type: {{foundWorkout.workoutType}}</h3>
+    {{#each foundWorkout.exercises}}
+    <p>Exercise Name: {{this.name}}</p>
+    <p>Sets: {{this.sets}}</p>
+    <p>Reps: {{this.reps}}</p>
+    <p>Weight: {{this.weight}}</p>
+    <p>Difficulty Rating: {{this.rating}}</p>
+    <br>
+    {{/each}}
+    {{!-- <h3>Difficulty: {{foundWorkout.rating}}</h2> --}}
+      <a href="/comments/{{foundWorkout._id}}">View Comments</a>
+  </div>
+  {{/each}}
+  {{else}}
+  <h2>User Doesnt have any workouts</h2>
+  {{/if}}
+</div>
+
+
+<script src="/public/js/workout.js"></script>
 <script src="public/js/Profile/friend.js"></script>

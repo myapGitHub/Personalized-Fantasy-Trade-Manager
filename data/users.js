@@ -204,6 +204,7 @@ export const signUp = async (
         savedWorkouts: [],
         streakCount: 0,
         lastStreakDate: "",
+        favoriteWorkout: [],
     };
     // inserts the new user
     const newInsertUser = await userCollection.insertOne(newUser); 

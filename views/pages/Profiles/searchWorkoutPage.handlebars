@@ -1,0 +1,27 @@
+
+
+
+{{!-- <header>
+  <nav>
+    <a href="/workouts/workoutsPage">Back</a>
+    <a href="/workouts/public">View Other Users Workouts</a>
+    <a href="/workouts/createWorkout">Create A Workout</a>
+  </nav>
+</header>
+
+<div>
+    <div id="each-workout">
+      <h2>{{workoutName}}</h2>
+      {{#each exercises}}
+      <p>Exercise Name: {{this.name}}</p>
+      <p>Sets: {{this.sets}}</p>
+      <p>Reps: {{this.reps}}</p>
+      <p>Weight: {{this.weight}}</p>
+      <p>Difficulty Rating: {{this.rating}}</p>
+      <br>
+      {{/each}}
+      <a href="/comments/{{foundWorkout._id}}" onclick="event.stopPropagation();">View Comments</a>
+      <button class="workoutRemove" data-id="{{foundWorkout._id}}" onclick="event.stopPropagation();">Remove this workout</button>
+    </div>
+</div>
+<script src="/public/js/workout.js"></script> --}}

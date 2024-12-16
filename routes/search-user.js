@@ -1,7 +1,7 @@
 import {Router} from 'express';
 const router = Router();
 import xss from 'xss';
-import { userData } from '../data/index.js';
+import { userData, workoutData } from '../data/index.js';
 import { searchUser } from '../data/users.js';
 
 
@@ -99,15 +99,16 @@ router.route('/:userId').get(async (req, res) => {
         // Logic for public profile
         const { userId } = await userData.getUserProfile(requestUserId);
         const friendStatus = await userData.friendStatus(currUser, requestUserId);
+        const result = await workoutData.getAllWorkoutsOfUserBilly(requestUserId);
 
         if (friendStatus === 'sent') {
-            return res.render('pages/Profiles/public', { userId: requestUserId, requested: true });
+            return res.render('pages/Profiles/public', { userId: requestUserId, requested: true, workouts: result , reqUserId: requestUserId});
         } else if (friendStatus === 'inbox') {
-            return res.render('pages/Profiles/public', { userId: requestUserId, inbox: true });
+            return res.render('pages/Profiles/public', { userId: requestUserId, inbox: true ,workouts: result, reqUserId: requestUserId});
         } else if (friendStatus === 'friend') {
-            return res.render('pages/Profiles/public', { userId: requestUserId, friends: true });
+            return res.render('pages/Profiles/public', { userId: requestUserId, friends: true, workouts: result , reqUserId: requestUserId});
         } else if (friendStatus === 'send') {
-            return res.render('pages/Profiles/public', { userId: requestUserId, send: true });
+            return res.render('pages/Profiles/public', { userId: requestUserId, send: true , workouts: result, reqUserId: requestUserId});
         }
 
         return res.status(400).render('pages/Profiles/public', { error: "Error: fetching friend status" });
