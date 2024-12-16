@@ -128,12 +128,12 @@ app.use('/search-user', (req,res,next) => {
   }
   next();
 })
-// app.use('/search-workout', (req, res, next) => {
-//   if (!req.session.user) {
-//     return res.redirect('/signin');
-//   }
-//   next();
-// })
+app.use('/search-workout', (req, res, next) => {
+  if (!req.session.user) {
+    return res.redirect('/signin');
+  }
+  next();
+})
 // FRIEND MIDDLEWARE
 app.use('/friends', (req, res, next) => {
   if (!req.session.user) {

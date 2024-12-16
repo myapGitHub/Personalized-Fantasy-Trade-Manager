@@ -140,7 +140,7 @@ const createWorkoutPlan = async (userId, workoutName, workoutType, exercises, ra
     workoutType: workoutType,
     exercises: exercises,
     // rating: rating,
-    comments: []
+    comments: [],
   };
 
   const insertInfo = await workoutCollection.insertOne(newWorkout);

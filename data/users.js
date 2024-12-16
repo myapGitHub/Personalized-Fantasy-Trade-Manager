@@ -599,7 +599,7 @@ export const getAllFriends = async (userId) => {
     userId = checkUserId(userId);
 
     const userCollection = await users();
-    const findUser = await userCollection.findOne({ userId: userId.toLowerCase() }); // Add await here
+    const findUser = await userCollection.findOne({ userId: userId.toLowerCase() }); 
     if (!findUser) throw "User not in db";
 
     const { friends } = findUser;
@@ -614,7 +614,7 @@ export const getInboxFriends = async (userId) => {
     userId = checkUserId(userId);
 
     const userCollection = await users();
-    const findUser = await userCollection.findOne({ userId: userId.toLowerCase() }); // Add await here
+    const findUser = await userCollection.findOne({ userId: userId.toLowerCase() }); 
     if (!findUser) throw "User not in db";
 
     const { friendInbox } = findUser;
@@ -623,3 +623,48 @@ export const getInboxFriends = async (userId) => {
     const friendIboxArr = Object.keys(friendInbox); 
     return friendIboxArr;
 }
+
+
+export const getAllFavoritedWorkouts = async (currUserId) => {
+    currUserId = checkUserId(currUserId);
+
+    const userCollection = await users();
+    const workoutCollection = await workouts();
+
+    const findUser = await userCollection.findOne({ userId: currUserId.toLowerCase() });
+    if (!findUser) throw "User not in db";
+
+    const { favoriteWorkout } = findUser;
+
+    if (!favoriteWorkout || !Array.isArray(favoriteWorkout)) {
+        return []; 
+    }
+    const workoutObjArr = [];
+
+    for (const workoutId of favoriteWorkout) {
+        try {
+            const workoutObj = await workoutCollection.findOne({ _id: new ObjectId(workoutId) });
+            if (workoutObj) {
+                const { userId } = workoutObj;
+                const friendStat = await friendStatus(currUserId, userId)
+                console.log(friendStat);
+                if (userId === currUserId || friendStat=== 'friend') {
+                    workoutObjArr.push(workoutObj);
+                } else {
+                    if (await profilePrivacyStatus(userId)) {
+                        workoutObjArr.push(workoutObj);
+                    }
+                }
+            } else {
+                await userCollection.updateOne(
+                    { userId: currUserId.toLowerCase() },
+                    { $pull: { favoriteWorkout: workoutId } } 
+                );
+            }
+        } catch (e) {
+            console.error(`Error processing workoutId ${workoutId}:`, e);
+        }
+    }
+    return workoutObjArr;
+};
+

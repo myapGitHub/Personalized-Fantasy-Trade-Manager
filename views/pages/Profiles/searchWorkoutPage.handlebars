@@ -1,7 +1,7 @@
 
 
 
-{{!-- <header>
+<header>
   <nav>
     <a href="/workouts/workoutsPage">Back</a>
     <a href="/workouts/public">View Other Users Workouts</a>
@@ -11,7 +11,8 @@
 
 <div>
     <div id="each-workout">
-      <h2>{{workoutName}}</h2>
+      <h1>{{workoutName}}</h1>
+      <h2>Created By: {{this.userId}}</h2>
       {{#each exercises}}
       <p>Exercise Name: {{this.name}}</p>
       <p>Sets: {{this.sets}}</p>
@@ -20,8 +21,51 @@
       <p>Difficulty Rating: {{this.rating}}</p>
       <br>
       {{/each}}
-      <a href="/comments/{{foundWorkout._id}}" onclick="event.stopPropagation();">View Comments</a>
-      <button class="workoutRemove" data-id="{{foundWorkout._id}}" onclick="event.stopPropagation();">Remove this workout</button>
+
+      <button class="workoutClone" data-id={{workoutId}}>Copy this workout</button>
+
+      <div id="favorited-error">{{error}}</div>
+      <button id="favorited-workout" data-status="{{#if isWorkoutFavorited}}favorited-{{workoutId}}{{else}}favorite-{{workoutId}}{{/if}}">
+        {{#if isWorkoutFavorited}}
+          Remove From Favorites
+        {{else}}
+          Favorite Workout
+        {{/if}}
+      </button>
+
+      <ul>
+        {{#each comments}}
+            <li>
+                {{this.text}} - {{this.date}} - {{this.userId}}
+                <button 
+                    data-workoutid="{{this.workoutId}}" 
+                    data-id="likebutton-{{this.commentId}}" 
+                    class="likebutton"
+                >
+                    Like ({{this.likes}})
+                </button>
+
+                <button 
+                    data-workoutid="{{this.workoutId}}" 
+                    data-id="dislikebutton-{{this.commentId}}" 
+                    class="dislikebutton"
+                >
+                    Dislike ({{this.dislikes}})
+                </button>
+            </li>
+        {{/each}}
+    </ul>
     </div>
 </div>
-<script src="/public/js/workout.js"></script> --}}
+
+<form action="/comments/{{workoutId}}" method="POST">
+        <label for="comment">Add a comment</label>
+        <input type="text" name="comment" id="comment">
+        <button type="submit">Submit comment</button>
+</form>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+    crossorigin="anonymous"></script>
+<script src="/public/js/favorite.js"></script>
+<script src="/public/js/comments.js"></script>

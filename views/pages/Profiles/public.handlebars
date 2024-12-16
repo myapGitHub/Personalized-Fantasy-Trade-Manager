@@ -37,6 +37,7 @@
   <h1 id="all-workouts-title">{{reqUserId}} Workouts</h1>
   {{#if workouts}}
   {{#each workouts}}
+  <a href="/search-workout/{{foundWorkout._id}}" style="text-decoration: none; color: inherit;">
   <div id="each-workout">
     <h2>{{foundWorkout.workoutName}}</h2>
     <h3>Type: {{foundWorkout.workoutType}}</h3>
@@ -52,6 +53,7 @@
       <a href="/comments/{{foundWorkout._id}}">View Comments</a>
     <button class="workoutClone" data-id={{foundWorkout._id}}>Copy this workout</button>
   </div>
+  </a>
   {{/each}}
   {{else}}
   <h2>User Doesnt have any workouts</h2>

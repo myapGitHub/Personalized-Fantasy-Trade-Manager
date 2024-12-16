@@ -39,7 +39,9 @@ router.post("/:id", async (req, res) => {
         console.log(workout)
         workout.comments.push(comment);
         await workoutFuncs.updateWorkout(workoutId, workout.workoutType, workout.exercises, workout.comments);
-        res.redirect(`/comments/${workoutId}`);
+        // REMOVE THIS FOR OLD VERSION
+        res.redirect(`/search-workout/${workoutId}`)
+        //res.redirect(`/comments/${workoutId}`);
     } catch (error) {
         console.error(error.message);
     }

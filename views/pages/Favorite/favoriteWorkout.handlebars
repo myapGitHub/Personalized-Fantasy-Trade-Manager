@@ -9,11 +9,11 @@
 <div id="all-workouts">
   <h1 id="all-workouts-title">Your Workouts</h1>
   {{#each workouts}}
-  <a href="/search-workout/{{foundWorkout._id}}" style="text-decoration: none; color: inherit;">
+  <a href="/search-workout/{{_id}}" style="text-decoration: none; color: inherit;">
     <div id="each-workout">
-      <h2>{{foundWorkout.workoutName}}</h2>
-      <h3>Type: {{foundWorkout.workoutType}}</h3>
-      {{#each foundWorkout.exercises}}
+      <h2>{{workoutName}}</h2>
+      <h3>Type: {{workoutType}}</h3>
+      {{#each exercises}}
       <p>Exercise Name: {{this.name}}</p>
       <p>Sets: {{this.sets}}</p>
       <p>Reps: {{this.reps}}</p>
@@ -22,12 +22,12 @@
       <br>
       {{/each}}
       <div>
-        <a href="/comments/{{foundWorkout._id}}">View Comments</a>
-        <button class="workoutClone" data-id={{foundWorkout._id}}>Copy this workout</button>
-        <button class="workoutRemove" data-id={{foundWorkout._id}}>Remove this workout</button>
+        <a href="/comments/{{_id}}">View Comments</a>
+        <button class="workoutClone" data-id="{{_id}}">Copy this workout</button>
       </div>
     </div>
   </a>
   {{/each}}
 </div>
 <script src="/public/js/workout.js"></script>
+

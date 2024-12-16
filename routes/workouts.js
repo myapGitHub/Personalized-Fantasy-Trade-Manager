@@ -218,4 +218,25 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+
+router.route('/favorited').get(async (req, res) => {
+  const currUserId = req.session.user.userId;
+  try {
+    const workoutObjArr = await userData.getAllFavoritedWorkouts(currUserId);
+    console.log(workoutObjArr);
+    if (workoutObjArr.length !== 0){
+      return res.render('pages/Favorite/favoriteWorkout', {
+        workouts: workoutObjArr
+      })
+    } else {
+      return res.render('pages/Favorite/favoriteWorkoutEmpty');
+    }
+
+  } catch(e) {
+    console.log(e);
+    res.status.redirect('/dashboard');
+  }
+});
+
+
 export default router;
