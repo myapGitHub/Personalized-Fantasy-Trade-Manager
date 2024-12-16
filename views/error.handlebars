@@ -1,11 +1,33 @@
-<div id="error">
-  <h1>
-    Error
-  </h1>
-  <p>
-    {{message}}
-  </p>
-  <a href="/">
-    Go back to home
-  </a>
-</div>
+  <!DOCTYPE html>
+  <html lang = "en">
+    <head>
+      <meta charset ="utf-8">
+      <title>Error Page</title>
+    </head>
+  <header>
+    <nav>
+        <a href="/dashboard">Home</a>
+        <a>Profile</a>
+        <a href="/signout">Logout</a>
+        <a href="/workouts/workoutsPage">Workouts</a>
+        <a href="/friends">Friends</a>
+        <a href="/settings/account">Settings</a>
+        <div>
+            <form id="search-user-form" method="GET" action="/search-user">
+                <label for="searchUser">Search User:</label>
+                <input id="currentUserId" name="currentUserId" type="hidden" value="{{userId}}">
+                <input id="searchUser" name="searchUser" type="text" placeholder="type user">
+            </form>
+            <div id="search-user-error">{{{error}}}</div>
+        </div>
+
+    </nav>
+</header>
+  
+  <div id="error">
+    <h1>Error</h1>
+    <p>{{message}}</p>
+    <a href="/">Go back to home</a>
+  </div>
+
+  </html>
