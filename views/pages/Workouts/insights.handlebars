@@ -1,0 +1,54 @@
+
+<div id="insights">
+  <h1>Workout Insights</h1>
+  
+  {{#if noWorkouts}}
+    <div>
+      <p>Create workouts to see your insights!</p>
+      <a href="/workouts/createWorkout">Create Your First Workout</a>
+    </div>
+  {{else}}
+    <div>
+      <h2>Current Maxes</h2>
+      <div>
+        <p>Bench Press:</p>
+        <p>{{currentMaxes.bench}}</p>
+      </div>
+      <div>
+        <p>Squat:</p>
+        <p>{{currentMaxes.squat}}</p>
+      </div>
+      <div>
+        <p>Deadlift:</p>
+        <p>{{currentMaxes.deadlift}}</p>
+      </div>
+    </div>
+
+    <div>
+      <h2>Projected Maxes</h2>
+      <div>
+        <p>Projected Bench:</p>
+        <p id="value">{{projections.projBenchMax}}</p>
+        <p id="differential {{#if (gt differentials.bench 0)}}[+]{{else}}[-]{{/if}}"> 
+          {{#if (gt differentials.bench 0)}}+{{/if}}{{differentials.bench}}
+        </p>
+      </div>
+      <div>
+        <p>Projected Squat:</p>
+        <p id="value">{{projections.projSquatMax}}</p>
+        <p id="differential {{#if (gt differentials.squat 0)}}positive{{else}}negative{{/if}}">
+          {{#if (gt differentials.squat 0)}}+{{/if}}{{differentials.squat}}
+        </p>
+      </div>
+      <div class="projection-item">
+        <p>Projected Deadlift:</p>
+        <p id="value">{{projections.projDeadliftMax}}</p>
+        <p id="differential {{#if (gt differentials.deadlift 0)}}positive{{else}}negative{{/if}}">
+          {{#if (gt differentials.deadlift 0)}}+{{/if}}{{differentials.deadlift}}
+        </p>
+      </div>
+    </div>
+  {{/if}}
+  
+  <a href="/workouts/workoutPage" class="back-link">Back to Workouts</a>
+</div>
