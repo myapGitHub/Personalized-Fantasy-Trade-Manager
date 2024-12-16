@@ -1,5 +1,3 @@
-content = """# Workout Application
-
 ## Team Members
 - **Matthew Luzzi**  
 - **James Murphy**  
