@@ -4,7 +4,7 @@ import { workouts } from "../config/mongoCollections.js";
 import { users } from "../config/mongoCollections.js"; // for creating workout plan, need user details
 import { ObjectId } from "mongodb";
 import validateDate from "validate-date";
-import { getUserProfile } from "./users.js";
+import { getUserProfile, profilePrivacyStatus } from "./users.js";
 
 const workoutCollection = await workouts();
 
@@ -151,10 +151,9 @@ const createWorkoutPlan = async (userId, workoutName, workoutType, exercises, ra
 
   const userCollection = await users();
 
-  //broken, will fix
-  //const pastWorkouts = getPastWorkouts(userId);
-  //pastWorkouts.push(newId);
-  //await userCollection.findOneAndUpdate({userId: userId}, {$set:{pastWorkouts : pastWorkouts}});
+  let pastWorkouts = getAllWorkoutsOfUserBilly(userId);
+  pastWorkouts.push(newId);
+  await userCollection.findOneAndUpdate({userId: userId}, {$set:{savedWorkouts : pastWorkouts}});
 
   const workout = await getWorkoutById(newId);
   console.log("Workout from Data: " + newWorkout);
@@ -194,7 +193,9 @@ const updateUserStreak = async (userId) => {
   checkId(userId);
 
   const userCollection = await users();
-  const user = await userCollection.findOne({ userId: userId.toLowerCase() });
+  const user = await userCollection
+
+  .findOne({ userId: userId.toLowerCase() });
 
   if (!user) {
     throw "Error: User not found.";
@@ -247,17 +248,18 @@ const updateUserStreak = async (userId) => {
 
 
 //Gets all workouts in the database
-const getAllWorkouts = async () => {
+const getAllPublicWorkouts = async () => {
   const workoutCollection = await workouts();
   const workoutList = await workoutCollection.find({}).toArray();
 
   if (!workoutList) throw new Error(" Could not get all workouts");
 
   const resultList = [];
-
   for (const workout of workoutList) {
-    const nameID = await findByWorkoutIdExercisesOnly(workout._id);
-    resultList.push(nameID);
+    if (profilePrivacyStatus(workout.userId)){
+      const result = await findByWorkoutIdExercisesOnlyBilly(workout._id);
+      resultList.push(result);
+    }
   }
 
   return resultList;
@@ -345,9 +347,9 @@ const updateWorkout = async (workoutId, workoutType, exercises, comments) => {
 };
 
 //Gets all workouts of a specific user based on passed in userId
-const getPastWorkouts = async (userId) => {
+const getWorkouts = async (userId) => {
   const user = await getUserProfile(userId);
-  const workoutList = user.pastWorkouts;
+  const workoutList = user.savedWorkouts;
   
   const results = [];
   if(workoutList){
@@ -668,11 +670,11 @@ export default {
   //getSavedWorkouts,
   createWorkout,
   createWorkoutPlan,
-  getAllWorkouts,
+  getAllPublicWorkouts,
   getWorkoutById,
   removeWorkout,
   updateWorkout,
-  getPastWorkouts,
+  //getPastWorkouts,
   rateWorkout,
   getUserStreak,
   updateUserStreak,

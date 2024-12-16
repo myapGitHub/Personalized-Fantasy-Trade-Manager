@@ -201,7 +201,6 @@ export const signUp = async (
         friendRequest:  {},
         friendInbox:  {},
         friends: {},
-        pastWorkouts: [],
         savedWorkouts: [],
         streakCount: 0,
         lastStreakDate: "",
@@ -262,10 +261,10 @@ export const userLogin = async (userIdParam, password) => {
    const compareToSherlock = await bcrypt.compare(password, foundHashedPassword);
    if (!compareToSherlock) throw "Either the userId or password is invalid";
 
-   const {_id, userId, firstName, lastName, height, weight, age, gender, benchMax, squatMax, deadLiftMax, level, isPublic, pastWorkouts, savedWorkouts, streakCount,
+   const {_id, userId, firstName, lastName, height, weight, age, gender, benchMax, squatMax, deadLiftMax, level, isPublic, savedWorkouts, streakCount,
     lastStreakDate,} =  validUserIdFinder;
    // need to figure out what to return
-   return {_id, userId, firstName, lastName, height, weight, age, gender, benchMax, squatMax, deadLiftMax, level, isPublic, pastWorkouts, savedWorkouts, streakCount,
+   return {_id, userId, firstName, lastName, height, weight, age, gender, benchMax, squatMax, deadLiftMax, level, isPublic, savedWorkouts, streakCount,
     lastStreakDate,};
 
 };

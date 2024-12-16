@@ -9,10 +9,9 @@
     <header>
         <nav>
             {{#if loggedIn}}
-                <a href="/workouts/getAllWorkoutsOfUser">View All Workouts</a>
+                <a href="/workouts/public">View All Workouts</a>
                 <a href="/workouts/userWorkouts">View Your Workouts</a>
                 <a href="/workouts/createWorkout">Create A Workout</a>
-                <a href="/workouts/getWorkoutById">Get a Specific Workout</a>
             {{else}}
                 <a href="/">Home</a>
                 <a href="/login" id="login-button">Login</a>

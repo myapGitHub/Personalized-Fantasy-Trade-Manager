@@ -6,8 +6,7 @@ import xss from 'xss';
 const router = Router();
 
 router.get("/", async (req, res) => {
-  console.log("redirect in middleware (currently through routes)");
-  res.redirect("/workoutsPage")
+  res.redirect("/workouts/workoutsPage")
 })
 
 router.post("/", async (req, res) => {
@@ -59,12 +58,12 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/public", async (req, res) => {
-  const userId = req.session.user.userId
-  console.log("TODO");
-  return;
-  const results = await workoutData.getSavedWorkouts(userId)
+  const userId = req.session.user.userId;
+  const results = await workoutData.getAllPublicWorkouts();
+  const streakData = await workoutData.getUserStreak(userId);
   // console.log(results)
-  res.render("pages/Workouts/allWorkotus", {workouts: results})
+  res.render("pages/Workouts/allWorkouts", {workouts: results})
+
 })
 
 router.get("/userWorkouts", async (req, res) => {
@@ -72,7 +71,7 @@ router.get("/userWorkouts", async (req, res) => {
   const results = await workoutData.getAllWorkoutsOfUserBilly(userId);
   const streakData = await workoutData.getUserStreak(userId);
   // console.log(results)
-  res.render("pages/Workouts/getAllWorkoutsOfUser", {
+  res.render("pages/Workouts/savedWorkouts", {
     title: "userWorkouts",
     workouts: results,
   });
