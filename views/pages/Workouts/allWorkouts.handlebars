@@ -26,7 +26,11 @@
     <br>
     {{/each}}
     {{!-- <h3>Difficulty: {{foundWorkout.rating}}</h2> --}}
+    <div>
       <a href="/comments/{{foundWorkout._id}}">View Comments</a>
+      <button class="workoutClone" data-id={{foundWorkout._id}}>Copy this workout</button>
+    </div>
+
   </div>
   {{/each}}
 </div>

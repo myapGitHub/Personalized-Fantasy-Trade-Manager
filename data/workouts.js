@@ -163,6 +163,139 @@ const createWorkoutPlan = async (userId, workoutName, workoutType, exercises, ra
 }
 
 
+// Calculate suggested weight based on user's stats for each exercise
+const calculateSuggestedWeightForExercise = (userId, workoutId) => {
+  // for now exerciseName falls under workoutType subcategory
+  // if no maxes included, just go off of experience level for specific workout
+  // if (userId.experience 
+  // Assumption: signup data is validated, userId's object attributes are all valid
+  // with maxes included
+  // let experienceForLift = '';
+  // if workout type selection doesn't match a filled in max, then go off of experience
+  
+  console.log("User Id is: " + userId);
+  console.log("Workout Id is: " + workoutId); 
+  
+  console.log("User Id Maxes are");
+
+
+  let calculatedMax = -1;
+  if (workoutId.workoutType === 'Bench') {
+    if (!userId.benchMax) { 
+      if (userId.experience === 'Advanced') {
+        let advancedMultiplier = 1.75
+        calculatedMax = advancedMultiplier * userId.weight;
+      }
+      else if (userId.experience === 'Intermediate') {
+        let intermediateMultiplier = 1.25;
+        calculatedMax = intermediateMultiplier * userId.weight;
+      }
+      else {
+        let beginnerMultiplier = .5;
+        calculatedMax = beginnerMultiplier * userId.weight;
+      }
+    }
+    else { // go off experience level selection by default
+      calculatedMax = userId.benchMax;
+    }
+  }
+  if (workoutId.workoutType === 'Squat') {
+    if (!userId.squatMax) {
+      if (userId.experience === 'Advanced') {
+        let advancedMultiplier = 2.25;
+        calculatedMax = advancedMultiplier * userId.weight;
+      } 
+      else if (userId.experience === 'Intermediate') {
+        let intermediateMultiplier = 1.5;
+        calculatedMax = intermediateMultiplier * userId.weight;
+      } 
+      else {
+        let beginnerMultiplier = 0.75;
+        calculatedMax = beginnerMultiplier * userId.weight;
+      }
+    }
+    else {
+      calculatedMax = userId.squatMax;
+    }
+  }
+  if (workoutId.workoutType === 'Deadlift') {
+    if (!userId.deadliftMax) {
+      if (userId.experience === 'Advanced') {
+        let advancedMultiplier = 2.5;
+        calculatedMax = advancedMultiplier * userId.weight;
+      } 
+      else if (userId.experience === 'Intermediate') {
+        let intermediateMultiplier = 2;
+        calculatedMax = intermediateMultiplier * userId.weight;
+      } 
+      else {
+        let beginnerMultiplier = 1;
+        calculatedMax = beginnerMultiplier * userId.weight;
+      }
+    }
+    else {
+      calculatedMax = userId.deadliftMax;
+    }
+  }
+  if (calculatedMax < 0) {
+    throw new Error("Error computing formula for exercise");
+  }
+  // const maxWeightBench = userId.benchMax ? userId.benchMax : benc
+  // const maxWeightSquat = userId.benchMax ? userId.squatMax : 
+  // const maxWeightDeadlift = userId.benchMax ? userId.deadliftMax : 
+  // max = experienceMultiplier * userId.weight; // not correct
+  // experience multiplier
+  // 
+ //  calculatedMax has to be placed into a calculation for number of reps which will be consistent
+  let liftPercentage = .75; // percent of projected max for a workout
+  let percentOfMax = -1; 
+  switch(workoutId.exercises.reps) {
+    case 1:
+      percentOfMax = 1;
+      break;
+    case 2:
+      percentOfMax = .95;
+      break;
+    case 3:
+      percentOfMax = .925;
+      break;
+    case 4:
+      percentOfMax = .9;
+      break;
+    case 5:
+      percentOfMax = .875;
+      break;
+    case 6:
+      percentOfMax = .85;
+      break;
+    case 7:
+      percentOfMax = .825;
+      break;
+    case 8:
+      percentOfMax = .8;
+      break;
+    case 9:
+      percentOfMax = .775;
+      break;
+    case 10:
+      percentOfMax = .75;
+      break;
+    default:
+      percentOfMax = 1; // if no result
+      break;
+  }
+  let liftWeight = liftPercentage * calculatedMax * percentOfMax // .75 is working sets percentage of max
+  let suggestedExercise = {
+    name: workoutId.exercises.name,
+    sets: workoutId.exercises.sets,
+    reps: workoutId.exercises.reps,
+    weight: liftWeight
+  }
+  return suggestedExercise; // returns the whole exercise object for one exercise
+}
+
+
+
 //Get user streak based on userId
 
 const getUserStreak = async (userId) => {
@@ -669,6 +802,7 @@ export default {
   //getSavedWorkouts,
   createWorkout,
   createWorkoutPlan,
+  calculateSuggestedWeightForExercise,
   getAllPublicWorkouts,
   getWorkoutById,
   removeWorkout,

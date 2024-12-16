@@ -33,6 +33,7 @@
           id="workoutName"
           name="workoutName"
           placeholder="Name your Workout"
+          value="{{#if prefill}}{{prefill.workoutName}}{{/if}}"
           required
         />
       </div>
@@ -46,25 +47,168 @@
           placeholder="Brief description of the workout"
           required
         >
-          <option value="Bench">Bench</option>
-          <option value="Squat">Squat</option>
-          <option value="Deadlift">Deadlift</option>
+          <option value="Bench" {{#if prefill}}{{#if (eq prefill.workoutType "Bench")}}selected{{/if}}{{/if}}>Bench</option>
+          <option value="Squat" {{#if prefill}}{{#if (eq prefill.workoutType "Squat")}}selected{{/if}}{{/if}}>Squat</option>
+          <option value="Deadlift" {{#if prefill}}{{#if (eq prefill.workoutType "Deadlift")}}selected{{/if}}{{/if}}>Deadlift</option>
 
 
         </select>
       </div>
       {{!-- <div id="createWorkout"></div> --}}
+      {{!-- {{#if prefill}}
+        {{#each prefill.exercises}}
 
-     
-      <div class="exercise">
-        <div>
-          <label for="exercises">Exercises:</label>
-
+        <div class="exercise">
+          <div>
+            <label for="exercises">Exercises:</label>
             <select
-              {{!-- type="dropdown" --}}
               id="exerciseName"
               name="exerciseName"
-              {{!-- placeholder="Select Exercise" --}}
+              required
+            >
+              <option value="Bench" {{#if (eq this.name "Bench")}}selected{{/if}}>Bench</option>
+              <option value="Squat" {{#if (eq this.name "Squat")}}selected{{/if}}>Squat</option>
+              <option value="Deadlift" {{#if (eq this.name "Deadlift")}}selected{{/if}}>Deadlift</option>
+            </select>
+            
+            <label for="sets">Sets:</label>
+            <select
+              type="number"
+              id="sets"
+              name="sets"
+              required
+            >
+              <option value="1" {{#if (eq ../sets 1)}}selected{{/if}}>1</option>
+              <option value="2" {{#if (eq ../sets 2)}}selected{{/if}}>2</option>
+              <option value="3" {{#if (eq ../sets 3)}}selected{{/if}}>3</option>
+              <option value="4" {{#if (eq ../sets 4)}}selected{{/if}}>4</option>
+              <option value="5" {{#if (eq ../sets 5)}}selected{{/if}}>5</option>
+              <option value="6" {{#if (eq ../sets 6)}}selected{{/if}}>6</option>
+              <option value="7" {{#if (eq ../sets 7)}}selected{{/if}}>7</option>
+              <option value="8" {{#if (eq ../sets 8)}}selected{{/if}}>8</option>
+              <option value="9" {{#if (eq ../sets 9)}}selected{{/if}}>9</option>
+              <option value="10" {{#if (eq ../sets 10)}}selected{{/if}}>10</option>
+            </select>
+
+            <label for="reps">Reps:</label>
+            <select
+              type="number"
+              id="reps"
+              name="reps"
+              required
+            >
+              {{#each (seq 1 20)}}
+                <option value="{{this}}" {{#if (eq ../reps this)}}selected{{/if}}>{{this}}</option>
+              {{/each}}
+            </select>
+
+            <input
+              type="number"
+              id="weight"
+              name="weight"
+              placeholder="Enter weight (lbs)"
+              value="{{this.weight}}"
+              required
+            >
+          </div>
+        </div> --}}
+
+      {{#if prefill}}
+        {{#each prefill.exercises}}
+          <div class="exercise">
+            <div>
+              <label for="exercises">Exercises:</label>
+              <select
+                id="exerciseName"
+                name="exerciseName"
+                required
+              >
+                <option value="Bench" {{#if (eq this.name "Bench")}}selected{{/if}}>Bench</option>
+                <option value="Squat" {{#if (eq this.name "Squat")}}selected{{/if}}>Squat</option>
+                <option value="Deadlift" {{#if (eq this.name "Deadlift")}}selected{{/if}}>Deadlift</option>
+              </select>
+              
+              <label for="sets">Sets:</label>
+              <select
+                type="number"
+                id="sets"
+                name="sets"
+                required
+              >
+                <option value="1" {{#if (eq sets 1)}}selected{{/if}}>1</option>
+                <option value="2" {{#if (eq sets 2)}}selected{{/if}}>2</option>
+                <option value="3" {{#if (eq sets 3)}}selected{{/if}}>3</option>
+                <option value="4" {{#if (eq sets 4)}}selected{{/if}}>4</option>
+                <option value="5" {{#if (eq sets 5)}}selected{{/if}}>5</option>
+                <option value="6" {{#if (eq sets 6)}}selected{{/if}}>6</option>
+                <option value="7" {{#if (eq sets 7)}}selected{{/if}}>7</option>
+                <option value="8" {{#if (eq sets 8)}}selected{{/if}}>8</option>
+                <option value="9" {{#if (eq sets 9)}}selected{{/if}}>9</option>
+                <option value="10" {{#if (eq sets 10)}}selected{{/if}}>10</option>
+              </select>
+
+              <label for="reps">Reps:</label>
+              <select
+                type="number"
+                id="reps"
+                name="reps"
+                required
+              >
+                <option value="1" {{#if (eq reps 1)}}selected{{/if}}>1</option>
+                <option value="2" {{#if (eq reps 2)}}selected{{/if}}>2</option>
+                <option value="3" {{#if (eq reps 3)}}selected{{/if}}>3</option>
+                <option value="4" {{#if (eq reps 4)}}selected{{/if}}>4</option>
+                <option value="5" {{#if (eq reps 5)}}selected{{/if}}>5</option>
+                <option value="6" {{#if (eq reps 6)}}selected{{/if}}>6</option>
+                <option value="7" {{#if (eq reps 7)}}selected{{/if}}>7</option>
+                <option value="8" {{#if (eq reps 8)}}selected{{/if}}>8</option>
+                <option value="9" {{#if (eq reps 9)}}selected{{/if}}>9</option>
+                <option value="10" {{#if (eq reps 10)}}selected{{/if}}>10</option>
+                <option value="11" {{#if (eq reps 11)}}selected{{/if}}>11</option>
+                <option value="12" {{#if (eq reps 12)}}selected{{/if}}>12</option>
+                <option value="13" {{#if (eq reps 13)}}selected{{/if}}>13</option>
+                <option value="14" {{#if (eq reps 14)}}selected{{/if}}>14</option>
+                <option value="15" {{#if (eq reps 15)}}selected{{/if}}>15</option>
+                <option value="16" {{#if (eq reps 16)}}selected{{/if}}>16</option>
+                <option value="17" {{#if (eq reps 17)}}selected{{/if}}>17</option>
+                <option value="18" {{#if (eq reps 18)}}selected{{/if}}>18</option>
+                <option value="19" {{#if (eq reps 19)}}selected{{/if}}>19</option>
+                <option value="20" {{#if (eq reps 20)}}selected{{/if}}>20</option>
+              </select>
+
+              <input
+                type="number"
+                id="weight"
+                name="weight"
+                placeholder="Enter weight (lbs)"
+                value="{{this.weight}}"
+                required
+              >
+            </div>
+            <div>
+              <label for="rating">Difficulty Rating:</label>
+              <select
+                type="number"
+                id="rating"
+                name="rating"
+                required
+              >
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+            </div>
+          </div>
+        {{/each}}
+      {{else}}
+        <div class="exercise">
+          <div>
+            <label for="exercises">Exercises:</label>
+            <select
+              id="exerciseName"
+              name="exerciseName"
               required
             >
               <option value="Bench">Bench</option>
@@ -77,59 +221,74 @@
               type="number"
               id="sets"
               name="sets"
-              {{!-- placeholder="Select Option" --}}
               required
             >
-              <option value=1>1</option>
-              <option value=2>2</option>
-              <option value=3>3</option>
-              <option value=4>4</option>
-              <option value=5>5</option>
-              <option value=6>6</option>
-              <option value=7>7</option>
-              <option value=8>8</option>
-              <option value=9>9</option>
-              <option value=10>10</option>
-          </select>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+            </select>
 
-          <label for="reps">Reps:</label>
-          <select
+            <label for="reps">Reps:</label>
+            <select
               type="number"
               id="reps"
               name="reps"
-              {{!-- placeholder="Select Option" --}}
               required
             >
-              <option value=1>1</option>
-              <option value=2>2</option>
-              <option value=3>3</option>
-              <option value=4>4</option>
-              <option value=5>5</option>
-              <option value=6>6</option>
-              <option value=7>7</option>
-              <option value=8>8</option>
-              <option value=9>9</option>
-              <option value=10>10</option>
-              <option value=11>11</option>
-              <option value=12>12</option>
-              <option value=13>13</option>
-              <option value=14>14</option>
-              <option value=15>15</option>
-              <option value=16>16</option>
-              <option value=17>17</option>
-              <option value=18>18</option>
-              <option value=19>19</option>
-              <option value=20>20</option>
-          </select>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
+              <option value="13">13</option>
+              <option value="14">14</option>
+              <option value="15">15</option>
+              <option value="16">16</option>
+              <option value="17">17</option>
+              <option value="18">18</option>
+              <option value="19">19</option>
+              <option value="20">20</option>
+            </select>
 
-          <input
-            type="number"
-            id="weight"
-            name="weight"
-            placeholder="Enter weight (lbs)"
-            required
-          >
+            <input
+              type="number"
+              id="weight"
+              name="weight"
+              placeholder="Enter weight (lbs)"
+              required
+            >
+          </div>
+          <div>
+            <label for="rating">Difficulty Rating:</label>
+            <select
+              type="number"
+              id="rating"
+              name="rating"
+              required
+            >
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
         </div>
+      {{/if}}
 
         <div>
           <label for="rating">Difficulty Rating:</label>

@@ -156,12 +156,48 @@ router.post("/createWorkout", async (req, res) => {
 });
 
 
+router.get('/copy/:id', async (req, res) => {
+  // try {
+    const workoutId = xss(req.params.id);
+    const workout = await workoutData.getWorkoutById(req.params.id);
+    const userId = workout.userId;
+    // const user = await userData.getUserProfile();
+    const exercises = workout.exercises;
+    const nameOfWorkoutToClone = workout.workoutName;
+    const typeOfWorkoutToClone = workout.workoutType;
+    const exercisesWithSuggestions = [];
+    for (let exercise of exercises) {
+      let exerciseWithSuggestedWeights = await workoutData.calculateSuggestedWeightForExercise(userId, workoutId);
+      let updatedExercise = {
+        name: exercise.name,
+        sets: exercise.sets,
+        reps: exercise.reps,
+        weight: exerciseWithSuggestedWeights.weight
+      }
+      exercisesWithSuggestions.push(updatedExercise);
+    }
+    res.render("pages/workouts/createWorkout", {
+      loggedIn: true,
+      prefill:
+        {
+          workoutName: `${nameOfWorkoutToClone} Copy`,
+          workoutType: typeOfWorkoutToClone,
+          exercises: exercisesWithSuggestions
+        }
+    });
+  // }
+  // catch {
+  //   res.render('pages/')
+  // }
+})
+
+
 router.get("/:id&u=:userId"), async (req, res) => {
   const workout = await workoutData.getWorkoutById(req.params.id);
   res.render("/pages/Workouts/getWorkoutById", {workout : workout});
 }
 
-  router.get("/:id"), async (req, res) => { // planning to add an id for the workouts user after users
+router.get("/:id"), async (req, res) => { // planning to add an id for the workouts user after users
   try {
     const id = xss(req.params.id);
     const workout = await workoutData.getWorkoutById(id);

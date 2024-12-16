@@ -11,7 +11,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // setup handlebars
-app.engine("handlebars", exphbs.engine({ defaultLayout: "main" }));
+app.engine("handlebars", exphbs.engine({ 
+  defaultLayout: "main",
+  helpers: {
+    eq: function (a, b) {
+      return a === b;
+    },
+  },
+}));
 app.set("view engine", "handlebars");
 
 // middleware

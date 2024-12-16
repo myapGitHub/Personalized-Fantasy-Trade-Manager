@@ -14,6 +14,24 @@ async function remove(e) {
         console.log(error.message)
     }
 }
+
+const copyButtons = Array.from(document.getElementsByClassName("workoutClone"))
+
+copyButtons.forEach(button => {
+  button.addEventListener("click", copyWorkout);
+})
+
+async function copyWorkout(e) {
+  e.preventDefault();
+  try {
+      const workoutId = e.target.dataset.id;
+      window.location.href = `/workouts/copy/${workoutId}`
+  } catch (error) {
+      console.log(error.message)
+  }
+}
+
+
 document.getElementById("addExercise").addEventListener("click", addExercise)
 function addExercise(e) {
     e.preventDefault()
