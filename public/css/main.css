@@ -10,31 +10,33 @@ h1 {
 }
 
 body {
-    align-items: center;
-
     font-family: Georgia, Times, 'Times New Roman', serif;
+    
 }
 
 main {
-    position:relative;
+    position: relative;
     z-index: 1;
 }
-
+#break-main{
+    text-align: center;
+    display: block;
+    background-color: black;
+}
 /* GENERAL CSS STYLING */
 nav {
-    position: relative;
     text-align: center;
-    align-items: center;
     font-size: 10px;
-    background-color: #000000;
+    justify-content: center;
     padding: 10px 20px;
     display: inline-block;
     border-radius: 5px;
     white-space: normal;
     word-wrap: break-word;
     font-size: 10px;
+    margin: 0 auto
 }.home-link{
-    text-align: center;
+    position: fixed;
 }
 
 nav a {
