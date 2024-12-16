@@ -29,6 +29,9 @@ router.post("/", async (req, res) => {
     checkExists(req.body.reps);
     checkExists(req.body.weight);
     checkExists(req.body.rating);
+    checkNumber(parseInt(req.body.sets));
+    checkNumber(parseInt(req.body.reps));
+    checkNumber(parseInt(req.body.weight));
 
     const userId = req.session.user.userId;
 
@@ -83,6 +86,7 @@ router.post("/", async (req, res) => {
     res.redirect("/workouts/userWorkouts");
   } catch (error) {
     console.log(error.message);
+    res.status(400).json({ error: e });
   }
 });
 
@@ -101,7 +105,9 @@ router.get("/public", async (req, res) => {
     //   workouts: results,
     //   userId: userId,
     // })
-  } catch (e) {}
+  } catch (e) {
+    res.status(400).json({ error: e });
+  }
 });
 
 router.get("/userWorkouts", async (req, res) => {
