@@ -50,10 +50,18 @@ router.post("/", async (req, res) => {
     //   weight: weight
     // }];
 
+    const date = new Date(); // Create the date
+    console.log("Date being passed:", date); // Add this log to verify
+
+ 
+
     const updatedStreak = await workoutData.updateUserStreak(userId);
     console.log(updatedStreak)
     console.log(exercises)
     await workoutData.createWorkoutPlan(userId, workoutName, workoutType, exercises, rating);
+    // await workoutData.createWorkoutPlan({
+    //   userId, workoutName, workoutType, exercises, rating, createdAt: new Date().toISOString()
+    // });
     res.redirect("/workouts/userWorkouts");
 
   } catch (error) {
@@ -65,8 +73,16 @@ router.get("/public", async (req, res) => {
   const userId = req.session.user.userId;
   const results = await workoutData.getAllPublicWorkouts(userId);
   const streakData = await workoutData.getUserStreak(userId);
+
+  // const date = new Date();
+
   // console.log(results)
   res.render("pages/Workouts/allWorkouts", {workouts: results})
+
+  // res.render("pages/Workouts/allWorkouts", {
+  //   workouts: results,
+  //   userId: userId,
+  // })
 
 })
 
@@ -134,6 +150,18 @@ router.post("/createWorkout", async (req, res) => {
         weight: parseFloat(workout.weight),
       },
     ];
+
+    const dateAndTime = new Date().toUTCString();
+
+    // const newWorkout = await workoutData.createWorkoutPlan(
+    //   userId,
+    //   workout.workoutName,
+    //   workout.workoutType,
+    //   exercises,
+    //   workout.rating,
+    //   dateAndTime
+    // );
+
     const newWorkout = await workoutData.createWorkoutPlan(
       userId,
       workout.workoutName,

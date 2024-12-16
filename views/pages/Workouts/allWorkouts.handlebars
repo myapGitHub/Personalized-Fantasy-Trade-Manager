@@ -14,7 +14,12 @@
 <div id="all-workouts">
   <h1 id="all-workouts-title">Public Workouts</h1>
   {{#each workouts}}
+  
   <div id="each-workout">
+    <div id="user-and-date">
+      <p>{{foundWorkout.userId}}</p>
+      {{!-- <p>Date: {{foundWorkout.formattedDate}}</p> --}}
+    </div>
     <h2>{{foundWorkout.workoutName}}</h2>
     <h3>Type: {{foundWorkout.workoutType}}</h3>
     {{#each foundWorkout.exercises}}
@@ -30,7 +35,7 @@
       <a href="/comments/{{foundWorkout._id}}">View Comments</a>
       <button class="workoutClone" data-id={{foundWorkout._id}}>Copy this workout</button>
     </div>
-
+    
   </div>
   {{/each}}
 </div>

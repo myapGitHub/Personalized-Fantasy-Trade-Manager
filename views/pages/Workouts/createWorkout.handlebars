@@ -14,13 +14,6 @@
 
     </header>
 
-{{!-- userId,
-      workout.name,
-      workout.workoutType,
-      workout.exercises,
-      workout.rating --}}
-
-
     <form id="createWorkout-form" action="/workouts" method="POST">
     <h1>Create a New Workout</h1>
      {{#if error}}
@@ -54,65 +47,6 @@
 
         </select>
       </div>
-      {{!-- <div id="createWorkout"></div> --}}
-      {{!-- {{#if prefill}}
-        {{#each prefill.exercises}}
-
-        <div class="exercise">
-          <div>
-            <label for="exercises">Exercises:</label>
-            <select
-              id="exerciseName"
-              name="exerciseName"
-              required
-            >
-              <option value="Bench" {{#if (eq this.name "Bench")}}selected{{/if}}>Bench</option>
-              <option value="Squat" {{#if (eq this.name "Squat")}}selected{{/if}}>Squat</option>
-              <option value="Deadlift" {{#if (eq this.name "Deadlift")}}selected{{/if}}>Deadlift</option>
-            </select>
-            
-            <label for="sets">Sets:</label>
-            <select
-              type="number"
-              id="sets"
-              name="sets"
-              required
-            >
-              <option value="1" {{#if (eq ../sets 1)}}selected{{/if}}>1</option>
-              <option value="2" {{#if (eq ../sets 2)}}selected{{/if}}>2</option>
-              <option value="3" {{#if (eq ../sets 3)}}selected{{/if}}>3</option>
-              <option value="4" {{#if (eq ../sets 4)}}selected{{/if}}>4</option>
-              <option value="5" {{#if (eq ../sets 5)}}selected{{/if}}>5</option>
-              <option value="6" {{#if (eq ../sets 6)}}selected{{/if}}>6</option>
-              <option value="7" {{#if (eq ../sets 7)}}selected{{/if}}>7</option>
-              <option value="8" {{#if (eq ../sets 8)}}selected{{/if}}>8</option>
-              <option value="9" {{#if (eq ../sets 9)}}selected{{/if}}>9</option>
-              <option value="10" {{#if (eq ../sets 10)}}selected{{/if}}>10</option>
-            </select>
-
-            <label for="reps">Reps:</label>
-            <select
-              type="number"
-              id="reps"
-              name="reps"
-              required
-            >
-              {{#each (seq 1 20)}}
-                <option value="{{this}}" {{#if (eq ../reps this)}}selected{{/if}}>{{this}}</option>
-              {{/each}}
-            </select>
-
-            <input
-              type="number"
-              id="weight"
-              name="weight"
-              placeholder="Enter weight (lbs)"
-              value="{{this.weight}}"
-              required
-            >
-          </div>
-        </div> --}}
-
       {{#if prefill}}
         {{#each prefill.exercises}}
           <div class="exercise">
