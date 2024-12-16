@@ -1,17 +1,38 @@
 <header>
-    <nav>
-        <form id="search-user-form" method="GET" action="/search-user">
-            <label for="search-user">Search User:</label>
-            <input id="currentUserId" name="currentUserId" type="hidden" value="{{userId}}">
-            <input id="searchUser" name="searchUser" type="text" placeholder="type user">
-        </form>
-        <div id="search-user-error">{{{error}}}</div>
-        <a href="/workouts/workoutsPage">Workouts</a>
-        <a href="/friends/friends">Friends</a>
-        <a href="/settings/account">Account</a>
-        <a href="/signout">Logout</a>
-
-    </nav>
+  <nav>
+    <form id="search-user-form" method="GET" action="/search-user">
+      <label for="search-user">
+        Search User:
+      </label>
+      <input
+        id="currentUserId"
+        name="currentUserId"
+        type="hidden"
+        value="{{userId}}"
+      />
+      <input
+        id="searchUser"
+        name="searchUser"
+        type="text"
+        placeholder="type user"
+      />
+    </form>
+    <div id="search-user-error">
+      {{{error}}}
+    </div>
+    <a href="/workouts/workoutsPage">
+      Workouts
+    </a>
+    <a href="/friends/friends">
+      Friends
+    </a>
+    <a href="/settings/account">
+      Account
+    </a>
+    <a href="/signout">
+      Logout
+    </a>
+  </nav>
 </header>
 
 <div id="dashboard">
