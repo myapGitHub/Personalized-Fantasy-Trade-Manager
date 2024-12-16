@@ -15,51 +15,6 @@ router
   .post(async (req, res) => {
     // #TODO adding the error checking
 
-    checkExists(req.body);
-    checkExists(req.body.userId);
-    checkExists(req.body.password);
-    checkExists(req.body.firstName);
-    checkExists(req.body.lastName);
-    checkExists(req.body.height);
-    checkExists(req.body.weight);
-    checkExists(req.body.age);
-    checkExists(req.body.gender);
-    checkExists(req.body.level);
-
-    req.body.userId = checkUserId(req.body.userId);
-    req.body.password = checkPassword(req.body.password);
-    checkString(req.body.firstName);
-    req.body.firstName = req.body.firstName.trim();
-    checkStringLength(req.body.firstName);
-    checkString(req.body.lastName);
-    req.body.lastName = req.body.lastName.trim();
-    checkStringLength(req.body.lastName);
-    req.body.height = checkNum(parseInt(req.body.height));
-    checkValidRange(parseFloat(req.body.height), 40, 300, "Height");
-    req.body.weight = checkNum(parseInt(req.body.weight));
-    checkValidRange(parseFloat(req.body.weight), 10, 700, "Weight");
-    req.body.age = checkNum(parseInt(req.body.age));
-    checkValidRange(parseFloat(req.body.age), 0, 120, "Age");
-
-    if (req.body.benchMax) {
-      checkExists(req.body.benchMax);
-      req.body.benchMax = checkNum(parseInt(req.body.benchMax));
-      checkValidRange(parseInt(req.body.benchMax), 1, 1500, "Bench Max");
-    }
-    if (req.body.squatMax) {
-      checkExists(req.body.squatMax);
-      req.body.squatMax = checkNum(parseInt(req.body.squatMax));
-      checkValidRange(parseInt(req.body.squatMax), 1, 1500, "Squat Max");
-    }
-
-    if (req.body.deadLiftMax) {
-      checkExists(req.body.deadLiftMax);
-      req.body.deadLiftMax = checkNum(parseInt(req.body.deadLiftMax));
-      checkValidRange(parseInt(req.body.deadLiftMax), 1, 1500, "DeadLife Max");
-    }
-
-    checkGender(req.body.gender);
-    checkExperience(req.body.level);
     // cleanses the input useing xss
     const userId = xss(req.body.userId);
     const password = xss(req.body.password);
@@ -76,6 +31,56 @@ router
 
     let success;
     try {
+      checkExists(req.body);
+      checkExists(req.body.userId);
+      checkExists(req.body.password);
+      checkExists(req.body.firstName);
+      checkExists(req.body.lastName);
+      checkExists(req.body.height);
+      checkExists(req.body.weight);
+      checkExists(req.body.age);
+      checkExists(req.body.gender);
+      checkExists(req.body.level);
+
+      checkId(req.body.userId);
+      checkString(req.body.firstName);
+      req.body.firstName = req.body.firstName.trim();
+      checkStringLength(req.body.firstName);
+      checkString(req.body.lastName);
+      req.body.lastName = req.body.lastName.trim();
+      checkStringLength(req.body.lastName);
+      req.body.height = checkNum(parseInt(req.body.height));
+      checkValidRange(parseFloat(req.body.height), 40, 300, "Height");
+      req.body.weight = checkNum(parseInt(req.body.weight));
+      checkValidRange(parseFloat(req.body.weight), 10, 700, "Weight");
+      req.body.age = checkNum(parseInt(req.body.age));
+      checkValidRange(parseFloat(req.body.age), 0, 120, "Age");
+
+      if (req.body.benchMax) {
+        checkExists(req.body.benchMax);
+        req.body.benchMax = checkNum(parseInt(req.body.benchMax));
+        checkValidRange(parseInt(req.body.benchMax), 1, 1500, "Bench Max");
+      }
+      if (req.body.squatMax) {
+        checkExists(req.body.squatMax);
+        req.body.squatMax = checkNum(parseInt(req.body.squatMax));
+        checkValidRange(parseInt(req.body.squatMax), 1, 1500, "Squat Max");
+      }
+
+      if (req.body.deadLiftMax) {
+        checkExists(req.body.deadLiftMax);
+        req.body.deadLiftMax = checkNum(parseInt(req.body.deadLiftMax));
+        checkValidRange(
+          parseInt(req.body.deadLiftMax),
+          1,
+          1500,
+          "DeadLife Max"
+        );
+      }
+
+      checkGender(req.body.gender);
+      checkExperience(req.body.level);
+
       success = await userData.signUp(
         userId,
         password,
