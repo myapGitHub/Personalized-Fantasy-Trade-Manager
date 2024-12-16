@@ -2,6 +2,9 @@ import { Router } from "express";
 const router = Router();
 import { userData } from "../data/index.js";
 import xss from "xss";
+import { ObjectId } from "mongodb";
+import { users, workouts } from "../config/mongoCollections.js";
+import bcrypt from "bcrypt";
 
 // Routes for signup
 router
@@ -12,6 +15,51 @@ router
   .post(async (req, res) => {
     // #TODO adding the error checking
 
+    checkExists(req.body);
+    checkExists(req.body.userId);
+    checkExists(req.body.password);
+    checkExists(req.body.firstName);
+    checkExists(req.body.lastName);
+    checkExists(req.body.height);
+    checkExists(req.body.weight);
+    checkExists(req.body.age);
+    checkExists(req.body.gender);
+    checkExists(req.body.level);
+
+    checkId(req.body.userId);
+    checkPassword(req.body.password);
+    checkString(req.body.firstName);
+    req.body.firstName = req.body.firstName.trim();
+    checkStringLength(req.body.firstName);
+    checkString(req.body.lastName);
+    req.body.lastName = req.body.lastName.trim();
+    checkStringLength(req.body.lastName);
+    req.body.height = checkNum(parseInt(req.body.height));
+    checkValidRange(parseFloat(req.body.height), 40, 300, "Height");
+    req.body.weight = checkNum(parseInt(req.body.weight));
+    checkValidRange(parseFloat(req.body.weight), 10, 700, "Weight");
+    req.body.age = checkNum(parseInt(req.body.age));
+    checkValidRange(parseFloat(req.body.age), 0, 120, "Age");
+
+    if (req.body.benchMax) {
+      checkExists(req.body.benchMax);
+      req.body.benchMax = checkNum(parseInt(req.body.benchMax));
+      checkValidRange(parseInt(req.body.benchMax), 1, 1500, "Bench Max");
+    }
+    if (req.body.squatMax) {
+      checkExists(req.body.squatMax);
+      req.body.squatMax = checkNum(parseInt(req.body.squatMax));
+      checkValidRange(parseInt(req.body.squatMax), 1, 1500, "Squat Max");
+    }
+
+    if (req.body.deadLiftMax) {
+      checkExists(req.body.deadLiftMax);
+      req.body.deadLiftMax = checkNum(parseInt(req.body.deadLiftMax));
+      checkValidRange(parseInt(req.body.deadLiftMax), 1, 1500, "DeadLife Max");
+    }
+
+    checkGender(req.body.gender);
+    checkExperience(req.body.level);
     // cleanses the input useing xss
     const userId = xss(req.body.userId);
     const password = xss(req.body.password);
@@ -284,11 +332,131 @@ function checkBool(bool) {
 
 function checkValidRange(input, min, max, fieldName) {
   if (!input) {
-    errors.push("A valid number is not provided");
+    throw new Error("A valid number is not provided");
   }
   if (input < min || input > max) {
-    errors.push(`${fieldName} is required to be betweeen ${min} and ${max}`);
+    throw new Error(
+      `${fieldName} is required to be betweeen ${min} and ${max}`
+    );
   }
 }
+
+const checkPassword = async (password) => {
+  if (password === undefined || password === null)
+    throw "password is not supplied";
+  if (typeof password !== "string" || password.trim().length === 0)
+    throw "passord is not string or emtpy";
+
+  // NO TRIMING PASSWORD
+  //password = password.trim();
+
+  //password constraints
+  let capitalLetter = false;
+  let specialChar = false;
+  let number = false;
+
+  // object of special chars
+  const specialChars = {
+    "!": true,
+    "@": true,
+    "#": true,
+    $: true,
+    "%": true,
+    "^": true,
+    "&": true,
+    "*": true,
+    "(": true,
+    ")": true,
+    _: true,
+    "+": true,
+    "-": true,
+    "=": true,
+    "[": true,
+    "]": true,
+    "{": true,
+    "}": true,
+    "|": true,
+    ";": true,
+    ":": true,
+    "'": true,
+    ",": true,
+    ".": true,
+    "<": true,
+    ">": true,
+    "/": true,
+    "?": true,
+    "`": true,
+    "~": true,
+    '"': true,
+  };
+
+  if (password.length < 8) throw "password not long enough";
+  for (const char of password) {
+    if (char === " ") throw "password has space";
+    if (!isNaN(char)) number = true;
+    if (char <= "Z" && char >= "A") capitalLetter = true;
+    if (char in specialChars) specialChar = true;
+  }
+
+  if (!number || !capitalLetter || !specialChar)
+    throw "password doesnt contain Captial Letter, Number or special character";
+
+  const hash = await bcrypt.hash(password, 10);
+  return hash;
+};
+
+const checkFirstOrLastName = (name) => {
+  if (name === undefined || name === null)
+    throw "first or last name not provided";
+  if (typeof name !== "string" || name.trim().length === 0)
+    throw "first name or last name is not string or empty";
+  name = name.trim();
+  if (name.length < 2 || name.length > 25)
+    throw "at least 2 characters long with a max of 25 characters.";
+
+  for (const char of name) {
+    if (!isNaN(char) && char !== " ") {
+      throw "last or first name cotains number";
+    }
+  }
+
+  return name;
+};
+
+// checks to ensure the input is a number
+const checkNum = (num) => {
+  if (num === undefined || num === null) throw "No number provided"; // Fixed to handle `null` or `undefined`
+  if (typeof num !== "number") throw "Not a valid number";
+  if (isNaN(num)) throw "Not a valid number"; // Fixed logic
+
+  return num;
+};
+
+// checks gender to ensure it matches 'male', 'female', or 'other'
+const checkGender = (gender) => {
+  if (!gender) throw "No gender provided";
+  if (typeof gender !== "string" || gender.trim().length === 0)
+    throw "Invalid gender type";
+  gender = gender.trim();
+  if (gender !== "male" && gender !== "female" && gender !== "other")
+    throw "Invalid gender option";
+  return gender;
+};
+// checks experience level to ensure it matches 'beginner', 'intermediate', or 'advanced'
+const checkExperience = (experience) => {
+  console.log(experience);
+  if (!experience) throw "No experience provided"; // Fixed variable name
+  if (typeof experience !== "string" || experience.trim().length === 0)
+    throw "Invalid experience type";
+  experience = experience.trim();
+  if (
+    experience !== "beginner" &&
+    experience !== "intermediate" &&
+    experience !== "advanced"
+  )
+    throw "Invalid experience level";
+
+  return experience;
+};
 
 export default router;
