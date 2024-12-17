@@ -11,7 +11,7 @@ body {
 }
 
 main {
-    color: yellow;
+    color: rgb(204, 41, 19);
     position: relative;
     text-align: center;
     z-index: 1;
@@ -76,7 +76,7 @@ h1{
 }
 
 h3 {
-    color: rgb(255, 255, 255);
+    color: rgb(141, 24, 24);
 }
 
 a {
