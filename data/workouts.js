@@ -5,6 +5,7 @@ import { users } from "../config/mongoCollections.js"; // for creating workout p
 import { ObjectId } from "mongodb";
 import validateDate from "validate-date";
 import { getUserProfile, profilePrivacyStatus } from "./users.js";
+import { userData } from "./index.js";
 
 const workoutCollection = await workouts();
 
@@ -455,7 +456,8 @@ const getAllPublicWorkouts = async (userId) => {
 
   let resultList = [];
   for (const workout of workoutList) {
-    if (profilePrivacyStatus(workout.userId) && !(userId === workout.userId)){
+    const status = await userData.profilePrivacyStatus(workout.userId);
+    if (status && userId !== workout.userId){
       const result = await findByWorkoutIdExercisesOnlyBilly(workout._id);
       resultList.push(result);
     }
