@@ -1,20 +1,11 @@
 <header>
   <nav>
-    {{!-- {{#if loggedIn}} --}}
     <a href="/workouts/workoutsPage">Back</a>
     <a href="/workouts/userWorkouts">View Your Workouts</a>
     <a href="/workouts/createWorkout">Create A Workout</a>
-      <a href="/workouts/favorited">
-        View Your Favorited Workouts
-      </a>
-    {{!-- <a href="/workouts/removeWorkout">Remove A Workout</a> --}}
-    {{!-- {{else}} --}}
-    {{!-- <p>not logged?</p> --}}
-    {{!-- {{/if}} --}}
+    <a href="/workouts/favorited">View Your Favorited Workouts</a>
   </nav>
-
 </header>
-
 <div id="insights">
   <h1>Workout Insights</h1>
   
@@ -28,28 +19,30 @@
       <h2>Current Maxes</h2>
       <div>
         <p>Bench Press:</p>
-        <p>{{currentMaxes.bench}}</p>
+        <p>{{currentMaxes.benchMax}}</p>
       </div>
       <div>
         <p>Squat:</p>
-        <p>{{currentMaxes.squat}}</p>
+        <p>{{currentMaxes.squatMax}}</p>
       </div>
       <div>
         <p>Deadlift:</p>
-        <p>{{currentMaxes.deadlift}}</p>
+        <p>{{currentMaxes.deadliftMax}}</p>
       </div>
     </div>
-
     <div>
-      <h2>Projected Maxes</h2>
+      <h2>Differential from last workout</h2>
       <div>
-        <p>Projected Bench:</p>
-        <p class="value">{{projections.projBenchMax}}</p>
-        <p class="differential{{#if (gt differentials.bench 0)}}[+]{{else}}[-]{{/if}}"> 
-          {{#if (gt differentials.bench 0)}}+{{/if}}{{differentials.bench}}
-        </p>
+        <p class="value">Projected {{mostRecentWorkout.type}}: {{mostRecentWorkout.projectedMax}}</p>
+        
+        {{!-- Conditional logic for positive/negative differential --}}
+        {{#if (gt mostRecentWorkout.differential 0)}}
+          <p class="differential" style="color: green;">+{{mostRecentWorkout.differential}}</p>
+        {{else}}
+          <p class="differential" style="color: red;">{{mostRecentWorkout.differential}}</p>
+        {{/if}}
       </div>
-      <div>
+      {{!-- <div>
         <p>Projected Squat:</p>
         <p class="value">{{projections.projSquatMax}}</p>
         <p class="differential {{#if (gt differentials.squat 0)}}positive{{else}}negative{{/if}}">
@@ -62,12 +55,11 @@
         <p class="differential {{#if (gt differentials.deadlift 0)}}positive{{else}}negative{{/if}}">
           {{#if (gt differentials.deadlift 0)}}+{{/if}}{{differentials.deadlift}}
         </p>
-      </div>
-
-      <div>
+      </div> --}}
+      {{!-- <div>
         <p>Differentials:</p>
         <p>{{projections.projBenchMax}}</p>
-      </div>
+      </div> --}}
     </div>
   {{/if}}
   

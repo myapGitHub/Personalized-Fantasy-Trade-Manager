@@ -258,3 +258,10 @@ select {
     border-radius: 4px;
 
 }
+
+/* Insights Page */
+#insights {
+    background-color: lightgrey;
+    border-radius: 8px;
+
+}

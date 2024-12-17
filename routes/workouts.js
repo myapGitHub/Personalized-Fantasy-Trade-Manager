@@ -129,83 +129,36 @@ router.get("/insights", async (req, res) => {
   if (!req.session.user) {
     return res.redirect("/login");
   }
-
-  // try {
-  const userId = req.session.user.userId;
-  const userProfile = await userData.getUserProfile(userId);
-  const projections = await workoutData.getProjectedMaxes(userId);
-
-  console.log("User Id: " + userId);
-  console.log("get user profile: " + userProfile);
-  console.log("projections " + projections);
-
-  if (!projections) {
-    res.render("pages/workouts/insights", {
+  try {
+    const userId = req.session.user.userId;
+    const userProfile = await userData.getUserProfile(userId);
+    const projectionData = await workoutData.getProjectedMaxAndDiff(userId);
+    if (!projectionData) {
+      return res.render("pages/workouts/insights", {
+        title: "Workout Insights",
+        loggedIn: true,
+        noWorkouts: true,
+      });
+    }
+    // format data to pass into insight handlebars
+    const viewData = {
       title: "Workout Insights",
       loggedIn: true,
-      noWorkouts: true,
-      streakCount: userProfile.streakCount ? userProfile.streakCount : 0,
-    });
-    return;
-  }
-
-  let benchMax = userProfile.benchMax ? userProfile.benchMax : 0;
-  let squatMax = userProfile.squatMax ? userProfile.squatMax : 0;
-  let deadliftMax = userProfile.deadliftMax ? userProfile.deadliftMax : 0;
-  let differentials = Infinity;
-
-  // const differentials = {
-  //   bench: (projections.projBenchMax && userProfile.benchMax) ? (projections.projBenchMax - benchMax) : null,
-  //   squat: (projections.projSquatMax && userProfile.squatMax) ? (projections.projSquatMax - squatMax) : null,
-  //   deadlift: (projections.projDeadliftMax && userProfile.deadliftMax) ? (projections.projDeadliftMax - deadliftMax) : null
-  // };
-
-  // differential is just total projected increase/decrease
-
-  if (projections.projBenchMax && userProfile.benchMax && projections.projSquatMax && userProfile.squatMax && projections.projDeadliftMax && userProfile.deadliftMax) {
-    let differentials = (projections.projBenchMax - benchMax) + (projections.projSquatMax - squatMax) + (projections.projDeadliftMax - deadliftMax);
-  }
-
-
-
-  console.log(differentials); 
-
-  const streakCount = userProfile.streakCount ? userProfile.streakCount : 0;
-
-  if (differentials === Infinity) {
-    res.render("pages/workouts/insights", {
-      title: "Workout Insights",
-      loggedIn: true,
-      currentMaxes: {
-        bench: benchMax,
-        squat: squatMax,
-        deadlift: deadliftMax,
+      currentMaxes: projectionData.allMaxes,
+      mostRecentWorkout: {
+        type: projectionData.workoutType,
+        currentMax: projectionData.currentMax,
+        projectedMax: projectionData.projectedMax,
+        differential: projectionData.differential
       },
-      projections: projections,
-      // differentials: differentials,
-      streakCount: streakCount
-    });
+      // hasProjection: true
+    };
+    res.render("pages/workouts/insights", viewData);
+  } catch (e) {
+    res.status(500).render('error', { error: e.message });
   }
-  else {
-    res.render("pages/workouts/insights", {
-      title: "Workout Insights",
-      loggedIn: true,
-      currentMaxes: {
-        bench: benchMax,
-        squat: squatMax,
-        deadlift: deadliftMax,
-      },
-      projections: projections,
-      differentials: differentials,
-      streakCount: streakCount,
-    });
-  }
-  
-  // });
-  // } catch (e) {
-  //   res.status(500).render('error', { error: e });
-  // }
 });
+
 
 router.get("/workoutsPage", async (req, res) => {
   try {
