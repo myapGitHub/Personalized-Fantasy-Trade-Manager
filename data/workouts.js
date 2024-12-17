@@ -456,10 +456,10 @@ const getAllPublicWorkouts = async (userId) => {
 
   let resultList = [];
   for (const workout of workoutList) {
-    console.log(workout.userId);
+    if (userId === workout.userId) continue;
     const status = await userData.profilePrivacyStatus(workout.userId);
     const friendStatus = await userData.friendStatus(userId, workout.userId);
-    if (status || friendStatus === 'friend' || userId === workout.userId){
+    if (status || friendStatus === 'friend'){
       const result = await findByWorkoutIdExercisesOnlyBilly(workout._id);
       resultList.push(result);
     }
