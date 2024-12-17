@@ -1,8 +1,5 @@
 <header>
   <nav>
-    <a href="/dashboard">Home</a>
-  </nav>
-  <nav>
     <a href="/workouts/workoutsPage">Back</a>
     <a href="/workouts/userWorkouts">View Your Workouts</a>
     <a href="/workouts/createWorkout">Create A Workout</a>
@@ -16,7 +13,7 @@
   <h1 id="all-workouts-title">Public Workouts</h1>
   {{#each workouts}}
   <a href="/search-workout/{{foundWorkout._id}}" style="text-decoration: none; color: inherit;">
-    <div id="each-workout">
+    <div class="each-workout">
       <div id="user-and-date">
         <p>{{foundWorkout.userId}}</p>
         {{!-- <p>Date: {{foundWorkout.formattedDate}}</p> --}}

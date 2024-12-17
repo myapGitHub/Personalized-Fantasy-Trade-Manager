@@ -250,7 +250,7 @@ flex-wrap: wrap;}
     background-color: lightblue;
 }
 
-#each-workout {
+.each-workout {
     padding: 20px;
     background-color: rgb(92, 122, 213);
     border: 4px solid navy;
@@ -265,9 +265,17 @@ flex-wrap: wrap;}
 
 }
 
+#your-workouts-title {
+    padding: 20px;
+    color: rgb(110, 251, 138);
+    background-color: navy;
+    border: 4px solid navy;
+    border-radius: 4px;
+}
+
 /* Insights Page */
 #insights {
-    background-color: lightgrey;
+    background-color: rgb(152, 209, 255);
     border-radius: 8px;
 
 }
