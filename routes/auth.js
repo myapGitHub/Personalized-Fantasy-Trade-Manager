@@ -2,6 +2,10 @@ import {Router} from 'express';
 import { workoutData } from '../data/index.js';
 const router = Router();
 
+// new Changes
+import path from 'path';
+import {static as staticDir} from 'express';
+
 
 
 router.route('/').get(async (req, res) => {
@@ -9,7 +13,9 @@ router.route('/').get(async (req, res) => {
 })
 
 router.route('/home').get(async (req, res) => {
-    res.render('pages/home');
+    //res.render('pages/home');
+    res.sendFile(path.resolve('static/homePage.html'));
+    
 })
 
 router.route('/dashboard').get(async (req, res) => {
