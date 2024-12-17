@@ -43,16 +43,16 @@ router
       checkExists(req.body.level);
 
       checkString(req.body.firstName);
-      req.body.firstName = req.body.firstName.trim();
+      req.body.firstName = xss(req.body.firstName.trim());
       checkStringLength(req.body.firstName);
       checkString(req.body.lastName);
-      req.body.lastName = req.body.lastName.trim();
+      req.body.lastName = xss(req.body.lastName.trim());
       checkStringLength(req.body.lastName);
-      req.body.height = checkNum(parseInt(req.body.height));
+      req.body.height = checkNum(parseInt(xss(req.body.height)));
       checkValidRange(parseFloat(req.body.height), 40, 300, "Height");
-      req.body.weight = checkNum(parseInt(req.body.weight));
+      req.body.weight = checkNum(parseInt(xss(req.body.weight)));
       checkValidRange(parseFloat(req.body.weight), 10, 700, "Weight");
-      req.body.age = checkNum(parseInt(req.body.age));
+      req.body.age = checkNum(parseInt(xss(req.body.age)));
       checkValidRange(parseFloat(req.body.age), 0, 120, "Age");
 
       if (req.body.benchMax) {
@@ -96,16 +96,16 @@ router
       );
     } catch (e) {
       return res.status(400).render("pages/Login-Signup/signup", {
-        error: e,
-        firstName: firstName,
-        lastName: lastName,
-        userId: userId,
-        height: height,
-        weight: weight,
-        age: age,
-        benchMax: benchMax,
-        squatMax: squatMax,
-        deadLiftMax: deadLiftMax,
+        error: xss(e),
+        firstName: xss(firstName),
+        lastName: xss(lastName),
+        userId: xss(userId),
+        height: xss(height),
+        weight: xss(weight),
+        age: xss(age),
+        benchMax: xss(benchMax),
+        squatMax: xss(squatMax),
+        deadLiftMax: xss(deadLiftMax),
       });
     }
 

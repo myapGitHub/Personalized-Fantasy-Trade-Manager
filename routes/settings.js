@@ -12,11 +12,11 @@ router.route('/').get(async (req, res) => {
 
 router.route('/account').get(async (req, res) => {
     res.render('pages/Settings/account', {
-        userId: req.session.user.userId,
-        maxBench: req.session.user.benchMax,
-        maxSquat: req.session.user.squatMax,
-        maxDeadLift: req.session.user.deadLiftMax,
-        isPublic: req.session.user.isPublic
+        userId: xss(req.session.user.userId),
+        maxBench: xss(req.session.user.benchMax),
+        maxSquat: xss(req.session.user.squatMax),
+        maxDeadLift: xss(req.session.user.deadLiftMax),
+        isPublic: xss(req.session.user.isPublic)
     })
 })
 
@@ -24,7 +24,7 @@ router.route('/account').post(async (req, res) => {
     console.log('Request received at /settings/account');
     console.log('Request body:', req.body);
 
-    const type = req.body.type;
+    const type = xss(req.body.type);
     const updateField = xss(req.body.data);
 
     if (!type || !updateField) {
@@ -33,13 +33,13 @@ router.route('/account').post(async (req, res) => {
     try {
         // to change userId
         if (type === 'userId') {
-            const id = req.session.user._id;
+            const id = xss(req.session.user._id);
             const result = await userData.updateUserId(id,updateField);
             req.session.user.userId = updateField.toLowerCase();
             return res.json(result);
         // for the change profile status
         } else if (type === 'status') {
-            const id= req.session.user._id;
+            const id= xss(req.session.user._id);
             const {newStatus, completed}= await userData.updateProfileStatus(id, updateField);
             req.session.user.isPublic = newStatus; 
             const result = {newStatus: newStatus, completed: completed};

@@ -5,8 +5,8 @@ import { searchData, userData } from '../data/index.js';
 
 router.route('/:workoutId').get(async (req, res) => {
     if (!req.body) return res.status(400).redirect('/dashboard');
-    const workoutId = req.params.workoutId;
-    const currUser = req.session.user.userId;
+    const workoutId = xss(req.params.workoutId);
+    const currUser = xss(req.session.user.userId);
 
     try {
         const { userId, workoutName, exercises, comments } = await searchData.getWorkoutInfoFromId(workoutId);
@@ -43,7 +43,7 @@ router.route('/:workoutId').get(async (req, res) => {
 
 router.route('/favorite').post(async (req, res) => {
     if (!req.body) return res.status(400).redirect('/dashboard');
-    const workoutId = req.body.data
+    const workoutId = xss(req.body.data)
     if (!workoutId) return res.status(400).json({error: ""});
 
     try {

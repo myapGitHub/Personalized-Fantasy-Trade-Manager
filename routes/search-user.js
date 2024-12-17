@@ -25,12 +25,12 @@ router.route("/").get(async (req, res) => {
       });
     res.render("pages/search-user", {
       userIdArr: resultArr,
-      userId: req.session.user.userId,
+      userId: xss(req.session.user.userId),
     });
   } catch (e) {
     return res
       .status(400)
-      .render("pages/dashboard", { error: e, userId: req.session.user.userId });
+      .render("pages/dashboard", { error: xss(e), userId: xss(req.session.user.userId) });
   }
 });
 
@@ -70,7 +70,7 @@ router.route("/:userId").get(async (req, res) => {
   if (!req.body) return res.status(400).redirect("/dashboard");
 
   const requestUserId = xss(req.params.userId);
-  const currUser = req.session.user.userId;
+  const currUser = xss(req.session.user.userId);
 
   console.log(currUser, requestUserId);
 
@@ -161,8 +161,8 @@ router.route("/:userId").get(async (req, res) => {
     return res
       .status(400)
       .render("pages/search-user", {
-        error: e.message || e,
-        userId: req.session.user.userId,
+        error: xss(e.message || e),
+        userId: xss(req.session.user.userId),
       });
   }
 });
@@ -170,8 +170,8 @@ router.route("/:userId").get(async (req, res) => {
 router.route("/:userId/add-friend").post(async (req, res) => {
   if (!req.body) return res.status(400).redirect("/dashboard");
 
-  const sendToo = req.params.userId;
-  const currUser = req.session.user.userId;
+  const sendToo = xss(req.params.userId);
+  const currUser = xss(req.session.user.userId);
 
   if (!sendToo || !currUser) {
     return res.redirect("/dashboard");
@@ -196,8 +196,8 @@ router.route("/:userId/add-friend").post(async (req, res) => {
 router.route("/:userId/accept-request").post(async (req, res) => {
   if (!req.body) return res.status(400).redirect("/dashboard");
 
-  const sendToo = req.params.userId;
-  const currUser = req.session.user.userId;
+  const sendToo = xss(req.params.userId);
+  const currUser = xss(req.session.user.userId);
 
   if (!sendToo || !currUser) {
     return res.redirect("/dashboard");
@@ -223,8 +223,8 @@ router.route("/:userId/accept-request").post(async (req, res) => {
 router.route("/:userId/decline-request").post(async (req, res) => {
   if (!req.body) return res.status(400).redirect("/dashboard");
 
-  const sendToo = req.params.userId;
-  const currUser = req.session.user.userId;
+  const sendToo = xss(req.params.userId);
+  const currUser = xss(req.session.user.userId);
 
   if (!sendToo || !currUser) {
     return res.redirect("/dashboard");
@@ -251,8 +251,8 @@ router.route("/:userId/decline-request").post(async (req, res) => {
 router.route("/:userId/remove-friend").post(async (req, res) => {
   if (!req.body) return res.status(400).redirect("/dashboard");
 
-  const sendToo = req.params.userId;
-  const currUser = req.session.user.userId;
+  const sendToo = xss(req.params.userId);
+  const currUser = xss(req.session.user.userId);
 
   if (!sendToo || !currUser) {
     return res.redirect("/dashboard");
