@@ -70,6 +70,9 @@ The application automatically calculates the appropriate weights for exercises b
 ### 3. **Friends System**
 - Add other users to a **friends list** to easily view their workout plans and stay connected.
 
+### 4. **Insights**
+- Compare your most recent workout's **projected** max to your true max for that workout type to show your progress in a differential
+
 ---
 
 ## Purpose
