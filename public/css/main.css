@@ -11,6 +11,7 @@ body {
 }
 
 main {
+    color: yellow;
     position: relative;
     text-align: center;
     z-index: 1;
@@ -75,7 +76,7 @@ h1{
 }
 
 h3 {
-    color: rgb(7, 7, 63);
+    color: rgb(255, 255, 255);
 }
 
 a {
@@ -214,9 +215,6 @@ flex-wrap: wrap;}
     margin-top: 100px;
 }
 
-#signup-created-text {
-    color: rgb(51, 51, 51);
-}
 
 /* Sign-out Page Styling */
 
@@ -224,9 +222,6 @@ flex-wrap: wrap;}
     margin-top: 100px;
 }
 
-#logout-text {
-    color: rgb(51, 51, 51);
-}
 
 /* WORKOUTS STYLING */
 
