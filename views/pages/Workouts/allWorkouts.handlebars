@@ -1,45 +1,39 @@
 <header>
   <nav>
-    {{!-- {{#if loggedIn}} --}}
     <a href="/workouts/workoutsPage">Back</a>
     <a href="/workouts/userWorkouts">View Your Workouts</a>
     <a href="/workouts/createWorkout">Create A Workout</a>
-      <a href="/workouts/favorited">
-        View Your Favorited Workouts
-      </a>
-    {{!-- <a href="/workouts/removeWorkout">Remove A Workout</a> --}}
-    {{!-- {{else}} --}}
-    {{!-- <p>not logged?</p> --}}
-    {{!-- {{/if}} --}}
+    <a href="/workouts/favorited">
+      View Your Favorited Workouts
+    </a>
   </nav>
-
 </header>
+
 <div id="all-workouts">
   <h1 id="all-workouts-title">Public Workouts</h1>
   {{#each workouts}}
-  
-  <div id="each-workout">
-    <div id="user-and-date">
-      <p>{{foundWorkout.userId}}</p>
-      {{!-- <p>Date: {{foundWorkout.formattedDate}}</p> --}}
+  <a href="/search-workout/{{foundWorkout._id}}" style="text-decoration: none; color: inherit;">
+    <div id="each-workout">
+      <div id="user-and-date">
+        <p>{{foundWorkout.userId}}</p>
+        {{!-- <p>Date: {{foundWorkout.formattedDate}}</p> --}}
+      </div>
+      <h2>{{foundWorkout.workoutName}}</h2>
+      <h3>Type: {{foundWorkout.workoutType}}</h3>
+      <h3>Difficulty Rating: {{foundWorkout.rating}}</h3>
+      {{#each foundWorkout.exercises}}
+      <p>Exercise Name: {{this.name}}</p>
+      <p>Sets: {{this.sets}}</p>
+      <p>Reps: {{this.reps}}</p>
+      <p>Weight: {{this.weight}}</p>
+      <br>
+      {{/each}}
+      <div>
+        <a href="/comments/{{foundWorkout._id}}">View Comments</a>
+        <button class="workoutClone" data-id="{{foundWorkout._id}}">Copy this workout</button>
+      </div>
     </div>
-    <h2>{{foundWorkout.workoutName}}</h2>
-    <h3>Type: {{foundWorkout.workoutType}}</h3>
-    <h3>Difficulty Rating: {{foundWorkout.rating}}</h3>
-    {{#each foundWorkout.exercises}}
-    <p>Exercise Name: {{this.name}}</p>
-    <p>Sets: {{this.sets}}</p>
-    <p>Reps: {{this.reps}}</p>
-    <p>Weight: {{this.weight}}</p>
-    <br>
-    {{/each}}
-    {{!-- <h3>Difficulty: {{foundWorkout.rating}}</h2> --}}
-    <div>
-      <a href="/comments/{{foundWorkout._id}}">View Comments</a>
-      <button class="workoutClone" data-id={{foundWorkout._id}}>Copy this workout</button>
-    </div>
-    
-  </div>
+  </a>
   {{/each}}
 </div>
 <script src="/public/js/workout.js"></script>
