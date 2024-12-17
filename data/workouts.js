@@ -59,7 +59,7 @@ const createWorkout = async (workoutType, userId, exercises, description) => {
 // Creates a workout with workouts based on preferences. 
 /* New workout system, replaces createWorkout */
 const createWorkoutPlan = async (userId, workoutName, workoutType, exercises, rating) => {
-  console.log(exercises)
+  // console.log(exercises)
   // For now, workout type and name remain the same
 /*
   userId: user's id
@@ -77,11 +77,11 @@ const createWorkoutPlan = async (userId, workoutName, workoutType, exercises, ra
   // all required attributes
 */
 
-  console.log("User Id: " + userId);
-  console.log("Workout Name: " + workoutName);
-  console.log("Workout type: " + workoutType);
-  console.log("Exercises: " + exercises);
-  console.log("Rating: " + rating);
+  // console.log("User Id: " + userId);
+  // console.log("Workout Name: " + workoutName);
+  // console.log("Workout type: " + workoutType);
+  // console.log("Exercises: " + exercises);
+  // console.log("Rating: " + rating);
 
   
 
@@ -153,12 +153,12 @@ const createWorkoutPlan = async (userId, workoutName, workoutType, exercises, ra
   const userCollection = await users();
 
   let pastWorkouts = await getAllWorkoutsOfUserBilly(userId);
-  console.log(pastWorkouts);
+  // console.log(pastWorkouts);
   pastWorkouts.push(newId);
   await userCollection.findOneAndUpdate({userId: userId}, {$set:{savedWorkouts : pastWorkouts}});
 
   const workout = await getWorkoutById(newId);
-  console.log("Workout from Data: " + newWorkout);
+  // console.log("Workout from Data: " + newWorkout);
   return workout;
 
 }
@@ -192,7 +192,7 @@ const calculateSuggestedWeightForExercise = (user, workout, exercise) => {
   //     weight: 1
   // }
 
-  console.log("User Max squat: " + user.squatMax);
+  // console.log("User Max squat: " + user.squatMax);
 
   let calculatedMax = -1;
   if (workout.workoutType === 'Bench') {
@@ -308,59 +308,105 @@ const calculateSuggestedWeightForExercise = (user, workout, exercise) => {
     weight: liftWeight
   }
 
-
-
   return suggestedExercise; // returns the whole exercise object for one exercise
 }
 
 
-export const getProjectedMaxes = async (userId) => {
+const calculateAdjustedMax = (workout) => {
+  if (!workout) {
+    return null
+  };
+  let maxWeight = -Infinity;
+  let maxIndex = -1;
+  // grab highest weight and get index of that exercises array
+  workout.exercises.forEach((exercise, index) => {
+    if (exercise.weight > maxWeight) {
+        maxWeight = exercise.weight;
+        maxIndex = index;
+    }
+  });
+
+  // epley formula:
+  const projectedMax = workout.exercises[maxIndex].weight * (1 + 0.0333 * workout.exercises[maxIndex].reps);
+  
+  // console.log("Projected max: " + projectedMax);
+  // adjust projectedMax based on rating
+  let adjustment = 1;
+  if (workout.rating === 1) adjustment = 1.05;
+  else if (workout.rating === 2) adjustment = 1.025;
+  // 3 is just 1
+  else if (workout.rating === 4) adjustment = 0.975;
+  else if (workout.rating === 5) adjustment = 0.95;
+  
+  return Math.round(projectedMax * adjustment);
+};
+export const getProjectedMaxAndDiff = async (userId) => {
   const userCollection = await users();
   const workoutCollection = await workouts();
   
-  const recentWorkouts = await workoutCollection
-    .find({ userId: userId.toLowerCase() }) 
-    .sort({ date: -1 }) // get most recent date
-    .toArray();
+  // Get user data first to access their current maxes
+  const user = await userCollection.findOne({ userId: userId.toLowerCase() });
+  if (!user) return null;
+  // console.log(user + "user")
+  // Get all workouts sorted by date, most recent first
+  // const recentWorkouts = await workoutCollection
+  //   .find({ userId: userId.toLowerCase() })
+  //   .toArray();
 
+  // get most recent workout by .reverse(), to get least recent, remove .reverse
+  const recentWorkouts = (await workoutCollection
+    .find({ userId: userId.toLowerCase() })
+    .toArray())
+    .reverse();
+  
+  // console.log(recentWorkouts + "recent workouts");
+    
   if (!recentWorkouts || recentWorkouts.length === 0) {
     return null;
   }
+  
+  const mostRecentWorkout = recentWorkouts[0]; // Get most recent workout
+  const workoutType = mostRecentWorkout.workoutType;
 
-  // Get most recent workout for each type (SBD)
-  const latestBench = recentWorkouts.find(w => w.type === 'Bench');
-  const latestSquat = recentWorkouts.find(w => w.type === 'Squat');
-  const latestDeadlift = recentWorkouts.find(w => w.type === 'Deadlift');
-
-  const calculateAdjustedMax = (workout) => {
-    if (!workout) return null;
-    
-    const projectedMax = workout.weight * (1 + 0.0333 * workout.reps);
-    
-    // adjust projectedMax based on rating
-    let adjustment = 1;
-    if (workout.rating === 1) adjustment = 1.05;
-    else if (workout.rating === 2) adjustment = 1.025;
-    // 3 is just 1
-    else if (workout.rating === 4) adjustment = 0.975;
-    else if (workout.rating === 5) adjustment = 0.95;
-    
-    return Math.round(projectedMax * adjustment);
+  // Calculate projected max from most recent workout
+  const projectedMax = calculateAdjustedMax(mostRecentWorkout);
+  // console.log('projected max is ' + projectedMax)
+  
+  // Get current max based on workout type
+  let currentMax;
+  if (workoutType === 'Bench') {
+    currentMax = user.benchMax;
+  } else if (workoutType === 'Squat') {
+    currentMax = user.squatMax;
+  } else if (workoutType === 'Deadlift') {
+    currentMax = user.deadliftMax;
+  }
+  // console.log("Current Max is " + currentMax + " for " + workoutType);
+  
+  const result = {
+    workoutType,
+    currentMax, 
+    projectedMax, 
+    differential: currentMax ? projectedMax - currentMax : null,
+    allMaxes: {
+      benchMax: user.benchMax,
+      squatMax: user.squatMax,
+      deadliftMax: user.deadliftMax
+    }
   };
-
-  const projections = {
-    projBenchMax: calculateAdjustedMax(latestBench),
-    projSquatMax: calculateAdjustedMax(latestSquat),
-    projDeadliftMax: calculateAdjustedMax(latestDeadlift)
-  };
-
-  // Update user with projections
+  
+  // Update user's projections
   await userCollection.updateOne(
     { userId: userId.toLowerCase() },
-    { $set: { projections: projections } }
+    { 
+      $set: { 
+        [`projections.proj${workoutType}Max`]: projectedMax 
+      } 
+    }
   );
-
-  return projections;
+  // console.log(result + ' <- is the result');
+  
+  return result;
 };
 
 
@@ -874,7 +920,9 @@ export default {
   createWorkout,
   createWorkoutPlan,
   calculateSuggestedWeightForExercise,
-  getProjectedMaxes,
+  // getProjectedMaxes,
+  calculateAdjustedMax,
+  getProjectedMaxAndDiff,
   getAllPublicWorkouts,
   getWorkoutById,
   removeWorkout,
