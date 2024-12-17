@@ -152,27 +152,55 @@ router.get("/insights", async (req, res) => {
   let benchMax = userProfile.benchMax ? userProfile.benchMax : 0;
   let squatMax = userProfile.squatMax ? userProfile.squatMax : 0;
   let deadliftMax = userProfile.deadliftMax ? userProfile.deadliftMax : 0;
+  let differentials = Infinity;
 
-  const differentials = {
-    bench: projections.projBenchMax - benchMax,
-    squat: projections.projSquatMax - squatMax,
-    deadlift: projections.projDeadliftMax - deadliftMax,
-  };
+  // const differentials = {
+  //   bench: (projections.projBenchMax && userProfile.benchMax) ? (projections.projBenchMax - benchMax) : null,
+  //   squat: (projections.projSquatMax && userProfile.squatMax) ? (projections.projSquatMax - squatMax) : null,
+  //   deadlift: (projections.projDeadliftMax && userProfile.deadliftMax) ? (projections.projDeadliftMax - deadliftMax) : null
+  // };
+
+  // differential is just total projected increase/decrease
+
+  if (projections.projBenchMax && userProfile.benchMax && projections.projSquatMax && userProfile.squatMax && projections.projDeadliftMax && userProfile.deadliftMax) {
+    let differentials = (projections.projBenchMax - benchMax) + (projections.projSquatMax - squatMax) + (projections.projDeadliftMax - deadliftMax);
+  }
+
+
+
+  console.log(differentials); 
 
   const streakCount = userProfile.streakCount ? userProfile.streakCount : 0;
 
-  res.render("pages/workouts/insights", {
-    title: "Workout Insights",
-    loggedIn: true,
-    currentMaxes: {
-      bench: benchMax,
-      squat: squatMax,
-      deadlift: deadliftMax,
-    },
-    projections: projections,
-    differentials: differentials,
-    streakCount: streakCount,
-  });
+  if (differentials === Infinity) {
+    res.render("pages/workouts/insights", {
+      title: "Workout Insights",
+      loggedIn: true,
+      currentMaxes: {
+        bench: benchMax,
+        squat: squatMax,
+        deadlift: deadliftMax,
+      },
+      projections: projections,
+      // differentials: differentials,
+      streakCount: streakCount
+    });
+  }
+  else {
+    res.render("pages/workouts/insights", {
+      title: "Workout Insights",
+      loggedIn: true,
+      currentMaxes: {
+        bench: benchMax,
+        squat: squatMax,
+        deadlift: deadliftMax,
+      },
+      projections: projections,
+      differentials: differentials,
+      streakCount: streakCount,
+    });
+  }
+  
   // });
   // } catch (e) {
   //   res.status(500).render('error', { error: e });

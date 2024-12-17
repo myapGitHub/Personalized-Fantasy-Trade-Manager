@@ -193,7 +193,7 @@ export const signUp = async (
   gender,
   benchMax,
   squatMax,
-  deadLiftMax,
+  deadliftMax,
   level
 ) => {
   // checsk to make sure the userId is valid
@@ -245,12 +245,12 @@ export const signUp = async (
     squatMax = checkNum(parseInt(squatMax));
     checkValidRange(parseInt(squatMax), 1, 1500, "Squat Max");
   }
-  // if no deadLiftMax is supplied use the calc
-  if (!deadLiftMax) {
-    deadLiftMax = estDeadLiftMax;
+  // if no deadliftMax is supplied use the calc
+  if (!deadliftMax) {
+    deadliftMax = estDeadLiftMax;
   } else {
-    deadLiftMax = checkNum(parseInt(deadLiftMax));
-    checkValidRange(parseInt(deadLiftMax), 1, 1500, "DeadLife Max");
+    deadliftMax = checkNum(parseInt(deadliftMax));
+    checkValidRange(parseInt(deadliftMax), 1, 1500, "DeadLift Max");
   }
   // creates a new user obj to insert
   const newUser = {
@@ -264,7 +264,7 @@ export const signUp = async (
     gender: gender,
     benchMax: benchMax,
     squatMax: squatMax,
-    deadLiftMax: deadLiftMax,
+    deadliftMax: deadliftMax,
     experience: level,
     isPublic: true,
     friendRequest: {},
@@ -373,7 +373,7 @@ export const userLogin = async (userIdParam, password) => {
     gender,
     benchMax,
     squatMax,
-    deadLiftMax,
+    deadliftMax,
     level,
     isPublic,
     savedWorkouts,
@@ -392,7 +392,7 @@ export const userLogin = async (userIdParam, password) => {
     gender,
     benchMax,
     squatMax,
-    deadLiftMax,
+    deadliftMax,
     level,
     isPublic,
     savedWorkouts,
@@ -563,7 +563,7 @@ export const getUserProfile = async (requstUserId) => {
     gender,
     benchMax,
     squatMax,
-    deadLiftMax,
+    deadliftMax,
     experience,
     isPublic,
   } = findUser;
