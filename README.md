@@ -37,7 +37,6 @@ The application automatically calculates the appropriate weights for exercises b
 - Allows users to create and manage their profiles.
 - Displays essential information such as:
   - Name
-  - Email
   - Privacy status (public/private)
   - One-rep max weights for workout plan calculations
 - All profile information is securely stored in the database.
