@@ -5,10 +5,6 @@
     size: 2.0em;
 }
 
-h1 {
-    color: aqua;
-}
-
 body {
     font-family: Georgia, Times, 'Times New Roman', serif;
     
@@ -21,21 +17,21 @@ main {
 }
 
 /* GENERAL CSS STYLING */
+
 nav {
-    background-color: #0000007a;
-    text-align: center;
-    font-size: 10px;
-    justify-content: center;
+    display: inline-flex;  
+    background-color: #00000085;
     padding: 10px 20px;
-    display: inline-block;
-    border-radius: 5px;
-    white-space: normal;
-    word-wrap: break-word;
-    font-size: 10px;
-    margin: 0 auto
-}.home-link{
-    text-align: left;
+    border-radius: 10px;
+    text-align: center;  
+    justify-content: space-between;
+    gap: 10px;
 }
+
+nav .home-link {
+    text-align: left; 
+}
+
 
 nav a {
     text-decoration: none;
@@ -44,7 +40,7 @@ nav a {
     display: inline-block;
     padding: 10px;
     background-color: #007BFF;
-    border-radius: 5px;
+    border-radius: 10px;
     text-align: center;
     white-space: normal;
     word-wrap: break-word;
@@ -66,6 +62,7 @@ nav a:hover {
     word-wrap: break-word;
     min-width: 300px;
     max-width: 150px;
+    color: black
 
 }
 
@@ -73,16 +70,12 @@ input {
     font-family: Georgia, Times, 'Times New Roman', serif;
 }
 
-h1 {
-    color: rgb(0, 178, 128);
+h1{
+    color: rgb(0, 89, 93);
 }
 
 h3 {
     color: rgb(7, 7, 63);
-}
-
-form {
-    color: grey;
 }
 
 a {
@@ -116,6 +109,7 @@ select {
     font-family: Georgia, Times, 'Times New Roman', serif;
 }
 
+
 /* HOMEPAGE STYLING */
 .homeScreen {
     position: fixed;
@@ -131,22 +125,35 @@ select {
 
 
 #homepage-welcome {
+    display: inline-block;
     text-align: center;
+    align-content: center;
+    align-items: center;
     background-color: #000000a8;
+    color: white;
+    width: 80%;
+    border-radius: 90px;
+    
+}
+#homepage-welcome h1 {
+    margin-bottom: 50px;
+    text-align: center;
     color: white;
 }
 
 #homepage-signup {
+    display: inline-block;
     text-align: center;
     background-color: rgba(0, 0, 0, 0.641);
     color: wheat;
+    width: 500px;
+
 }
 
 /* DASHBOARD STYLING */
 
 #dashboard {
     background-color: #0000007a;
-    background: scroll;
 }
 
 #welcome {
@@ -154,7 +161,9 @@ select {
 }
 
 #search-user-form {
+    margin-bottom: 10px;
     display: grid;
+    width: 200px;
 }
 
 
@@ -177,7 +186,8 @@ select {
     font-size: 18px;
 }
 
-
+header.workoutsPage{
+flex-wrap: wrap;}
 /* Sign-up Page Styling */
 
 #userId-signup,
@@ -221,18 +231,13 @@ select {
 /* WORKOUTS STYLING */
 
 /* Create Workout */
-.createWorkout-form {
+#createWorkout-form {
     margin: 20px auto;
     padding: 20px;
     max-width: 500px;
     border: 1px solid lightblue;
     border-radius: 8px;
     background-color: lightblue;
-}
-
-.add-submit {
-    text-align: center;
-    background-color: navy;
 }
 
 /* Workouts Page */
@@ -245,7 +250,7 @@ select {
     background-color: lightblue;
 }
 
-.each-workout {
+#each-workout {
     padding: 20px;
     background-color: rgb(92, 122, 213);
     border: 4px solid navy;
@@ -253,6 +258,7 @@ select {
 
 #all-workouts-title {
     padding: 20px;
+    color: rgb(247, 255, 12);
     background-color: navy;
     border: 4px solid navy;
     border-radius: 4px;
