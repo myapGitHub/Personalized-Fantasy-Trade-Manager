@@ -21,7 +21,6 @@ The application automatically calculates the appropriate weights for exercises b
 - Pull code from https://github.com/myapGitHub/Workout-App
 
 ### 2. **Run "npm i" in the terminal**
-- Users can **like** or **dislike** comments on workout plans, fostering an interactive community.
 
 ### 3. **Run the seed file**
 - Once in the Workout-App directory, run "node tasks/seed.js"
