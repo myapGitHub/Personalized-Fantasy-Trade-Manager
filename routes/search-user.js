@@ -3,6 +3,7 @@ const router = Router();
 import xss from "xss";
 import { userData, workoutData } from "../data/index.js";
 import { searchUser } from "../data/users.js";
+import workouts from "../data/workouts.js";
 
 router.route("/").get(async (req, res) => {
   if (!req.body) return res.status(400).redirect("/dashboard");
@@ -85,6 +86,7 @@ router.route("/:userId").get(async (req, res) => {
     // Logic for private profile
     if (!profileStatus) {
       const friendStatus = await userData.friendStatus(currUser, requestUserId);
+      const result = await workoutData.getAllWorkoutsOfUserBilly(requestUserId);
 
       if (friendStatus === "sent") {
         return res.render("pages/Profiles/private", {
@@ -101,6 +103,7 @@ router.route("/:userId").get(async (req, res) => {
         return res.render("pages/Profiles/public", {
           userId: requestUserId,
           friends: true,
+          workouts: result
         });
       } else if (friendStatus === "send") {
         return res.render("pages/Profiles/private", {
