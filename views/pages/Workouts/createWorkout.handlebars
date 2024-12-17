@@ -1,4 +1,4 @@
-    <header>
+<header>
       <nav>
         {{#if loggedIn}}
           <a href="/workouts/workoutsPage">Back</a>
@@ -17,7 +17,7 @@
 
     </header>
 
-    <form class="createWorkout-form" action="/workouts" method="POST">
+    <form id="createWorkout-form" class="createWorkout-form" action="/workouts" method="POST">
     <h1>Create a New Workout</h1>
      {{#if error}}
         <p style="color: red;">{{error}}</p>
@@ -212,9 +212,6 @@
           </div>
         </div>
       {{/if}}
-
-  
-
     <div class="add-submit">
       <button id="addExercise">Add another exercise</button>
       <button type="submit">Create Workout</button>
